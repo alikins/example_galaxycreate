@@ -1,0 +1,42 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/cisco.aci-0.0.5.tar.gz",
+    "namespace": {
+        "name": "cisco"
+    },
+    "collection": {
+        "name": "aci"
+    },
+    "version": "0.0.5",
+    "metadata": {
+        "namespace": "cisco",
+        "name": "aci",
+        "version": "0.0.5",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "description": "An Ansible collection for managing Cisco ACI infrastructure",
+        "repository": null,
+        "documentation": null,
+        "homepage": null,
+        "issues": null,
+        "authors": [
+            "Dag Wieers (@dagwieers) <dag@wieers.com>"
+        ],
+        "tags": [
+            "aci",
+            "cisco",
+            "cloud",
+            "collection",
+            "networking",
+            "sdn"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "cisco.aci-0.0.5.tar.gz",
+        "sha256": "88272a57c53009b7a52e8d37a44a1adbacf080c8eedb5df35dbeabcb11d51802",
+        "size": 84838
+    }
+}

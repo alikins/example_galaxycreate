@@ -1,0 +1,33 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/ansible-netcommon-0.0.2.tar.gz",
+    "namespace": {
+        "name": "ansible"
+    },
+    "collection": {
+        "name": "netcommon"
+    },
+    "version": "0.0.2",
+    "metadata": {
+        "namespace": "ansible",
+        "name": "netcommon",
+        "version": "0.0.2",
+        "license": [],
+        "description": null,
+        "repository": "https://github.com/ansible-collections/netcommon",
+        "documentation": null,
+        "homepage": null,
+        "issues": null,
+        "authors": [
+            "Ansible Network Community (ansible-network)"
+        ],
+        "tags": [],
+        "license_file": "LICENSE",
+        "readme": "README.rst",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "ansible-netcommon-0.0.2.tar.gz",
+        "sha256": "5f1afe9acfd8ad3d5754ba37b48b9fcf3588431ff6e06dd06ab150f5d57ed31e",
+        "size": 129010
+    }
+}

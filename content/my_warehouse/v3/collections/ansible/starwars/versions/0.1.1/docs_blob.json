@@ -1,0 +1,73 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>Ansible Collection - fvzwieten.starwars</h1>\n<p>Documentation for the Ansible starwars collection.</p>\n<p>This is an example colleciton for training purposes</p>\n<p>It contains the following modules:\n- movie: \n  Returns title, trilogy and trilogy-sequence from given input movie number and numbering scheme (released or chronological)</p>\n<p>It contains the following roles:\n</p>\n<p>It contains the following plugins:\n</p>\n<p>It contains the following playbooks:\n</p>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "movie",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Fred van Zwieten (@fvzwieten)"
+                    ],
+                    "description": [
+                        "This module return the box office title for the requested starwars movie number"
+                    ],
+                    "filename": "/tmp/tmp8e4cfaxl/ansible_collections/ansible/starwars/plugins/modules/movie.py",
+                    "module": "movie",
+                    "options": [
+                        {
+                            "name": "movie",
+                            "description": [
+                                "This is the number of the movie"
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "scheme",
+                            "default": "chronological",
+                            "description": [
+                                "Choose for chronological or released"
+                            ],
+                            "required": false
+                        }
+                    ],
+                    "short_description": "return the title of a starwars movie",
+                    "version_added": "2.4"
+                },
+                "examples": "\n# ask for title of movie 1\n- name: give me the title of the first movie (in chronological order)\n  starwars:\n    movie: 1\n\n# pass in a message and have changed true\n- name: give me the title of the first movie made\n  starwars:\n    movie: 1\n    scheme: released\n\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": [
+                    {
+                        "name": "title",
+                        "description": "The box office title of the movie",
+                        "returned": "always",
+                        "type": "str"
+                    },
+                    {
+                        "name": "trilogy",
+                        "description": "from which trilogie is this movie part of",
+                        "returned": "always",
+                        "type": "str"
+                    },
+                    {
+                        "name": "trilogy_sequence",
+                        "description": "which sequence number within the trilogy is this movie",
+                        "returned": "always",
+                        "type": "number"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

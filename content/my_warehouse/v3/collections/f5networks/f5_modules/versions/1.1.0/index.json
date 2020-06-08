@@ -1,0 +1,42 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/f5networks.f5_modules-1.1.0.tar.gz",
+    "namespace": {
+        "name": "f5networks"
+    },
+    "collection": {
+        "name": "f5_modules"
+    },
+    "version": "1.1.0",
+    "metadata": {
+        "namespace": "f5networks",
+        "name": "f5_modules",
+        "version": "1.1.0",
+        "license": [
+            "GPL-3.0-only"
+        ],
+        "description": "F5 Modules for Ansible",
+        "repository": "https://github.com/F5Networks/f5-ansible",
+        "documentation": "https://clouddocs.f5.com/products/orchestration/ansible/devel/modules/module_index.html",
+        "homepage": "https://clouddocs.f5.com/products/orchestration/ansible/devel/",
+        "issues": "https://github.com/F5Networks/f5-ansible/issues",
+        "authors": [
+            "Wojciech Wypior (@wojtek0806)",
+            "Greg Crosby (@crosbygw)",
+            "Nitin Khanna (@nitinthewiz)"
+        ],
+        "tags": [
+            "f5",
+            "networking",
+            "bigip",
+            "bigiq"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "f5networks.f5_modules-1.1.0.tar.gz",
+        "sha256": "7cde4b97ed7146b56d4f06c8984f47af5a83d711e3fb4e80c4b415079616528b",
+        "size": 922163
+    }
+}

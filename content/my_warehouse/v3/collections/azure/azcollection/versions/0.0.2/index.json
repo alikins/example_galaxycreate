@@ -1,0 +1,35 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/azure.azcollection-0.0.2.tar.gz",
+    "namespace": {
+        "name": "azure"
+    },
+    "collection": {
+        "name": "azcollection"
+    },
+    "version": "0.0.2",
+    "metadata": {
+        "namespace": "azure",
+        "name": "azcollection",
+        "version": "0.0.2",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "The Azure collection.",
+        "repository": "https://github.com/ansible/ansible_collections_azure",
+        "documentation": null,
+        "homepage": "https://azure.microsoft.com",
+        "issues": "https://github.com/ansible/ansible_collections_azure/issues",
+        "authors": [
+            "Microsoft <jieshe@microsoft.com>"
+        ],
+        "tags": [],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "azure.azcollection-0.0.2.tar.gz",
+        "sha256": "b39d9fc7b16ae16166a5b2f374ba9fa8d4cba8079c58bd32d95596c63454e1aa",
+        "size": 117409
+    }
+}

@@ -1,0 +1,861 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>Splunk Enterprise Security Ansible Collection</h1>\n<h2>Tech Preview</h2>\n<p>Using splunk modules are meant to be used with the <a href=\"https://docs.ansible.com/ansible/latest/plugins/connection/httpapi.html\"><code>httpapi</code> connection\nplugin</a>\nand as such we will set certain attributes in the inventory</p>\n<p>Example <code>inventory.ini</code>:</p>\n<p>NOTE: The passwords should be stored in a secure location or an <a href=\"https://docs.ansible.com/ansible/latest/user_guide/vault.html\">Ansible\nVault</a></p>\n<p>NOTE: the default port for Splunk's REST API is 8089</p>\n<pre><code>[splunk]\nsplunk.example.com\n\n[splunk:vars]\nansible_network_os=splunk\nansible_user=admin\nansible_httpapi_pass=my_super_secret_admin_password\nansible_httpapi_port=8089\nansible_httpapi_use_ssl=yes\nansible_httpapi_validate_certs=True\nansible_connection=httpapi\n</code></pre>\n<p>Example playbook:</p>\n<h2>License</h2>\n<p>GPLv3</p>\n<h2>Author Information</h2>\n<p><a href=\"https://github.com/ansible-security\">Ansible Security Automation Team</a>\nThis is the <a href=\"https://docs.ansible.com/ansible/devel/collections_tech_preview.html\">Ansible\nCollection</a>\nprovided by the <a href=\"https://github.com/ansible-security\">Ansible Security Automation\nTeam</a> for automating actions in <a href=\"https://www.splunk.com/en_us/software/enterprise-security.html\">Splunk\nEnterprise Security\nSIEM</a></p>\n<p>This Collection is meant for distribution via\n<a href=\"https://galaxy.ansible.com/\">Ansible Galaxy</a> as is available for all\n<a href=\"https://github.com/ansible/ansible\">Ansible</a> users to utilize, contribute to,\nand provide feedback about.</p>\n<h3>Using Splunk Enterprise Security Ansible Collection</h3>\n<p>An example for using this collection to manage a log source with <a href=\"https://www.splunk.com/en_us/software/enterprise-security.html\">Splunk Enterprise Security SIEM</a> is as follows.</p>\n<p><code>inventory.ini</code> (Note the password should be managed by a <a href=\"https://docs.ansible.com/ansible/latest/user_guide/vault.html\">Vault</a> for a production environment.</p>\n<pre><code>[splunk]\nsplunk.example.com\n\n[qradar:vars]\nansible_network_os=splunk.enterprise_security.splunk\nansible_user=admin\nansible_httpapi_pass=my_super_secret_admin_password\nansible_httpapi_port=8089\nansible_httpapi_use_ssl=yes\nansible_httpapi_validate_certs=True\nansible_connection=httpapi\n</code></pre>\n\n<h4>Define your collection search path at the Play level</h4>\n<p>Below we specify our collection at the Play level which allows us to use the\nsplunk modules without specifying the need for the\nAnsible Collection Namespace.</p>\n<p><code>splunk_with_collections_example.yml</code></p>\n<pre><code>---\n- name: demo splunk\n  hosts: splunk\n  gather_facts: False\n  collections:\n    - splunk.enterprise_security\n  tasks:\n    - name: test splunk_data_input_monitor\n      ansible_security.collection.splunk_data_input_monitor:\n        name: &quot;/var/log/demo.log&quot;\n        state: &quot;present&quot;\n        recursive: True\n    - name: test splunk_data_input_network\n      ansible_security.collection.splunk_data_input_network:\n        name: &quot;9001&quot;\n        protocol: &quot;tcp&quot;\n        state: &quot;absent&quot;\n    - name: test splunk_coorelation_search\n      ansible_security.collection.splunk_correlation_search:\n        name: &quot;Test Demo Coorelation Search From Playbook&quot;\n        description: &quot;Test Demo Coorelation Search From Playbook, description.&quot;\n        search: 'source=&quot;/var/log/snort.log&quot;'\n        state: &quot;present&quot;\n    - name: test splunk_adaptive_response_notable_event\n      ansible_security.collection.splunk_adaptive_response_notable_event:\n        name: &quot;Demo notable event from playbook&quot;\n        correlation_search_name: &quot;Test Demo Coorelation Search From Playbook&quot;\n        description: &quot;Test Demo notable event from playbook, description.&quot;\n        state: &quot;present&quot;\n        next_steps:\n          - ping\n          - nslookup\n        recommended_actions:\n          - script\n</code></pre>\n\n<h4>Define your collection search path at the Block level</h4>\n<p>Below we use the <a href=\"https://docs.ansible.com/ansible/latest/user_guide/playbooks_blocks.html\"><code>block</code></a>\nlevel keyword, we are able to use the splunk modules without the need for the\nAnsible Collection Namespace.</p>\n<p><code>splunk_with_collections_block_example.yml</code></p>\n<pre><code>---\n- name: demo splunk\n  hosts: splunk\n  gather_facts: False\n  tasks:\n    - name: collection namespace block\n      - name: test splunk_data_input_monitor\n        ansible_security.collection.splunk_data_input_monitor:\n          name: &quot;/var/log/demo.log&quot;\n          state: &quot;present&quot;\n          recursive: True\n      - name: test splunk_data_input_network\n        ansible_security.collection.splunk_data_input_network:\n          name: &quot;9001&quot;\n          protocol: &quot;tcp&quot;\n          state: &quot;absent&quot;\n      - name: test splunk_coorelation_search\n        ansible_security.collection.splunk_correlation_search:\n          name: &quot;Test Demo Coorelation Search From Playbook&quot;\n          description: &quot;Test Demo Coorelation Search From Playbook, description.&quot;\n          search: 'source=&quot;/var/log/snort.log&quot;'\n          state: &quot;present&quot;\n      - name: test splunk_adaptive_response_notable_event\n        ansible_security.collection.splunk_adaptive_response_notable_event:\n          name: &quot;Demo notable event from playbook&quot;\n          correlation_search_name: &quot;Test Demo Coorelation Search From Playbook&quot;\n          description: &quot;Test Demo notable event from playbook, description.&quot;\n          state: &quot;present&quot;\n          next_steps:\n            - ping\n            - nslookup\n          recommended_actions:\n            - script\n      collections:\n        - splunk.enterprise_security\n</code></pre>\n\n<h3>Directory Structure</h3>\n<ul>\n<li><code>docs/</code>: local documentation for the collection</li>\n<li><code>license.txt</code>: optional copy of license(s) for this collection</li>\n<li><code>galaxy.yml</code>: source data for the MANIFEST.json that will be part of the collection package</li>\n<li><code>playbooks/</code>: playbooks reside here</li>\n<li><code>tasks/</code>: this holds 'task list files' for <code>include_tasks</code>/<code>import_tasks</code> usage</li>\n<li><code>plugins/</code>: all ansible plugins and modules go here, each in its own subdir</li>\n<li><code>modules/</code>: ansible modules</li>\n<li><code>lookups/</code>: lookup plugins</li>\n<li><code>filters/</code>: Jinja2 filter plugins</li>\n<li>... rest of plugins</li>\n<li><code>README.md</code>: information file (this file)</li>\n<li><code>roles/</code>: directory for ansible roles</li>\n<li><code>tests/</code>: tests for the collection's content</li>\n</ul>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "splunk_data_input_network",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Security Automation Team (@maxamillion) <https://github.com/ansible-security>",
+                    "description": [
+                        "This module allows for addition or deletion of TCP and UDP Data Inputs in Splunk."
+                    ],
+                    "filename": "/tmp/tmpe072adik/ansible_collections/splunk/enterprise_security/plugins/modules/splunk_data_input_network.py",
+                    "module": "splunk_data_input_network",
+                    "options": [
+                        {
+                            "name": "connection_host",
+                            "choices": [
+                                "ip",
+                                "dns",
+                                "none"
+                            ],
+                            "default": "ip",
+                            "description": [
+                                "Set the host for the remote server that is sending data.",
+                                "C(ip) sets the host to the IP address of the remote server sending data.",
+                                "C(dns) sets the host to the reverse DNS entry for the IP address of the remote server sending data.",
+                                "C(none) leaves the host as specified in inputs.conf, which is typically the Splunk system hostname."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "datatype",
+                            "choices": [
+                                "cooked",
+                                "raw"
+                            ],
+                            "default": "raw",
+                            "description": "Forwarders can transmit three types of data: raw, unparsed, or parsed. C(cooked) data refers to parsed and unparsed formats.\n",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "host",
+                            "description": [
+                                "Host from which the indexer gets data."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "index",
+                            "description": [
+                                "default Index to store generated events."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "name",
+                            "description": [
+                                "The input port which receives raw data."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "protocol",
+                            "choices": [
+                                "tcp",
+                                "udp"
+                            ],
+                            "description": [
+                                "Choose between tcp or udp"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "queue",
+                            "choices": [
+                                "parsingQueue",
+                                "indexQueue"
+                            ],
+                            "default": "parsingQueue",
+                            "description": [
+                                "Specifies where the input processor should deposit the events it reads. Defaults to parsingQueue.",
+                                "Set queue to parsingQueue to apply props.conf and other parsing rules to your data. For more information about props.conf and rules for timestamping and linebreaking, refer to props.conf and the online documentation at \"Monitor files and directories with inputs.conf\"",
+                                "Set queue to indexQueue to send your data directly into the index."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "rawTcpDoneTimeout",
+                            "default": 10,
+                            "description": [
+                                "Specifies in seconds the timeout value for adding a Done-key.",
+                                "If a connection over the port specified by name remains idle after receiving data for specified number of seconds, it adds a Done-key. This implies the last event is completely received."
+                            ],
+                            "required": false,
+                            "type": "int"
+                        },
+                        {
+                            "name": "restrictToHost",
+                            "description": [
+                                "Allows for restricting this input to only accept data from the host specified here."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "source",
+                            "description": [
+                                "Sets the source key/field for events from this input. Defaults to the input file path.",
+                                "Sets the source key initial value. The key is used during parsing/indexing, in particular to set the source field during indexing. It is also the source field used at search time. As a convenience, the chosen string is prepended with 'source::'.\n",
+                                "Note: Overriding the source key is generally not recommended. Typically, the input layer provides a more accurate string to aid in problem analysis and investigation, accurately recording the file from which the data was retrieved. Consider use of source types, tagging, and search wildcards before overriding this value.\n"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "sourcetype",
+                            "description": [
+                                "Set the source type for events from this input.",
+                                "\"sourcetype=\" is automatically prepended to <string>.",
+                                "Defaults to audittrail (if signedaudit=True) or fschange (if signedaudit=False)."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "ssl",
+                            "description": [
+                                "Enable or disble ssl for the data stream"
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent",
+                                "enabled",
+                                "disable"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "Enable, disable, create, or destroy"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Manage Splunk Data Inputs of type TCP or UDP",
+                    "version_added": "2.8"
+                },
+                "examples": "\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "splunk_data_input_monitor",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Security Automation Team (@maxamillion) <https://github.com/ansible-security>",
+                    "description": [
+                        "This module allows for addition or deletion of File and Directory Monitor Data Inputs in Splunk."
+                    ],
+                    "filename": "/tmp/tmpe072adik/ansible_collections/splunk/enterprise_security/plugins/modules/splunk_data_input_monitor.py",
+                    "module": "splunk_data_input_monitor",
+                    "options": [
+                        {
+                            "name": "blacklist",
+                            "description": [
+                                "Specify a regular expression for a file path. The file path that matches this regular expression is not indexed."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "check_index",
+                            "default": false,
+                            "description": [
+                                "If set to C(True), the index value is checked to ensure that it is the name of a valid index."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "check_path",
+                            "description": [
+                                "If set to C(True), the name value is checked to ensure that it exists."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "crc_salt",
+                            "description": [
+                                "A string that modifies the file tracking identity for files in this input. The magic value <SOURCE> invokes special behavior (see admin documentation)."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "disabled",
+                            "default": false,
+                            "description": [
+                                "Indicates if input monitoring is disabled."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "followTail",
+                            "default": false,
+                            "description": [
+                                "If set to C(True), files that are seen for the first time is read from the end."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "host",
+                            "description": [
+                                "The value to populate in the host field for events from this data input."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "host_regex",
+                            "description": [
+                                "Specify a regular expression for a file path. If the path for a file matches this regular expression, the captured value is used to populate the host field for events from this data input. The regular expression must have one capture group."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "host_segment",
+                            "description": [
+                                "Use the specified slash-separate segment of the filepath as the host field value."
+                            ],
+                            "required": false,
+                            "type": "int"
+                        },
+                        {
+                            "name": "ignore_older_than",
+                            "description": [
+                                "Specify a time value. If the modification time of a file being monitored falls outside of this rolling time window, the file is no longer being monitored."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "index",
+                            "description": [
+                                "Which index events from this input should be stored in. Defaults to default."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "name",
+                            "description": [
+                                "The file or directory path to monitor on the system."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "recursive",
+                            "default": false,
+                            "description": [
+                                "Setting this to False prevents monitoring of any subdirectories encountered within this data input."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "rename_source",
+                            "description": [
+                                "The value to populate in the source field for events from this data input. The same source should not be used for multiple data inputs."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "sourcetype",
+                            "description": [
+                                "The value to populate in the sourcetype field for incoming events."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent"
+                            ],
+                            "description": [
+                                "Add or remove a data source."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "time_before_close",
+                            "description": [
+                                "When Splunk software reaches the end of a file that is being read, the file is kept open for a minimum of the number of seconds specified in this value. After this period has elapsed, the file is checked again for more data."
+                            ],
+                            "required": false,
+                            "type": "int"
+                        },
+                        {
+                            "name": "whitelist",
+                            "description": [
+                                "Specify a regular expression for a file path. Only file paths that match this regular expression are indexed."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Manage Splunk Data Inputs of type Monitor",
+                    "version_added": "2.8"
+                },
+                "examples": "\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "splunk_correlation_search_info",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Security Automation Team (@maxamillion) <https://github.com/ansible-security>",
+                    "description": [
+                        "This module allows for the query of Splunk Enterprise Security Correlation Searches"
+                    ],
+                    "filename": "/tmp/tmpe072adik/ansible_collections/splunk/enterprise_security/plugins/modules/splunk_correlation_search_info.py",
+                    "module": "splunk_correlation_search_info",
+                    "options": [
+                        {
+                            "name": "name",
+                            "description": [
+                                "Name of coorelation search"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Manage Splunk Enterprise Security Correlation Searches",
+                    "version_added": "2.9"
+                },
+                "examples": "\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "splunk_correlation_search",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Security Automation Team (@maxamillion) <https://github.com/ansible-security>",
+                    "description": [
+                        "This module allows for creation, deletion, and modification of Splunk Enterprise Security Correlation Searches"
+                    ],
+                    "filename": "/tmp/tmpe072adik/ansible_collections/splunk/enterprise_security/plugins/modules/splunk_correlation_search.py",
+                    "module": "splunk_correlation_search",
+                    "notes": [
+                        "The following options are not yet supported: throttle_window_duration, throttle_fields_to_group_by, and adaptive_response_actions\n"
+                    ],
+                    "options": [
+                        {
+                            "name": "app",
+                            "default": "SplunkEnterpriseSecuritySuite",
+                            "description": [
+                                "Splunk app to associate the correlation seach with"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "cron_schedule",
+                            "default": "*/5 * * * *",
+                            "description": [
+                                "Enter a cron-style schedule.",
+                                "For example C('*/5 * * * *') (every 5 minutes) or C('0 21 * * *') (every day at 9 PM).",
+                                "Real-time searches use a default schedule of C('*/5 * * * *')."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "description",
+                            "description": [
+                                "Description of the coorelation search, this will populate the description field for the web console"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "name",
+                            "description": [
+                                "Name of coorelation search"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "schedule_priority",
+                            "choices": [
+                                "Default",
+                                "Higher",
+                                "Highest"
+                            ],
+                            "default": "Default",
+                            "description": [
+                                "Raise the scheduling priority of a report. Set to \"Higher\" to prioritize it above other searches of the same scheduling mode, or \"Highest\" to prioritize it above other searches regardless of mode. Use with discretion."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "schedule_window",
+                            "default": "0",
+                            "description": [
+                                "Let report run at any time within a window that opens at its scheduled run time, to improve efficiency when there are many concurrently scheduled reports. The \"auto\" setting automatically determines the best window width for the report."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "scheduling",
+                            "choices": [
+                                "real-time",
+                                "continuous"
+                            ],
+                            "default": "real-time",
+                            "description": [
+                                "Controls the way the scheduler computes the next execution time of a scheduled search.",
+                                "Learn more: https://docs.splunk.com/Documentation/Splunk/7.2.3/Report/Configurethepriorityofscheduledreports#Real-time_scheduling_and_continuous_scheduling\n"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "search",
+                            "description": [
+                                "SPL search string"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent",
+                                "enabled",
+                                "disabled"
+                            ],
+                            "description": [
+                                "Add, remove, enable, or disiable a correlation search."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "suppress_alerts",
+                            "default": false,
+                            "description": [
+                                "To suppress alerts from this correlation search or not"
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "throttle_fields_to_group_by",
+                            "description": [
+                                "Type the fields to consider for matching events for throttling."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "throttle_window_duration",
+                            "description": [
+                                "How much time to ignore other events that match the field values specified in Fields to group by."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "time_earliest",
+                            "default": "-24h",
+                            "description": [
+                                "Earliest time using relative time modifiers."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "time_latest",
+                            "default": "now",
+                            "description": [
+                                "Latest time using relative time modifiers."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "trigger_alert_when",
+                            "choices": [
+                                "number of events",
+                                "number of results",
+                                "number of hosts",
+                                "number of sources"
+                            ],
+                            "default": "number of events",
+                            "description": [
+                                "Raise the scheduling priority of a report. Set to \"Higher\" to prioritize it above other searches of the same scheduling mode, or \"Highest\" to prioritize it above other searches regardless of mode. Use with discretion."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "trigger_alert_when_condition",
+                            "choices": [
+                                "greater than",
+                                "less than",
+                                "equal to",
+                                "not equal to",
+                                "drops by",
+                                "rises by"
+                            ],
+                            "default": "greater than",
+                            "description": [
+                                "Conditional to pass to C(trigger_alert_when)"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "trigger_alert_when_value",
+                            "default": "10",
+                            "description": [
+                                "Value to pass to C(trigger_alert_when)"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "ui_dispatch_context",
+                            "description": [
+                                "Set an app to use for links such as the drill-down search in a notable event or links in an email adaptive response action. If None, uses the Application Context."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Manage Splunk Enterprise Security Correlation Searches",
+                    "version_added": "2.8"
+                },
+                "examples": "\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "splunk_adaptive_response_notable_event",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Security Automation Team (@maxamillion) <https://github.com/ansible-security>",
+                    "description": [
+                        "This module allows for creation, deletion, and modification of Splunk Enterprise Security Notable Event Adaptive Responses that are associated with a correlation search"
+                    ],
+                    "filename": "/tmp/tmpe072adik/ansible_collections/splunk/enterprise_security/plugins/modules/splunk_adaptive_response_notable_event.py",
+                    "module": "splunk_adaptive_response_notable_event",
+                    "options": [
+                        {
+                            "name": "asset_extraction",
+                            "choices": [
+                                "src",
+                                "dest",
+                                "dvc",
+                                "orig_host"
+                            ],
+                            "default": [
+                                "src",
+                                "dest",
+                                "dvc",
+                                "orig_host"
+                            ],
+                            "description": [
+                                "list of assets to extract, select any one or many of the available choices",
+                                "defaults to all available choices"
+                            ],
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "correlation_search_name",
+                            "description": [
+                                "Name of correlation search to associate this notable event adaptive response with"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "default_owner",
+                            "description": [
+                                "Default owner of the notable event, if unset it will default to Splunk System Defaults"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "default_status",
+                            "choices": [
+                                "unassigned",
+                                "new",
+                                "in progress",
+                                "pending",
+                                "resolved",
+                                "closed"
+                            ],
+                            "description": [
+                                "Default status of the notable event, if unset it will default to Splunk System Defaults"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "description",
+                            "description": [
+                                "Description of the notable event, this will populate the description field for the web console"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "drill_down_earliest_offset",
+                            "default": "$info_min_time$",
+                            "description": [
+                                "Set the amount of time before the triggering event to search for related events. For example, 2h. Use \"$info_min_time$\" to set the drill-down time to match the earliest time of the search"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "drill_down_latest_offset",
+                            "default": "$info_max_time$",
+                            "description": [
+                                "Set the amount of time after the triggering event to search for related events. For example, 1m. Use \"$info_max_time$\" to set the drill-down time to match the latest time of the search"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "drill_down_name",
+                            "description": [
+                                "Name for drill down search, Supports variable substitution with fields from the matching event."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "drill_down_search",
+                            "description": [
+                                "Drill down search, Supports variable substitution with fields from the matching event."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "identity_extraction",
+                            "choices": [
+                                "user",
+                                "src_user"
+                            ],
+                            "default": [
+                                "user",
+                                "src_user"
+                            ],
+                            "description": [
+                                "list of identity fields to extract, select any one or many of the available choices",
+                                "defaults to all available choices"
+                            ],
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "investigation_profiles",
+                            "description": [
+                                "Investigation profile to assiciate the notable event with."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "name",
+                            "description": [
+                                "Name of notable event"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "next_steps",
+                            "description": [
+                                "List of adaptive responses that should be run next",
+                                "Describe next steps and response actions that an analyst could take to address this threat."
+                            ],
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "recommended_actions",
+                            "description": [
+                                "List of adaptive responses that are recommended to be run next",
+                                "Identifying Recommended Adaptive Responses will highlight those actions for the analyst when looking at the list of response actions available, making it easier to find them among the longer list of available actions."
+                            ],
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "security_domain",
+                            "choices": [
+                                "access",
+                                "endpoint",
+                                "network",
+                                "threat",
+                                "identity",
+                                "audit"
+                            ],
+                            "default": "threat",
+                            "description": [
+                                "Splunk Security Domain"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "severity",
+                            "choices": [
+                                "informational",
+                                "low",
+                                "medium",
+                                "high",
+                                "critical",
+                                "unknown"
+                            ],
+                            "default": "high",
+                            "description": [
+                                "Severity rating"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent"
+                            ],
+                            "description": [
+                                "Add or remove a data source."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Manage Splunk Enterprise Security Notable Event Adaptive Responses",
+                    "version_added": "2.8"
+                },
+                "examples": "\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "splunk",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "splunk",
+            "content_type": "httpapi",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Security Automation Team",
+                    "description": [
+                        "This HttpApi plugin provides methods to connect to Splunk over a HTTP(S)-based api."
+                    ],
+                    "filename": "/tmp/tmpe072adik/ansible_collections/splunk/enterprise_security/plugins/httpapi/splunk.py",
+                    "httpapi": "splunk",
+                    "short_description": "HttpApi Plugin for Splunk",
+                    "version_added": "2.8"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

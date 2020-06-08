@@ -1,0 +1,35 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/ansible-posix-0.1.1.tar.gz",
+    "namespace": {
+        "name": "ansible"
+    },
+    "collection": {
+        "name": "posix"
+    },
+    "version": "0.1.1",
+    "metadata": {
+        "namespace": "ansible",
+        "name": "posix",
+        "version": "0.1.1",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "description": null,
+        "repository": "https://github.com/ansible-collections/ansible.posix",
+        "documentation": "https://github.com/ansible-collections/ansible.posix/tree/master/docs",
+        "homepage": "https://github.com/ansible-collections/ansible.posix",
+        "issues": "https://github.com/ansible-collections/ansible.posix",
+        "authors": [
+            "Ansible (github.com/ansible)"
+        ],
+        "tags": [],
+        "license_file": "COPYING",
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "ansible-posix-0.1.1.tar.gz",
+        "sha256": "06319fbd01c6f4d2e3177fd2f70e8cf56fdd614a37c50a9bb1000a82a4302588",
+        "size": 102496
+    }
+}

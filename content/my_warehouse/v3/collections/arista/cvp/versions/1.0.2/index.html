@@ -1,0 +1,121 @@
+<h1>Ansible Modules for Arista CloudVision Platform</h1>
+<h2>About</h2>
+<p><a href="https://www.arista.com/">Arista Networks</a> supports Ansible for managing devices running the EOS operating system through <a href="https://www.arista.com/en/products/eos/eos-cloudvision">CloudVision platform (CVP)</a>. This roles includes a set of ansible modules that perform specific configuration tasks on CVP server. These tasks include: collecting facts, managing configlets, containers, build provisionning topology and running tasks.</p>
+<h2>Installation</h2>
+<p>For the collection to be used you need to have installed:
+- requests &gt;= <code>2.22.0</code>
+- treelib version <code>1.5.5</code> or later</p>
+<pre><code>pip install requests&gt;=2.22.0
+pip install treelib&gt;=1.5.5
+</code></pre>
+
+<p>Ansible galaxy hosts all stable version of this collection. Installation from ansible-galaxy is the most convenient approach for consuming <code>arista.cvp</code> content</p>
+<pre><code>$ ansible-galaxy collection install arista.cvp
+Process install dependency map
+Starting collection install process
+Installing 'arista.cvp:1.0.1' to '~/.ansible/collections/ansible_collections/arista/cvp'
+</code></pre>
+
+<h2>Modules overview</h2>
+<p>This repository provides content for Ansible's collection <strong>arista.cvp</strong> with following content:</p>
+<ul>
+<li><strong>arista.cvp.cv_facts</strong> - Collect CVP facts from server like list of containers, devices, configlet and tasks.</li>
+<li><strong>arista.cvp.cv_configlet</strong> -  Manage configlet configured on CVP.</li>
+<li><strong>arista.cvp.cv_container</strong> -  Manage container topology and attach configlet and devices to containers.</li>
+<li><strong>arista.cvp.cv_device</strong> - Manage devices configured on CVP</li>
+<li><strong>arista.cvp.cv_task</strong> - Run tasks created on CVP.</li>
+</ul>
+<p>This collection supports CVP version &gt;= <code>2018.2.5</code></p>
+<h2>Example</h2>
+<h3>Create containers on CloudVision</h3>
+<pre><code>---
+- name: Build Switch configuration
+  hosts: DC1_FABRIC
+  connection: local
+  gather_facts: no
+  vars:
+    CVP_CONTAINERS:
+      DC1_LEAF1:
+        parent_container: DC1_L3LEAFS
+      DC1_FABRIC:
+        parent_container: Tenant
+      DC1_L3LEAFS:
+        parent_container: DC1_FABRIC
+      DC1_LEAF2:
+        parent_container: DC1_L3LEAFS
+      DC1_SPINES:
+        parent_container: DC1_FABRIC
+  tasks:
+    - name: 'Collecting facts from CVP {{inventory_hostname}}.'
+      arista.cvp.cv_facts:
+      register: CVP_FACTS
+    - name: &quot;Building Container topology on {{inventory_hostname}}&quot;
+      tags: [provision]
+      arista.cvp.cv_container:
+          topology: '{{CVP_CONTAINERS}}'
+          cvp_facts: '{{CVP_FACTS.ansible_facts}}'
+          save_topology: true
+</code></pre>
+
+<h3>Create Configlets on CloudVision</h3>
+<pre><code>---
+- name: Build Switch configuration
+  hosts: DC1_FABRIC
+  connection: local
+  gather_facts: no
+  vars:
+    CVP_CONFIGLETS:
+      ANSIBLE_TESTING_CONTAINER: &quot;alias a{{ 999 | random }} show version&quot;
+      ANSIBLE_TESTING_VEOS: &quot;alias a{{ 999 | random }} show version&quot;
+  tasks:
+    - name: 'Collecting facts from CVP {{inventory_hostname}}.'
+      arista.cvp.cv_facts:
+      register: CVP_FACTS
+    - name: 'Create configlets on CVP {{inventory_hostname}}.'
+      arista.cvp.cv_configlet:
+        cvp_facts: &quot;{{CVP_FACTS.ansible_facts}}&quot;
+        configlets: &quot;{{CVP_CONFIGLETS}}&quot;
+        configlet_filter: [&quot;_TESTING_&quot;]
+</code></pre>
+
+<h3>Configure devices on CloudVision</h3>
+<pre><code>---
+- name: Build Switch configuration
+  hosts: DC1_FABRIC
+  connection: local
+  gather_facts: no
+  vars:
+    CVP_DEVICES:
+      DC1-SPINE1:
+        name: DC1-SPINE1
+        parent_container: DC1_SPINES
+        configlets:
+            - AVD_DC1-SPINE1
+        imageBundle: []
+      DC1-SPINE2:
+        name: DC1-SPINE2
+        parent_container: DC1_SPINES
+        configlets:
+            - AVD_DC1-SPINE2
+        imageBundle: []
+  tasks:
+    - name: 'Collecting facts from CVP {{inventory_hostname}}.'
+      arista.cvp.cv_facts:
+      register: CVP_FACTS
+    - name: &quot;Configure devices on {{inventory_hostname}}&quot;
+      arista.cvp.cv_device:
+        devices: &quot;{{CVP_DEVICES}}&quot;
+        cvp_facts: '{{CVP_FACTS.ansible_facts}}'
+        device_filter: ['DC1']
+        state: present
+</code></pre>
+
+<p>More documentation on <a href="https://github.com/aristanetworks/ansible-cvp">github repository</a></p>
+<h2>License</h2>
+<p>Project is published under <a href="LICENSE">Apache License</a>.</p>
+<h2>Ask a question</h2>
+<p>Support for this <code>arista.cvp</code> collection is provided by the community directly in this repository. Easiest way to get support is to open <a href="https://github.com/aristanetworks/ansible-cvp/issues">an issue</a>.</p>
+<h2>Contributing</h2>
+<p>Contributing pull requests are gladly welcomed for this repository. If you are planning a big change, please start a discussion first to make sure we'll be able to merge it.</p>
+<p>You can also open an <a href="https://github.com/aristanetworks/ansible-cvp/issues">issue</a> to report any problem or to submit enhancement.</p>
+<p>A more complete <a href="https://github.com/aristanetworks/ansible-cvp/contributing.md">guide for contribution</a> is available in the repository</p>

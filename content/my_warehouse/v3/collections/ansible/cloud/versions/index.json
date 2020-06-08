@@ -1,0 +1,19 @@
+{
+    "meta": {
+        "count": 1
+    },
+    "links": {
+        "first": "content/my_warehouse/v3/collections/ansible/cloud/versions/",
+        "last": "content/my_warehouse/v3/collections/ansible/cloud/versions/",
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "version": "0.0.3",
+            "href": "content/my_warehouse/v3/collections/ansible/cloud/versions/0.0.3/",
+            "created_at": "2020-06-08T14:09:14.543329",
+            "modified_at": "2020-06-08T14:09:14.543329"
+        }
+    ]
+}

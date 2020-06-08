@@ -1,0 +1,25 @@
+{
+    "meta": {
+        "count": 2
+    },
+    "links": {
+        "first": "content/my_warehouse/v3/collections/google/cloud/versions/",
+        "last": "content/my_warehouse/v3/collections/google/cloud/versions/",
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "version": "0.0.9",
+            "href": "content/my_warehouse/v3/collections/google/cloud/versions/0.0.9/",
+            "created_at": "2020-06-08T14:09:16.350510",
+            "modified_at": "2020-06-08T14:09:16.350510"
+        },
+        {
+            "version": "0.0.9",
+            "href": "content/my_warehouse/v3/collections/google/cloud/versions/0.0.9/",
+            "created_at": "2020-06-08T14:09:16.749267",
+            "modified_at": "2020-06-08T14:09:16.749267"
+        }
+    ]
+}

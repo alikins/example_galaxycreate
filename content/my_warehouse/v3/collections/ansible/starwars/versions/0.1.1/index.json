@@ -1,0 +1,35 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/ansible.starwars-0.1.1.tar.gz",
+    "namespace": {
+        "name": "ansible"
+    },
+    "collection": {
+        "name": "starwars"
+    },
+    "version": "0.1.1",
+    "metadata": {
+        "namespace": "ansible",
+        "name": "starwars",
+        "version": "0.1.1",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "This example collection contains a set of content to be used for starwars fans",
+        "repository": "https://www.github.com/fvzwieten/starwars",
+        "documentation": "https://www.github.com/fvzwieten/starwares/README.md",
+        "homepage": "https://www.github.com/fvzwieten/starwars",
+        "issues": "https://github.com/fvzwieten/starwars/issues",
+        "authors": [
+            "Fred van Zwieten (fvzwieten@redhat.com)"
+        ],
+        "tags": [],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "ansible.starwars-0.1.1.tar.gz",
+        "sha256": "676ca4f20fe2ca5d1ffec9dab8d959723f0a125b5359352e14e660d2f7c37659",
+        "size": 3420
+    }
+}

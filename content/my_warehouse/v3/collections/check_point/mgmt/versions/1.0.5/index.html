@@ -1,0 +1,171 @@
+<h1>Check Point Ansible Mgmt Collection</h1>
+<p>This Ansible collection provides control over a Check Point Management server using
+Check Point's web-services APIs.</p>
+<p>The Ansible Check Point modules reference can be found here:
+https://docs.ansible.com/ansible/latest/modules/list_of_network_modules.html#check-point
+<br>Note - look only at the <code>cp_mgmt_*</code> modules, cause the <code>checkpoint_*</code> will be deprecated.</p>
+<p>This is the repository of the mgmt collection which can be found here - https://galaxy.ansible.com/check_point/mgmt</p>
+<h2>Installation instructions</h2>
+<p>Run <code>ansible-galaxy collection install check_point.mgmt</code></p>
+<h2>Requirements</h2>
+<ul>
+<li>Ansible 2.9+ is required.</li>
+<li>The Check Point server should be using the versions detailed in this SK: https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&amp;solutionid=sk114661</li>
+<li>The Check Point server should be open for API communication from the Ansible server.
+  Open SmartConsole and check "Manage &amp; Settings &gt; Blades &gt; Management API &gt; Advanced settings".</li>
+</ul>
+<h2>Usage</h2>
+<ol>
+<li>Edit the <code>hosts</code> so that it will contain a section similar to this one:</li>
+</ol>
+<pre><code>[check_point]
+%CHECK_POINT_MANAGEMENT_SERVER_IP%
+[check_point:vars]
+ansible_httpapi_use_ssl=True
+ansible_httpapi_validate_certs=False
+ansible_user=%CHECK_POINT_MANAGEMENT_SERVER_USER%
+ansible_password=%CHECK_POINT_MANAGEMENT_SERVER_PASSWORD%
+ansible_network_os=check_point.mgmt.checkpoint
+</code></pre>
+
+<p>Note - If you want to run against Ansible version 2.9 instead of the collection, just replace <code>ansible_network_os=check_point.mgmt.checkpoint</code> with <code>ansible_network_os=checkpoint</code>
+<br><br>2. Run a playbook:</p>
+<pre><code>ansible-playbook your_ansible_playbook.yml
+</code></pre>
+
+<p>or</p>
+<p>Run a playbook in "check mode":</p>
+<pre><code>ansible-playbook -C your_ansible_playbook.yml
+</code></pre>
+
+<p>Example playbook:</p>
+<pre><code>---
+- name: playbook name
+  hosts: check_point
+  connection: httpapi
+  tasks:
+    - name: task to have network
+      check_point.mgmt.cp_mgmt_network:
+        name: &quot;network name&quot;
+        subnet: &quot;4.1.76.0&quot;
+        mask_length: 24
+        auto_publish_session: true
+
+      vars: 
+        ansible_checkpoint_domain: &quot;SMC User&quot;
+</code></pre>
+
+<p>Note - If you want to run against Ansible version 2.9 instead of the collection, just replace <code>check_point.mgmt.cp_mgmt_network</code> with <code>cp_mgmt_network</code></p>
+<h3>Notes:</h3>
+<ol>
+<li>Because this Ansible module is controlling the management server remotely via the web API, 
+     the Ansible server needs to have access to the Check Point API server.
+     Open <code>SmartConsole</code>, navigate to "Manage &amp; Settings &gt; Blades &gt; Management API &gt; Advanced settings"
+     and check the API server's accessibility set</li>
+<li>Ansible has a feature called "Check Mode" that enables you to test the
+     changes without actually changing anything.</li>
+<li>The login and logout happens automatically.</li>
+<li>If you want to login to a specific domain, in the playbook above in the <code>vars</code>secion change the domain name to 
+     <code>ansible_checkpoint_domain</code></li>
+<li>There are two ways to publish changes:
+    a. Set the <code>auto_publish_session</code> to <code>true</code> as displayed in the example playbook above.
+       This option will publish only the task which this parameter belongs to.
+    b. Add the task to publish to the <code>cp_mgmt_publish</code> module.
+       This option will publish all the tasks above this task.</li>
+<li>It is recommended by Check Point to use this collection over the modules of Ansible version 2.9</li>
+<li>If you still want to use Ansible version 2.9 instead of this collection (not recommended):
+    a. In the <code>hosts</code> file replace <code>ansible_network_os=check_point.mgmt.checkpoint</code> with <code>ansible_network_os=checkpoint</code>
+    b. In the task in the playbook replace the module <code>check_point.mgmt.cp_mgmt_*</code> with the module <code>cp_mgmt_*</code></li>
+</ol>
+<h2>Modules</h2>
+<ul>
+<li><code>cp_mgmt_access_layer</code> – Manages access-layer objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_access_layer_facts</code> – Get access-layer objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_access_role</code> – Manages access-role objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_access_role_facts</code> – Get access-role objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_access_rule</code> – Manages access-rule objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_access_rule_facts</code> – Get access-rule objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_address_range</code> – Manages address-range objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_address_range_facts</code> – Get address-range objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_administrator</code> – Manages administrator objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_administrator_facts</code> – Get administrator objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_application_site</code> – Manages application-site objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_application_site_category</code> – Manages application-site-category objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_application_site_category_facts</code> – Get application-site-category objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_application_site_facts</code> – Get application-site objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_application_site_group</code> – Manages application-site-group objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_application_site_group_facts</code> – Get application-site-group objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_assign_global_assignment</code> – assign global assignment on Check Point over Web Services API</li>
+<li><code>cp_mgmt_discard</code> – All changes done by user are discarded and removed from database</li>
+<li><code>cp_mgmt_dns_domain</code> – Manages dns-domain objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_dns_domain_facts</code> – Get dns-domain objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_dynamic_object</code> – Manages dynamic-object objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_dynamic_object_facts</code> – Get dynamic-object objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_exception_group</code> – Manages exception-group objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_exception_group_facts</code> – Get exception-group objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_global_assignment</code> – Manages global-assignment objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_global_assignment_facts</code> – Get global-assignment objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_group</code> – Manages group objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_group_facts</code> – Get group objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_group_with_exclusion</code> – Manages group-with-exclusion objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_group_with_exclusion_facts</code> – Get group-with-exclusion objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_host</code> – Manages host objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_host_facts</code> – Get host objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_install_policy</code> – install policy on Check Point over Web Services API</li>
+<li><code>cp_mgmt_mds_facts</code> – Get Multi-Domain Server (mds) objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_multicast_address_range</code> – Manages multicast-address-range objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_multicast_address_range_facts</code> – Get multicast-address-range objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_network</code> – Manages network objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_network_facts</code> – Get network objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_package</code> – Manages package objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_package_facts</code> – Get package objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_publish</code> – All the changes done by this user will be seen by all users only after publish is called</li>
+<li><code>cp_mgmt_put_file</code> – put file on Check Point over Web Services API</li>
+<li><code>cp_mgmt_run_ips_update</code> – Runs IPS database update. If "package-path" is not provided server will try to get the latest package from the User Center</li>
+<li><code>cp_mgmt_run_script</code> – Executes the script on a given list of targets</li>
+<li><code>cp_mgmt_security_zone</code> – Manages security-zone objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_security_zone_facts</code> – Get security-zone objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_dce_rpc</code> – Manages service-dce-rpc objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_dce_rpc_facts</code> – Get service-dce-rpc objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_group</code> – Manages service-group objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_group_facts</code> – Get service-group objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_icmp</code> – Manages service-icmp objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_icmp6</code> – Manages service-icmp6 objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_icmp6_facts</code> – Get service-icmp6 objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_icmp_facts</code> – Get service-icmp objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_other</code> – Manages service-other objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_other_facts</code> – Get service-other objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_rpc</code> – Manages service-rpc objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_rpc_facts</code> – Get service-rpc objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_sctp</code> – Manages service-sctp objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_sctp_facts</code> – Get service-sctp objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_tcp</code> – Manages service-tcp objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_tcp_facts</code> – Get service-tcp objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_udp</code> – Manages service-udp objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_service_udp_facts</code> – Get service-udp objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_session_facts</code> – Get session objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_simple_gateway</code> – Manages simple-gateway objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_simple_gateway_facts</code> – Get simple-gateway objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_tag</code> – Manages tag objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_tag_facts</code> – Get tag objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_exception</code> – Manages threat-exception objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_exception_facts</code> – Get threat-exception objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_indicator</code> – Manages threat-indicator objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_indicator_facts</code> – Get threat-indicator objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_layer</code> – Manages threat-layer objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_layer_facts</code> – Get threat-layer objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_profile</code> – Manages threat-profile objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_profile_facts</code> – Get threat-profile objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_protection_override</code> – Edit existing object using object name or uid</li>
+<li><code>cp_mgmt_threat_rule</code> – Manages threat-rule objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_threat_rule_facts</code> – Get threat-rule objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_time</code> – Manages time objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_time_facts</code> – Get time objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_verify_policy</code> – Verifies the policy of the selected package</li>
+<li><code>cp_mgmt_vpn_community_meshed</code> – Manages vpn-community-meshed objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_vpn_community_meshed_facts</code> – Get vpn-community-meshed objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_vpn_community_star</code> – Manages vpn-community-star objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_vpn_community_star_facts</code> – Get vpn-community-star objects facts on Check Point over Web Services API</li>
+<li><code>cp_mgmt_wildcard</code> – Manages wildcard objects on Check Point over Web Services API</li>
+<li><code>cp_mgmt_wildcard_facts</code> – Get wildcard objects facts on Check Point over Web Services API</li>
+</ul>

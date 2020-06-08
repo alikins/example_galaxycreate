@@ -1,0 +1,39 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/arista.cvp-1.0.2.tar.gz",
+    "namespace": {
+        "name": "arista"
+    },
+    "collection": {
+        "name": "cvp"
+    },
+    "version": "1.0.2",
+    "metadata": {
+        "namespace": "arista",
+        "name": "cvp",
+        "version": "1.0.2",
+        "license": [],
+        "description": "Ansible Modules for CloudVision Platform (CVP)",
+        "repository": "https://github.com/aristanetworks/ansible-cvp",
+        "documentation": "https://github.com/aristanetworks/ansible-cvp",
+        "homepage": "https://github.com/aristanetworks/ansible-cvp",
+        "issues": "https://github.com/aristanetworks/ansible-cvp/issues",
+        "authors": [
+            "EMEA AS <ansible-dev@arista.com>"
+        ],
+        "tags": [
+            "arista",
+            "network",
+            "networking",
+            "cloudvision",
+            "cvp"
+        ],
+        "license_file": "LICENSE",
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "arista.cvp-1.0.2.tar.gz",
+        "sha256": "cd228a31e94b5ee510b9ca5d2b661e3f640617aaab62483ff3cb63d144146b69",
+        "size": 54227
+    }
+}

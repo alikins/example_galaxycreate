@@ -1,0 +1,405 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>Ansible Modules for Arista CloudVision Platform</h1>\n<h2>About</h2>\n<p><a href=\"https://www.arista.com/\">Arista Networks</a> supports Ansible for managing devices running the EOS operating system through <a href=\"https://www.arista.com/en/products/eos/eos-cloudvision\">CloudVision platform (CVP)</a>. This roles includes a set of ansible modules that perform specific configuration tasks on CVP server. These tasks include: collecting facts, managing configlets, containers, build provisionning topology and running tasks.</p>\n<h2>Installation</h2>\n<p>For the collection to be used you need to have installed:\n- requests &gt;= <code>2.22.0</code>\n- treelib version <code>1.5.5</code> or later</p>\n<pre><code>pip install requests&gt;=2.22.0\npip install treelib&gt;=1.5.5\n</code></pre>\n\n<p>Ansible galaxy hosts all stable version of this collection. Installation from ansible-galaxy is the most convenient approach for consuming <code>arista.cvp</code> content</p>\n<pre><code>$ ansible-galaxy collection install arista.cvp\nProcess install dependency map\nStarting collection install process\nInstalling 'arista.cvp:1.0.1' to '~/.ansible/collections/ansible_collections/arista/cvp'\n</code></pre>\n\n<h2>Modules overview</h2>\n<p>This repository provides content for Ansible's collection <strong>arista.cvp</strong> with following content:</p>\n<ul>\n<li><strong>arista.cvp.cv_facts</strong> - Collect CVP facts from server like list of containers, devices, configlet and tasks.</li>\n<li><strong>arista.cvp.cv_configlet</strong> -  Manage configlet configured on CVP.</li>\n<li><strong>arista.cvp.cv_container</strong> -  Manage container topology and attach configlet and devices to containers.</li>\n<li><strong>arista.cvp.cv_device</strong> - Manage devices configured on CVP</li>\n<li><strong>arista.cvp.cv_task</strong> - Run tasks created on CVP.</li>\n</ul>\n<p>This collection supports CVP version &gt;= <code>2018.2.5</code></p>\n<h2>Example</h2>\n<h3>Create containers on CloudVision</h3>\n<pre><code>---\n- name: Build Switch configuration\n  hosts: DC1_FABRIC\n  connection: local\n  gather_facts: no\n  vars:\n    CVP_CONTAINERS:\n      DC1_LEAF1:\n        parent_container: DC1_L3LEAFS\n      DC1_FABRIC:\n        parent_container: Tenant\n      DC1_L3LEAFS:\n        parent_container: DC1_FABRIC\n      DC1_LEAF2:\n        parent_container: DC1_L3LEAFS\n      DC1_SPINES:\n        parent_container: DC1_FABRIC\n  tasks:\n    - name: 'Collecting facts from CVP {{inventory_hostname}}.'\n      arista.cvp.cv_facts:\n      register: CVP_FACTS\n    - name: &quot;Building Container topology on {{inventory_hostname}}&quot;\n      tags: [provision]\n      arista.cvp.cv_container:\n          topology: '{{CVP_CONTAINERS}}'\n          cvp_facts: '{{CVP_FACTS.ansible_facts}}'\n          save_topology: true\n</code></pre>\n\n<h3>Create Configlets on CloudVision</h3>\n<pre><code>---\n- name: Build Switch configuration\n  hosts: DC1_FABRIC\n  connection: local\n  gather_facts: no\n  vars:\n    CVP_CONFIGLETS:\n      ANSIBLE_TESTING_CONTAINER: &quot;alias a{{ 999 | random }} show version&quot;\n      ANSIBLE_TESTING_VEOS: &quot;alias a{{ 999 | random }} show version&quot;\n  tasks:\n    - name: 'Collecting facts from CVP {{inventory_hostname}}.'\n      arista.cvp.cv_facts:\n      register: CVP_FACTS\n    - name: 'Create configlets on CVP {{inventory_hostname}}.'\n      arista.cvp.cv_configlet:\n        cvp_facts: &quot;{{CVP_FACTS.ansible_facts}}&quot;\n        configlets: &quot;{{CVP_CONFIGLETS}}&quot;\n        configlet_filter: [&quot;_TESTING_&quot;]\n</code></pre>\n\n<h3>Configure devices on CloudVision</h3>\n<pre><code>---\n- name: Build Switch configuration\n  hosts: DC1_FABRIC\n  connection: local\n  gather_facts: no\n  vars:\n    CVP_DEVICES:\n      DC1-SPINE1:\n        name: DC1-SPINE1\n        parent_container: DC1_SPINES\n        configlets:\n            - AVD_DC1-SPINE1\n        imageBundle: []\n      DC1-SPINE2:\n        name: DC1-SPINE2\n        parent_container: DC1_SPINES\n        configlets:\n            - AVD_DC1-SPINE2\n        imageBundle: []\n  tasks:\n    - name: 'Collecting facts from CVP {{inventory_hostname}}.'\n      arista.cvp.cv_facts:\n      register: CVP_FACTS\n    - name: &quot;Configure devices on {{inventory_hostname}}&quot;\n      arista.cvp.cv_device:\n        devices: &quot;{{CVP_DEVICES}}&quot;\n        cvp_facts: '{{CVP_FACTS.ansible_facts}}'\n        device_filter: ['DC1']\n        state: present\n</code></pre>\n\n<p>More documentation on <a href=\"https://github.com/aristanetworks/ansible-cvp\">github repository</a></p>\n<h2>License</h2>\n<p>Project is published under <a href=\"LICENSE\">Apache License</a>.</p>\n<h2>Ask a question</h2>\n<p>Support for this <code>arista.cvp</code> collection is provided by the community directly in this repository. Easiest way to get support is to open <a href=\"https://github.com/aristanetworks/ansible-cvp/issues\">an issue</a>.</p>\n<h2>Contributing</h2>\n<p>Contributing pull requests are gladly welcomed for this repository. If you are planning a big change, please start a discussion first to make sure we'll be able to merge it.</p>\n<p>You can also open an <a href=\"https://github.com/aristanetworks/ansible-cvp/issues\">issue</a> to report any problem or to submit enhancement.</p>\n<p>A more complete <a href=\"https://github.com/aristanetworks/ansible-cvp/contributing.md\">guide for contribution</a> is available in the repository</p>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "cv_device",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "EMEA AS Team (@aristanetworks)",
+                    "description": [
+                        "CloudVison Portal Device compares the list of Devices in",
+                        "in devices against cvp-facts then adds, resets, or updates them as appropriate.",
+                        "If a device is in cvp_facts but not in devices it will be reset to factory defaults",
+                        "If a device is in devices but not in cvp_facts it will be provisioned",
+                        "If a device is in both devices and cvp_facts its configlets and imageBundles will be compared",
+                        "and updated with the version in devices if the two are different."
+                    ],
+                    "filename": "/tmp/tmpvwy97g9_/ansible_collections/arista/cvp/plugins/modules/cv_device.py",
+                    "module": "cv_device",
+                    "options": [
+                        {
+                            "name": "cvp_facts",
+                            "description": "Facts from CVP collected by cv_facts module",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "device_filter",
+                            "default": [
+                                "none"
+                            ],
+                            "description": "Filter to apply intended mode on a set of configlet. If not used, then module only uses ADD mode. device_filter list devices that can be modified or deleted based on configlets entries.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "devices",
+                            "description": "Yaml dictionary to describe intended devices configuration from CVP stand point.",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "If absent, devices will be removed from CVP and moved back to undefined.",
+                                "If present, devices will be configured or updated."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Provision, Reset, or Update CloudVision Portal Devices.",
+                    "version_added": "2.9"
+                },
+                "examples": "\n---\n- name: Test cv_device\n  hosts: cvp\n  connection: local\n  gather_facts: no\n  collections:\n    - arista.cvp\n  vars:\n    configlet_list:\n      cv_device_test01: \"alias a{{ 999 | random }} show version\"\n      cv_device_test02: \"alias a{{ 999 | random }} show version\"\n    # Device inventory for provision activity: bind configlet\n    devices_inventory:\n      veos01:\n        name: veos01\n        configlets:\n          - cv_device_test01\n          - SYS_TelemetryBuilderV2_172.23.0.2_1\n          - veos01-basic-configuration\n          - SYS_TelemetryBuilderV2\n  tasks:\n      # Collect CVP Facts as init process\n    - name: \"Gather CVP facts from {{inventory_hostname}}\"\n      cv_facts:\n      register: cvp_facts\n      tags:\n        - always\n\n    - name: \"Configure devices on {{inventory_hostname}}\"\n      tags:\n        - provision\n      cv_device:\n        devices: \"{{devices_inventory}}\"\n        cvp_facts: '{{cvp_facts.ansible_facts}}'\n        device_filter: ['veos']\n      register: cvp_device\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_task",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "EMEA AS Team (@aristanetworks)",
+                    "description": "CloudVison Portal Task module",
+                    "filename": "/tmp/tmpvwy97g9_/ansible_collections/arista/cvp/plugins/modules/cv_task.py",
+                    "module": "cv_task",
+                    "options": [
+                        {
+                            "name": "state",
+                            "choices": [
+                                "executed",
+                                "cancelled"
+                            ],
+                            "default": "executed",
+                            "description": "action to carry out on the task executed - execute tasks cancelled - cancel tasks",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "tasks",
+                            "description": "CVP taskIDs to act on",
+                            "required": true,
+                            "type": "list"
+                        },
+                        {
+                            "name": "wait",
+                            "default": 0,
+                            "description": "Time to wait for tasks to transition to 'Completed'",
+                            "required": false,
+                            "type": "int"
+                        }
+                    ],
+                    "short_description": "Execute or Cancel CVP Tasks.",
+                    "version_added": "2.9"
+                },
+                "examples": "\n---\n- name: Execute all tasks registered in cvp_configlets variable\n  arista.cvp.cv_task:\n    tasks: \"{{ cvp_configlets.data.tasks }}\"\n\n- name: Cancel a list of pending tasks\n  arista.cvp.cv_task:\n    tasks: \"{{ cvp_configlets.data.tasks }}\"\n    state: cancelled\n\n# Execute all pending tasks and wait for completion for 60 seconds\n# In order to get a list of all pending tasks, execute cv_facts first\n- name: Update cvp facts\n  arista.cvp.cv_facts:\n\n- name: Execute all pending tasks and wait for completion for 60 seconds\n  arista.cvp.cv_task:\n    port: '{{cvp_port}}'\n    tasks: \"{{ tasks }}\"\n    wait: 60\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_facts_v1",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "EMEA AS Team (@aristanetworks)",
+                    "description": [
+                        "Returns the list of devices, configlets, containers and images"
+                    ],
+                    "filename": "/tmp/tmpvwy97g9_/ansible_collections/arista/cvp/plugins/modules/cv_facts_v1.py",
+                    "module": "cv_facts_v1",
+                    "options": [
+                        {
+                            "name": "gather_subset",
+                            "choices": [
+                                "default",
+                                "config"
+                            ],
+                            "default": [
+                                "default"
+                            ],
+                            "description": [
+                                "When supplied, this argument will restrict the facts collected",
+                                "to a given subset.  Possible values for this argument include",
+                                "all, hardware, config, and interfaces.  Can specify a list of",
+                                "values to include a larger subset.  Values can also be used",
+                                "with an initial C(M(!)) to specify that a specific subset should",
+                                "not be collected."
+                            ],
+                            "required": false,
+                            "type": "list"
+                        }
+                    ],
+                    "short_description": "Collect facts from CloudVision Portal.",
+                    "version_added": "2.9"
+                },
+                "examples": "\n---\n    # Collect CVP Facts as init process\n- name: \"Gather CVP facts from {{inventory_hostname}}\"\n  arista.cvp.cv_facts_v1:\n  register: cvp_facts\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_facts",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "EMEA AS Team (@aristanetworks)",
+                    "description": [
+                        "Returns list of devices, configlets, containers and images"
+                    ],
+                    "filename": "/tmp/tmpvwy97g9_/ansible_collections/arista/cvp/plugins/modules/cv_facts.py",
+                    "module": "cv_facts",
+                    "options": [
+                        {
+                            "name": "facts",
+                            "choices": [
+                                "all",
+                                "devices",
+                                "containers",
+                                "configlets",
+                                "tasks"
+                            ],
+                            "default": [
+                                "all"
+                            ],
+                            "description": [
+                                "List of facts to retrieve from CVP.",
+                                "By default, cv_facts returns facts for devices/configlets/containers/tasks",
+                                "Using this parameter allows user to limit scope to a subet of information."
+                            ],
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "gather_subset",
+                            "choices": [
+                                "default",
+                                "config",
+                                "tasks_pending",
+                                "tasks_failed",
+                                "tasks_all"
+                            ],
+                            "default": [
+                                "default"
+                            ],
+                            "description": [
+                                "When supplied, this argument will restrict the facts collected",
+                                "to a given subset.  Possible values for this argument include",
+                                "all, hardware, config, and interfaces.  Can specify a list of",
+                                "values to include a larger subset.  Values can also be used",
+                                "with an initial C(M(!)) to specify that a specific subset should",
+                                "not be collected."
+                            ],
+                            "required": false,
+                            "type": "list"
+                        }
+                    ],
+                    "short_description": "Collect facts from CloudVision Portal.",
+                    "version_added": "2.9"
+                },
+                "examples": "\n---\n  tasks:\n    - name: '#01 - Collect devices facts from {{inventory_hostname}}'\n      cv_facts:\n        facts:\n          devices\n      register: FACTS_DEVICES\n\n    - name: '#02 - Collect devices facts (with config) from {{inventory_hostname}}'\n      cv_facts:\n        gather_subset:\n          config\n        facts:\n          devices\n      register: FACTS_DEVICES_CONFIG\n\n    - name: '#03 - Collect confilgets facts from {{inventory_hostname}}'\n      cv_facts:\n        facts:\n          configlets\n      register: FACTS_CONFIGLETS\n\n    - name: '#04 - Collect containers facts from {{inventory_hostname}}'\n      cv_facts:\n        facts:\n          containers\n      register: FACTS_CONTAINERS\n\n    - name: '#10 - Collect ALL facts from {{inventory_hostname}}'\n      cv_facts:\n      register: FACTS\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_container",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "EMEA AS Team (@aristanetworks)",
+                    "description": [
+                        "CloudVison Portal Configlet configuration requires a dictionary of containers with their parent, to create and delete containers on CVP side.",
+                        "Returns number of created and/or deleted containers"
+                    ],
+                    "filename": "/tmp/tmpvwy97g9_/ansible_collections/arista/cvp/plugins/modules/cv_container.py",
+                    "module": "cv_container",
+                    "options": [
+                        {
+                            "name": "cvp_facts",
+                            "description": "Facts from CVP collected by cv_facts module",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "mode",
+                            "choices": [
+                                "merge",
+                                "override",
+                                "delete"
+                            ],
+                            "default": "merge",
+                            "description": "Allow to save topology or not",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "save_topology",
+                            "default": true,
+                            "description": "Allow to save topology or not",
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "topology",
+                            "description": "Yaml dictionary to describe intended containers",
+                            "required": true,
+                            "type": "dict"
+                        }
+                    ],
+                    "short_description": "Manage Provisioning topology.",
+                    "version_added": "2.9"
+                },
+                "examples": "\n- name: Create container topology on CVP\n  hosts: cvp\n  connection: local\n  gather_facts: no\n  vars:\n    verbose: False\n    containers:\n        Fabric:\n            parent_container: Tenant\n        Spines:\n            parent_container: Fabric\n            configlets:\n                - container_configlet\n            images:\n                - 4.22.0F\n            devices:\n                - veos01\n  tasks:\n    - name: \"Gather CVP facts {{inventory_hostname}}\"\n      cv_facts:\n      register: cvp_facts\n    - name: \"Build Container topology on {{inventory_hostname}}\"\n      cv_container:\n        cvp_facts: '{{cvp_facts.ansible_facts}}'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_configlet",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "EMEA AS Team (@aristanetworks)",
+                    "description": [
+                        "CloudVison Portal Configlet compares the list of configlets and config in",
+                        "configlets against cvp-facts then adds, deletes, or updates",
+                        "them as appropriate.",
+                        "If a configlet is in cvp_facts but not in configlets it will be deleted.",
+                        "If a configlet is in configlets but not in cvp_facts it will be created.",
+                        "If a configlet is in both configlets and cvp_facts it configuration will",
+                        "be compared and updated with the version in configlets",
+                        "if the two are different."
+                    ],
+                    "filename": "/tmp/tmpvwy97g9_/ansible_collections/arista/cvp/plugins/modules/cv_configlet.py",
+                    "module": "cv_configlet",
+                    "options": [
+                        {
+                            "name": "configlet_filter",
+                            "default": [
+                                "none"
+                            ],
+                            "description": "Filter to apply intended mode on a set of configlet. If not used, then module only uses ADD mode. configlet_filter list configlets that can be modified or deleted based on configlets entries.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "configlets",
+                            "description": "List of configlets to managed on CVP server.",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "cvp_facts",
+                            "description": "Facts extracted from CVP servers using cv_facts module",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "If absent, configlets will be removed from CVP if they are not binded",
+                                "to either a container or a device.",
+                                "If present, configlets will be created or updated."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Create, Delete, or Update CloudVision Portal Configlets.",
+                    "version_added": "2.9"
+                },
+                "examples": "\n---\n- name: Test cv_configlet_v2\n  hosts: cvp\n  connection: local\n  gather_facts: no\n  vars:\n    configlet_list:\n      Test_Configlet: \"! This is a Very First Testing Configlet\\n!\"\n      Test_DYNAMIC_Configlet: \"{{ lookup('file', 'templates/configlet_'+inventory_hostname+'.txt') }}\"\n  tasks:\n    - name: 'Collecting facts from CVP {{inventory_hostname}}.'\n      tags:\n        - always\n      cv_facts:\n      register: cvp_facts\n\n    - name: 'Create configlets on CVP {{inventory_hostname}}.'\n      tags:\n        - provision\n      cv_configlet:\n        cvp_facts: \"{{cvp_facts.ansible_facts}}\"\n        configlets: \"{{configlet_list}}\"\n        configlet_filter: [\"New\", \"Test\",\"base-chk\",\"base-firewall\"]\n      register: cvp_configlet\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_api2018",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_client_errors",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_client",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cv_api2019",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

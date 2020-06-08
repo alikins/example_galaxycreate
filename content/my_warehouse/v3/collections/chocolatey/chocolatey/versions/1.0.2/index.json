@@ -1,0 +1,45 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/chocolatey.chocolatey-1.0.2.tar.gz",
+    "namespace": {
+        "name": "chocolatey"
+    },
+    "collection": {
+        "name": "chocolatey"
+    },
+    "version": "1.0.2",
+    "metadata": {
+        "namespace": "chocolatey",
+        "name": "chocolatey",
+        "version": "1.0.2",
+        "license": [],
+        "description": "Manage packages using Chocolatey.",
+        "repository": "https://github.com/chocolatey/chocolatey-ansible",
+        "documentation": "https://github.com/chocolatey/chocolatey-ansible",
+        "homepage": "https://github.com/chocolatey/chocolatey-ansible",
+        "issues": "https://github.com/chocolatey/chocolatey-ansible/issues",
+        "authors": [
+            "Joel Francis (@vexx32)",
+            "Adil Leghari (@adilio)",
+            "Trond Hindenes (@trondhindenes)",
+            "Peter Mounce (@petemounce)",
+            "Pepe Barbe (@elventear)",
+            "Adam Keech (@smadam813)",
+            "Pierre Templier (@ptemplier)",
+            "Jordan Borean (@jborean93)"
+        ],
+        "tags": [
+            "chocolatey",
+            "windows",
+            "packaging",
+            "package_management"
+        ],
+        "license_file": "LICENSE",
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "chocolatey.chocolatey-1.0.2.tar.gz",
+        "sha256": "cb287d9612e0ae1565a5eeacf6a1a746e60925d934c8531fb761330934aa4165",
+        "size": 41173
+    }
+}

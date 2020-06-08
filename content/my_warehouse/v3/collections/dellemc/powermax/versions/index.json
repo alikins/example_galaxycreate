@@ -1,0 +1,25 @@
+{
+    "meta": {
+        "count": 2
+    },
+    "links": {
+        "first": "content/my_warehouse/v3/collections/dellemc/powermax/versions/",
+        "last": "content/my_warehouse/v3/collections/dellemc/powermax/versions/",
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "version": "1.0.3",
+            "href": "content/my_warehouse/v3/collections/dellemc/powermax/versions/1.0.3/",
+            "created_at": "2020-06-08T14:09:15.068876",
+            "modified_at": "2020-06-08T14:09:15.068876"
+        },
+        {
+            "version": "1.0.3",
+            "href": "content/my_warehouse/v3/collections/dellemc/powermax/versions/1.0.3/",
+            "created_at": "2020-06-08T14:09:15.075395",
+            "modified_at": "2020-06-08T14:09:15.075395"
+        }
+    ]
+}

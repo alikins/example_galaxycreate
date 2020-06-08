@@ -1,0 +1,1397 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>Ansible Modules for Dell EMC PowerMax</h1>\n<p>The Ansible Modules for Dell EMC PowerMax allow Data Center and IT administrators to use RedHat Ansible to automate and orchestrate the configuration and management of Dell EMC PowerMax arrays.</p>\n<p>The capabilities of Ansible modules are managing volumes, storage groups, ports, port groups, hosts, host groups, masking views, snapshots, and gather high-level facts about the arrays. The options available for each capability are list, show, create, delete, and modify. These tasks can be executed by running simple playbooks written in yaml syntax. The modules are written so that all the operations are idempotent, so making multiple identical requests has the same effect as making a single request.</p>\n<h2>Supported Platforms</h2>\n<ul>\n<li>Dell EMC PowerMax Arrays with Unisphere version 9.0</li>\n</ul>\n<h2>Prerequisites</h2>\n<ul>\n<li>Ansible 2.9 or higher</li>\n<li>Python 3.5 or higher</li>\n<li>Red Hat Enterprise Linux 7.5</li>\n<li>Python Library for PowerMax (PyU4V) 3.1.3 or higher</li>\n<li>Please follow Py4UV installation instructions on https://pyu4v.readthedocs.io/</li>\n</ul>\n<h2>Idempotency</h2>\n<p>The modules are written in such a way that all requests are idempotent and hence fault-tolerant. It essentially means that the result of a successfully performed request is independent of the number of times it is executed.</p>\n<h2>List of Ansible Modules for Dell EMC PowerMax</h2>\n<ul>\n<li>Volume module</li>\n<li>Host module</li>\n<li>Host group module</li>\n<li>Snapshot module</li>\n<li>Maskingview module</li>\n<li>Port module</li>\n<li>Port group module</li>\n<li>Storage group module  </li>\n<li>Gather facts module</li>\n</ul>\n<h2>Installing Collections</h2>\n<ul>\n<li>\n<p>Download the tar build and follow the below command to install the collection anywhere in your system:\n        ansible-galaxy collection install dellemc-powermax-1.0.3.tar.gz -p ./collections</p>\n</li>\n<li>\n<p>Set the environemnt variable:\n        export ANSIBLE_COLLECTIONS_PATHS=$ANSIBLE_COLLECTIONS_PATHS:/collections</p>\n</li>\n</ul>\n<h2>Using Collections</h2>\n<ul>\n<li>\n<p>In order to use any  Ansible module, ensure that the importing of proper FQCN(Fully Qualified Collection Name) must be embedded in the playbook. Below example can be refered.\n        collections:\n        - dellemc.powermax</p>\n</li>\n<li>\n<p>For generating Ansible documentaion for a specific module, embed the FQCN  before the module name. Below example can be refered.\n        ansible-doc dellemc.powermax.dellemc_powermax_gatherfacts</p>\n</li>\n</ul>\n<h2>Running Ansible Modules</h2>\n<p>The Ansible server must be configured with Python library for Unisphere to run the Ansible playbooks. The <a href=\"https://github.com/dell/ansible-powermax/tree/1.0.0/dellemc_ansible/docs\">Documents</a> provide information on different Ansible modules along with their functions and syntax. The parameters table in the Product Guide provides information on various parameters which needs to be configured before running the modules.</p>\n<h2>Results</h2>\n<p>Each module returns the updated state and details of the entity, for example, if you are using the Volume module, all calls will return the updated details of the volume. Sample result is shown in each module's documentation.</p>\n<h2>Support</h2>\n<p>Ansible for PowerMax Modules are supported by Dell EMC and are provided under the terms of the license attached to the source code.\nFor any setup, configuration issues, questions or feedback, join the <a href=\"https://www.dell.com/community/Automation/bd-p/Automation\">Dell EMC Automation community</a>.\nFor any Dell EMC storage issues, please contact Dell support at: https://www.dell.com/support.\nFor clarity, Dell EMC does not provide support for any source code modifications.</p>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "dellemc_powermax_volume",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Vasudevu Lakhinana (@unknown) <vasudevu.lakhinana@dell.com>",
+                        "Akash Shendge (@shenda1) <Akash.Shendge@dell.com>",
+                        "Ambuj Dubey (@AmbujDube) <Ambuj.Dubey@dell.com>"
+                    ],
+                    "description": [
+                        "Managing volume on PowerMax Storage System includes create volume, rename volume, expand volume and delete volume"
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_volume.py",
+                    "module": "dellemc_powermax_volume",
+                    "notes": [
+                        "To expand volume, either provide vol_id or vol_name and sg_name",
+                        "size is required to create/expand volume",
+                        "vol_id is required to rename/delete volume",
+                        "vol_name, sg_name and new_sg_name is required to move volume between storage group",
+                        "Deletion of volume will fail if storage group is part of masking view",
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "cap_unit",
+                            "choices": [
+                                "MB",
+                                "GB",
+                                "TB"
+                            ],
+                            "default": "GB",
+                            "description": [
+                                "volume capacity units"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "new_name",
+                            "description": [
+                                "The new volume identifier for the volume."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "new_sg_name",
+                            "description": [
+                                "The name of the target storage group"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "sg_name",
+                            "description": [
+                                "The name of the storage group"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "size",
+                            "description": [
+                                "The new size of existing volume.",
+                                "Required in case of create and expand volume."
+                            ],
+                            "type": "float"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "description": [
+                                "Define whether the volume should exist or not."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "vol_id",
+                            "description": [
+                                "The native id of the volume.",
+                                "Required in case of rename and delete volume."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "vol_name",
+                            "description": [
+                                "The name of the volume."
+                            ],
+                            "type": "str"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Manage volumes on PowerMax Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n- name: Create volume\n  dellemc_powermax_volume:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      vol_name: '{{vol_name}}'\n      sg_name: '{{sg_name}}'\n      size: 1\n      cap_unit: '{{cap_unit}}'\n      state: 'present'\n\n- name: Expanding volume size\n  dellemc_powermax_volume:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      size:  3\n      cap_unit: '{{cap_unit}}'\n      vol_id: '0059B'\n      state: 'present'\n\n- name: Renaming volume\n  dellemc_powermax_volume:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      new_name:  'Test_GOLD_vol_Renamed'\n      vol_id: '0059B'\n      state: 'present'\n\n- name: Delete volume\n  dellemc_powermax_volume:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      vol_id: '0059B'\n      state: 'absent'\n\n- name: Move volume between storage group\n  dellemc_powermax_volume:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      vol_name: '{{vol_name}}'\n      sg_name: '{{sg_name}}'\n      new_sg_name: '{{new_sg_name}}'\n      state: 'present'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_storagegroup",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Vasudevu Lakhinana (@unknown) <Vasudevu.Lakhinana@dell.com>",
+                        "Prashant Rakheja (@prashant-dell) <prashant.rakheja@dell.com>"
+                    ],
+                    "description": [
+                        "Managing storage group on PowerMax Storage System includes List the volumes of a Storage Group, Create a new Storage Group, Delete an existing Storage Group, Add existing volumes to an existing Storage Group, Remove existing volumes from existing Storage Group, Create new Volumes in an existing Storage Group, Modify existing Storage Group attributes, Add child Storage Groups inside existing Storage Group(parent), Remove Child Storage Groups from existing parent Storage Group"
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_storagegroup.py",
+                    "module": "dellemc_powermax_storagegroup",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "child_sg_state",
+                            "choices": [
+                                "present-in-group",
+                                "absent-in-group"
+                            ],
+                            "description": [
+                                "Describes the state of CSG inside parent SG"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "child_storage_groups",
+                            "description": [
+                                "This is a list of child storage groups"
+                            ],
+                            "type": "list"
+                        },
+                        {
+                            "name": "compression",
+                            "description": [
+                                "compression on storage group.",
+                                "Compression parameter is ignored if service_level is not specified.",
+                                "Default is true."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "new_sg_name",
+                            "description": [
+                                "The new name of the Storage Group"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "service_level",
+                            "description": [
+                                "The Name of SLO."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "sg_name",
+                            "description": [
+                                "The name of the storage group."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "srp",
+                            "description": [
+                                "Name of the storage resource pool.",
+                                "This parameter is ignored if service_level is not specified.",
+                                "Default is to use whichever is the default SRP on the array."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "description": [
+                                "Define whether the storage group should exist or not."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "vol_state",
+                            "choices": [
+                                "present-in-group",
+                                "absent-in-group"
+                            ],
+                            "description": [
+                                "Describes the state of volumes inside SG"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "volumes",
+                            "description": [
+                                "This is a list of volumes.",
+                                "Each volume has four attributes-",
+                                "vol_name",
+                                "size",
+                                "cap_unit",
+                                "vol_id.",
+                                "Either the volume ID must be provided for existing volumes, or the name and size must be provided to add new volumes to SG. The unit is optional.",
+                                "vol_name - Represents the name of the volume",
+                                "size - Represents the volume size",
+                                "cap_unit - The unit in which size is represented. Default unit is GB. Choices are MB, GB, TB.",
+                                "vol_id - This is the volume ID"
+                            ],
+                            "type": "list"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Manage storage groups on PowerMax/VMAX Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n  - name: Get storage group details including volumes\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      state: 'present'\n  - name: Create empty storage group\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'foo'\n      service_level:  'Diamond'\n      srp: 'SRP_1'\n      compression: True\n      state: 'present'\n\n  - name: Delete the storage Group\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'foo'\n      state: 'absent'\n\n  - name: Adding existing volume(s) to existing SG\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'foo'\n      state: 'present'\n      volumes:\n        - vol_id: '00028'\n        - vol_id: '00018'\n        - vol_id: '00025'\n      vol_state: 'present-in-group'\n\n  - name: Create new volumes for existing SG\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'foo'\n      state: 'present'\n      volumes:\n        - vol_name: 'foo'\n          size: 1\n          cap_unit: 'GB'\n        - vol_name: 'bar'\n          size: 1\n          cap_unit: 'GB'\n      vol_state: 'present-in-group'\n\n  - name: Remove volume(s) from existing SG\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'foo'\n      state: 'present'\n      volumes:\n        - vol_id: '00028'\n        - vol_id: '00018'\n        - vol_name: 'ansible-vol'\n      vol_state: 'absent-in-group'\n\n  - name: Adding child SG to parent SG\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'parent_sg'\n      state: 'present'\n      child_storage_groups:\n        - 'pie'\n        - 'bar'\n      child_sg_state: 'present-in-group'\n\n  - name: Removing child SG from parent SG\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'parent_sg'\n      state: 'present'\n      child_storage_groups:\n        - 'pie'\n        - 'bar'\n      child_sg_state: 'absent-in-group'\n\n  - name: Rename Storage Group\n    dellemc_powermax_storagegroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      new_sg_name: 'ansible_sg_renamed'\n      state: 'present'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_snapshot",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Prashant Rakheja (@prashant-dell) <prashant.rakheja@dell.com>"
+                    ],
+                    "description": [
+                        "Managing Snapshots on PowerMax Storage System includes Create a new Storage Group Snapshot, Get details of Storage Group Snapshot, Rename SG Snapshot, Change Snapshot link status, Delete an existing Storage Group Snapshot."
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_snapshot.py",
+                    "module": "dellemc_powermax_snapshot",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "generation",
+                            "description": [
+                                "The generation number of the Snapshot.",
+                                "Generation is mandatory for link, unlink, rename and delete operations.",
+                                "Optional for Get snapshot details.",
+                                "Create snapshot will always create a new snapshot with generation number 0.",
+                                "Rename is supported only for generation number 0."
+                            ],
+                            "type": "int"
+                        },
+                        {
+                            "name": "link_status",
+                            "choices": [
+                                "linked",
+                                "unlinked"
+                            ],
+                            "description": [
+                                "Describes the link status of the Snapshot."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "new_snapshot_name",
+                            "description": [
+                                "The new name of the Snapshot."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "sg_name",
+                            "description": [
+                                "The name of the storage group."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "snapshot_name",
+                            "description": [
+                                "The name of the Snapshot."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "description": [
+                                "Define whether the Snapshot should exist or not."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "target_sg_name",
+                            "description": [
+                                "The target Storage Group."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "ttl",
+                            "description": [
+                                "The Time To Live (TTL) value for the Snapshot.",
+                                "If the ttl is not specified, the storage group snap details would be returned.",
+                                "However, to create a SG snap - TTL must be given.",
+                                "If the SG snap should not have any TTL - specify TTL as 'None'"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "ttl_unit",
+                            "choices": [
+                                "hours",
+                                "days"
+                            ],
+                            "default": "days",
+                            "description": [
+                                "The unit for the ttl.",
+                                "If no ttl_unit is specified, 'days' is taken as default ttl_unit."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Manage Snapshots on PowerMax/VMAX Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n  - name: Create a Snapshot for a Storage Group\n    dellemc_powermax_snapshot:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      snapshot_name: 'ansible_sg_snap'\n      ttl: '2'\n      ttl_unit: 'days'\n      state: 'present'\n\n  - name: Get Storage Group Snapshot details\n    dellemc_powermax_snapshot:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      snapshot_name: 'ansible_sg_snap'\n      state: 'present'\n\n  - name: Delete Storage Group Snapshot\n    dellemc_powermax_snapshot:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      snapshot_name: 'ansible_sg_snap'\n      generation: 1\n      state: 'absent'\n\n  - name: Rename Storage Group Snapshot\n    dellemc_powermax_snapshot:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      snapshot_name: 'ansible_sg_snap'\n      new_snapshot_name: 'ansible_snap_new'\n      generation: 0\n      state: 'present'\n\n  - name: Change Snapshot Link Status to Linked\n    dellemc_powermax_snapshot:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      snapshot_name: 'ansible_snap_new'\n      generation: 1\n      target_sg_name: 'ansible_sg_target'\n      link_status: 'linked'\n      state: 'present'\n\n  - name: Change Snapshot Link Status to UnLinked\n    dellemc_powermax_snapshot:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      sg_name: 'ansible_sg'\n      snapshot_name: 'ansible_snap_new'\n      generation: 1\n      target_sg_name: 'ansible_sg_target'\n      link_status: 'unlinked'\n      state: 'present'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_portgroup",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Vasudevu Lakhinana (@unknown) <Vasudevu.Lakhinana@dell.com>",
+                        "Ashish Verma (@vermaa31) <Ashish.Verma1@emc.com>",
+                        "Rajshree Khare (@kharer5) <rajshree.khare@dell.com>"
+                    ],
+                    "description": [
+                        "Managing port groups on PowerMax Storage System includes create port group with set of ports, add/remove single or multiple ports to/from port group, rename port group and delete port group"
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_portgroup.py",
+                    "module": "dellemc_powermax_portgroup",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "new_name",
+                            "description": [
+                                "New name of the port group while renaming. No Special Character support except for _. Case sensitive for REST Calls."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "port_state",
+                            "choices": [
+                                "present-in-group",
+                                "absent-in-group"
+                            ],
+                            "description": [
+                                "Define whether the port should be present or absent in port group.",
+                                "present-in-group - indicates that the ports should be present on port group object",
+                                "absent-in-group - indicates that the ports should not be present on port group object"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "portgroup_name",
+                            "description": [
+                                "The name of the port group. No Special Character support except for _. Case sensitive for REST Calls."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "ports",
+                            "description": [
+                                "List of Directors and Ports to be added or removed to/from the Port Group"
+                            ],
+                            "type": "list"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "description": [
+                                "Define whether the port group should exist or not.",
+                                "present - indicates that the port group should be present on system",
+                                "absent - indicates that the port group should not be present on system"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Manage port groups on PowerMax/VMAX Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n  - name: Create port group without ports\n    dellemc_powermax_portgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{array_id}}'\n      portgroup_name: '{{portgroup_name}}'\n      state: 'present'\n\n  - name: Create port group with ports\n    dellemc_powermax_portgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{array_id}}'\n      portgroup_name: '{{portgroup_name}}'\n      state: 'present'\n      ports:\n      - director_id: 'FA-1D'\n        port_id: '5'\n      - director_id: 'FA-2D'\n        port_id: '5'\n      port_state: 'present-in-group'\n\n  - name: Add ports to port group\n    dellemc_powermax_portgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{array_id}}'\n      portgroup_name: '{{portgroup_name}}'\n      state: 'present'\n      ports:\n      - director_id: 'FA-2D'\n        port_id: '8'\n      - director_id: 'FA-2D'\n        port_id: '9'\n      port_state: 'present-in-group'\n\n  - name: Remove ports from port group\n    dellemc_powermax_portgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{array_id}}'\n      portgroup_name: '{{portgroup_name}}'\n      state: 'present'\n      ports:\n      - director_id: 'FA-2D'\n        port_id: '8'\n      - director_id: 'FA-2D'\n        port_id: '9'\n      port_state: 'absent-in-group'\n\n  - name: Modify port group\n    dellemc_powermax_portgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{array_id}}'\n      portgroup_name: '{{portgroup_name}}'\n      state: 'present'\n      new_name: '{{new_name}}'\n\n  - name: Delete port group\n    dellemc_powermax_portgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{array_id}}'\n      portgroup_name: '{{portgroup_name}}'\n      state: 'absent'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_port",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Ashish Verma (@vermaa31) (Ashish.Verma1@emc.com)"
+                    ],
+                    "description": [
+                        "Managing ports on PowerMax Storage System includes getting details of a port"
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_port.py",
+                    "module": "dellemc_powermax_port",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "ports",
+                            "description": [
+                                "List of port's director and port id"
+                            ],
+                            "required": true,
+                            "type": "list"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Manage ports on PowerMax/VMAX Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n  - name: Get details of single/multiple ports\n    dellemc_powermax_port:\n      unispherehost: '{{unispherehost}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{array_id}}'\n      ports:\n      - director_id: 'FA-1D'\n        port_id: '5'\n      - director_id: 'SE-1F'\n        port_id: '29'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_maskingview",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Vasudevu Lakhinana (@unknown) <Vasudevu.Lakhinana@dell.com>",
+                        "Prashant Rakheja (@prashant-dell) <prashant.rakheja@dell.com>"
+                    ],
+                    "description": [
+                        "Managing masking views on PowerMax Storage System includes, create masking view with port group, storage group and host or host group, rename masking view and delete masking view",
+                        "For creating a masking view -",
+                        "(i) portgroup_name,",
+                        "(ii) sg_name and",
+                        "(iii) any one of host_name or hostgroup_name is required.",
+                        "All three entities must be present on the array.",
+                        "For renaming a masking view, the 'new_mv_name' is required. Once a masking view is created, only its name can be changed. No underlying entity (portgroup, storagegroup, host or hostgroup) can be changed on the MV."
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_maskingview.py",
+                    "module": "dellemc_powermax_maskingview",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "host_name",
+                            "description": [
+                                "The name of the existing host.",
+                                "This parameter is to create an exclusive or host export."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "hostgroup_name",
+                            "description": [
+                                "The name of the existing host group.",
+                                "This parameter is used to create cluster export."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "mv_name",
+                            "description": [
+                                "The name of the masking view. No Special Character support except for _. Case sensitive for REST Calls."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "new_mv_name",
+                            "description": [
+                                "The new name for renaming function. No Special Character support except for _. Case sensitive for REST Calls."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "portgroup_name",
+                            "description": [
+                                "The name of the existing port group."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "sg_name",
+                            "description": [
+                                "The name of the existing storage group."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "description": [
+                                "Defines whether the masking view should exist or not."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Managing masking views on PowerMax/VMAX Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n  - name: Create MV with hostgroup\n    dellemc_powermax_maskingview:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      mv_name: '{{mv_name}}'\n      portgroup_name: 'Ansible_Testing_portgroup'\n      hostgroup_name: 'Ansible_Testing_hostgroup'\n      sg_name: 'Ansible_Testing_SG'\n      state: 'present'\n\n  - name: Create MV with host\n    dellemc_powermax_maskingview:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      mv_name: '{{mv_name}}'\n      portgroup_name: 'Ansible_Testing_portgroup'\n      host_name: 'Ansible_Testing_host'\n      sg_name: 'Ansible_Testing_SG'\n      state: 'present'\n\n  - name: Rename host masking view\n    dellemc_powermax_maskingview:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      mv_name: '{{mv_name}}'\n      new_mv_name: 'Ansible_Testing_mv_renamed'\n      state: 'present'\n\n  - name: Delete host masking view\n    dellemc_powermax_maskingview:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      mv_name: 'Ansible_Testing_mv_renamed'\n      state: 'absent'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_hostgroup",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Vasudevu Lakhinana (@unknown) Vasudevu.Lakhinana@dell.com",
+                        "Manisha Agrawal(@agrawm3) manisha.agrawal@dell.com"
+                    ],
+                    "description": [
+                        "Managing host group on PowerMax Storage System includes create host group with set of hosts, add/remove hosts to/from host group, rename host group, modify host flags of host group and delete host group"
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_hostgroup.py",
+                    "module": "dellemc_powermax_hostgroup",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "host_flags",
+                            "description": [
+                                "input as an yaml dictionary",
+                                "List of all host_flags -",
+                                "1. volume_set_addressing",
+                                "2. disable_q_reset_on_ua",
+                                "3. environ_set",
+                                "4. avoid_reset_broadcast",
+                                "5. openvms",
+                                "6. scsi_3",
+                                "7. spc2_protocol_version",
+                                "8. scsi_support1",
+                                "9. consistent_lun",
+                                "Possible values are true, false, unset(default state)"
+                            ],
+                            "required": false,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "host_state",
+                            "choices": [
+                                "present-in-group",
+                                "absent-in-group"
+                            ],
+                            "description": [
+                                "Define whether the host should be present or absent in host group.",
+                                "present-in-group - indicates that the hosts should exist in host group",
+                                "absent-in-group - indicates that the hosts should not exist in host group"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "hostgroup_name",
+                            "description": [
+                                "The name of the host group. No Special Character support except for _. Case sensitive for REST Calls."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "hosts",
+                            "description": [
+                                "List of host names to be added to the host group or removed from host group.",
+                                "Creation of empty host group is allowed.",
+                                "In gather facts module, empty host groups will be listed as hosts."
+                            ],
+                            "type": "list"
+                        },
+                        {
+                            "name": "new_name",
+                            "description": [
+                                "The new name for host group for renaming function. No Special Character support except for _. Case sensitive for REST Calls"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "description": [
+                                "Define whether the host group should be present or absent on the system.",
+                                "present - indicates that the host group should be present on system",
+                                "absent - indicates that the host group should be absent on system"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Manage host group (cascaded initiator group) on PowerMax/VMAX Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n\n  - name: Create host group\n    dellemc_powermax_hostgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      hostgroup_name: '{{hostgroup_name}}'\n      hosts:\n      - Ansible_Testing_host\n      state: 'present'\n      host_state: 'present-in-group'\n      host_flags:\n          spc2_protocol_version: true\n          consistent_lun: true\n          disable_q_reset_on_ua: false\n          openvms: \"unset\"\n\n  - name: Get host group details\n    dellemc_powermax_hostgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      hostgroup_name: '{{hostgroup_name}}'\n      state: 'present'\n\n  - name: Adding host to host group\n    dellemc_powermax_hostgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      hostgroup_name: '{{hostgroup_name}}'\n      hosts:\n      - Ansible_Testing_host2\n      state: 'present'\n      host_state: 'present-in-group'\n\n  - name: Removing host from host group\n    dellemc_powermax_hostgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      hostgroup_name: '{{hostgroup_name}}'\n      hosts:\n      - Ansible_Testing_host2\n      state: 'present'\n      host_state: 'absent-in-group'\n\n  - name: Modify flags of host group\n    dellemc_powermax_hostgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      hostgroup_name: '{{hostgroup_name}}'\n      host_flags:\n          spc2_protocol_version: unset\n          disable_q_reset_on_ua: false\n          openvms: false\n          avoid_reset_broadcast: true\n      state: 'present'\n\n  - name: Rename host group\n    dellemc_powermax_hostgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      hostgroup_name: '{{hostgroup_name}}'\n      new_name: 'Ansible_Testing_hostgroup2'\n      state: 'present'\n\n  - name: Delete host group\n    dellemc_powermax_hostgroup:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      hostgroup_name: 'Ansible_Testing_hostgroup2'\n      state: 'absent'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_host",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Vasudevu Lakhinana (@unknown) Vasudevu.Lakhinana@dell.com",
+                        "Manisha Agrawal(@agrawm3) manisha.agrawal@dell.com"
+                    ],
+                    "description": [
+                        "Managing host on PowerMax Storage System includes create host with a set of initiators and host flags, add/remove initiators to/from host, modify host flag values, rename host and delete host"
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_host.py",
+                    "module": "dellemc_powermax_host",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "host_flags",
+                            "description": [
+                                "input as an yaml dictionary",
+                                "List of all host_flags-",
+                                "1. volume_set_addressing",
+                                "2. disable_q_reset_on_ua",
+                                "3. environ_set",
+                                "4. avoid_reset_broadcast",
+                                "5. openvms",
+                                "6. scsi_3",
+                                "7. spc2_protocol_version",
+                                "8. scsi_support1",
+                                "9. consistent_lun",
+                                "Possible values are true, false, unset(default state)"
+                            ],
+                            "required": false,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "host_name",
+                            "description": [
+                                "The name of the host. No  Special Character support except for _. Case sensitive for REST Calls.",
+                                "Creation of empty host is allowed"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "initiator_state",
+                            "choices": [
+                                "present-in-host",
+                                "absent-in-host"
+                            ],
+                            "description": [
+                                "Define whether the initiators should be present or absent in host.",
+                                "present-in-host - indicates that the initiators should exist on host",
+                                "absent-in-host - indicates that the initiators should not exist on host",
+                                "Required when creating a host with initiators or adding/removing initiators to/from existing host"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "initiators",
+                            "description": [
+                                "List of Initiator WWN or IQN to be added to host or removed from the host."
+                            ],
+                            "type": "list"
+                        },
+                        {
+                            "name": "new_name",
+                            "description": [
+                                "The new name host for renaming function. No Special Character support except for _. Case sensitive for REST Calls"
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "description": [
+                                "Define whether the host should exist or not.",
+                                "present - indicates that the host should exist in system",
+                                "absent - indicates that the host should not not exist in system"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Manage host (initiator group) on PowerMax/VMAX Storage System",
+                    "version_added": "2.7"
+                },
+                "examples": "\n\n  - name: Create host\n    dellemc_powermax_host:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      host_name: '{{host_name}}'\n      initiators:\n      - 10000090fa7b4e85\n      host_flags:\n          spc2_protocol_version: true\n          consistent_lun: true\n          volume_set_addressing: 'unset'\n          disable_q_reset_on_ua: false\n          openvms: 'unset'\n      state: 'present'\n      initiator_state: 'present-in-host'\n\n  - name: Get host details\n    dellemc_powermax_host:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      host_name: '{{host_name}}'\n      state: 'present'\n\n  - name: Adding initiator to host\n    dellemc_powermax_host:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      host_name: '{{host_name}}'\n      initiators:\n      - 10000090fa3d303e\n      initiator_state: 'present-in-host'\n      state: 'present'\n\n  - name: Removing initiator from host\n    dellemc_powermax_host:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      host_name: '{{host_name}}'\n      initiators:\n      - 10000090fa3d303e\n      initiator_state: 'absent-in-host'\n      state: 'present'\n\n  - name: Modify flags of host\n    dellemc_powermax_host:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      host_name: '{{host_name}}'\n      host_flags:\n          spc2_protocol_version: unset\n          consistent_lun: unset\n          volume_set_addressing: true\n          disable_q_reset_on_ua: false\n          openvms: false\n          avoid_reset_broadcast: true\n      state: 'present'\n\n  - name: Rename host\n    dellemc_powermax_host:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      host_name: '{{host_name}}'\n      new_name: '{{new_host_name}}'\n      state: 'present'\n\n  - name: Delete host\n    dellemc_powermax_host:\n      unispherehost: '{{unispherehost}}'\n      universion: '{{universion}}'\n      verifycert: '{{verifycert}}'\n      user: '{{user}}'\n      password: '{{password}}'\n      serial_no: '{{serial_no}}'\n      host_name: '{{new_host_name}}'\n      state: 'absent'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_powermax_gatherfacts",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Arindam Datta (@arindam-emc) (arindam.datta@dell.com)"
+                    ],
+                    "description": [
+                        "Gathers the list of specified PowerMax/VMAX Storage System entities, like the list of registered arrays, storage groups, hosts, host groups, storage groups, storage resource pools, port groups, masking views, etc."
+                    ],
+                    "filename": "/tmp/tmpo9sk2gye/ansible_collections/dellemc/powermax/plugins/modules/dellemc_powermax_gatherfacts.py",
+                    "module": "dellemc_powermax_gatherfacts",
+                    "notes": [
+                        "The modules prefixed with dellemc_powermax are built to support the DellEMC PowerMax storage platform."
+                    ],
+                    "options": [
+                        {
+                            "name": "gather_subset",
+                            "choices": [
+                                "vol",
+                                "srp",
+                                "sg",
+                                "pg",
+                                "host",
+                                "hg",
+                                "port",
+                                "mv"
+                            ],
+                            "description": [
+                                "List of string variables to specify the PowerMax/VMAX entities for which information is required.",
+                                "Required only if serial_no is present",
+                                "List of all PowerMax/VMAX entities supported by the module -",
+                                "vol - volumes",
+                                "srp - storage resource pools",
+                                "sg - storage groups",
+                                "pg - port groups",
+                                "host - hosts",
+                                "hg -  host groups",
+                                "port - ports",
+                                "mv - masking views"
+                            ],
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "the password of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "serial_no",
+                            "description": [
+                                "the serial number of  PowerMax/VMAX array. It is a required parameter for all array specific operations except for getting list of arrays in the Gatherfacts module."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "unispherehost",
+                            "description": [
+                                "IP or FQDN of the Unisphere host"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "universion",
+                            "description": [
+                                "Unisphere version"
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "username of the Unisphere host."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "verifycert",
+                            "choices": [
+                                true,
+                                false
+                            ],
+                            "description": [
+                                "boolean variable to specify whether to validate SSL certificate or not.",
+                                "True - indicates that the SSL certificate should be verified.",
+                                "False - indicates that the SSL certificate should not be verified."
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "A DellEMC PowerMax Storage device.",
+                        "Ansible 2.7."
+                    ],
+                    "short_description": "Gathers information about PowerMax/VMAX Storage entities",
+                    "version_added": "2.7"
+                },
+                "examples": "\n\n- name: Get array list\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n\n- name: Get list of volumes\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - vol\n\n- name: Get list of Storage groups\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - sg\n\n- name: Get list of Storage Resource Pools\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - srp\n\n- name: Get list of Port Groups\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - pg\n\n- name: Get list of Hosts\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - host\n\n- name: Get list of Host Groups\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - hg\n\n- name: Get list of Ports\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - port\n\n- name: Get list of Maskng Views\n  dellemc_powermax_gatherfacts:\n    unispherehost: '{{unispherehost}}'\n    universion: '{{universion}}'\n    verifycert: '{{verifycert}}'\n    user: '{{user}}'\n    password: '{{password}}'\n    serial_no: '{{serial_no}}'\n    gather_subset:\n      - mv\n\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc_ansible_utils",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dellemc",
+            "content_type": "doc_fragments",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/cisco.mso-0.0.4.tar.gz",
+    "namespace": {
+        "name": "cisco"
+    },
+    "collection": {
+        "name": "mso"
+    },
+    "version": "0.0.4",
+    "metadata": {
+        "namespace": "cisco",
+        "name": "mso",
+        "version": "0.0.4",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "description": "An Ansible collection for managing Cisco ACI Multi-Site",
+        "repository": null,
+        "documentation": null,
+        "homepage": null,
+        "issues": null,
+        "authors": [
+            "Dag Wieers (@dagwieers) <dag@wieers.com>"
+        ],
+        "tags": [
+            "aci",
+            "cisco",
+            "cloud",
+            "collection",
+            "mso",
+            "multisite",
+            "networking",
+            "sdn"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "cisco.mso-0.0.4.tar.gz",
+        "sha256": "365a14d58d8b585c5161390e53ffb527139d670089106f7986ea00ab6633ac28",
+        "size": 31849
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/check_point.mgmt.1.0.5.tar.gz",
+    "namespace": {
+        "name": "check_point"
+    },
+    "collection": {
+        "name": "mgmt"
+    },
+    "version": "1.0.5",
+    "metadata": {
+        "namespace": "check_point",
+        "name": "mgmt",
+        "version": "1.0.5",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Check Point collection for the Management Server",
+        "repository": "https://github.com/CheckPointSW/CheckPointAnsibleMgmtCollection",
+        "documentation": "https://docs.ansible.com/ansible/latest/modules/list_of_network_modules.html#check-point",
+        "homepage": "https://github.com/CheckPointSW/CheckPointAnsibleMgmtCollection",
+        "issues": "https://github.com/CheckPointSW/CheckPointAnsibleMgmtCollection/issues",
+        "authors": [
+            "Or Soffer <orso@checkpoint.com>"
+        ],
+        "tags": [
+            "security"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "check_point.mgmt.1.0.5.tar.gz",
+        "sha256": "797d81740b7133f18f07ea22ff830abefcbc2c1977b527192138695073d5d750",
+        "size": 76371
+    }
+}

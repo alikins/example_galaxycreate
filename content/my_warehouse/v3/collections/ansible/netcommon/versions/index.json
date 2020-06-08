@@ -1,0 +1,25 @@
+{
+    "meta": {
+        "count": 2
+    },
+    "links": {
+        "first": "content/my_warehouse/v3/collections/ansible/netcommon/versions/",
+        "last": "content/my_warehouse/v3/collections/ansible/netcommon/versions/",
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "version": "0.0.2",
+            "href": "content/my_warehouse/v3/collections/ansible/netcommon/versions/0.0.2/",
+            "created_at": "2020-06-08T14:09:14.544720",
+            "modified_at": "2020-06-08T14:09:14.544720"
+        },
+        {
+            "version": "0.0.3-dev8",
+            "href": "content/my_warehouse/v3/collections/ansible/netcommon/versions/0.0.3-dev8/",
+            "created_at": "2020-06-08T14:09:14.545363",
+            "modified_at": "2020-06-08T14:09:14.545363"
+        }
+    ]
+}

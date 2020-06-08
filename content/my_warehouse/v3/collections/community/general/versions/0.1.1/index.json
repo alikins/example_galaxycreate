@@ -1,0 +1,35 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/community-general-0.1.1.tar.gz",
+    "namespace": {
+        "name": "community"
+    },
+    "collection": {
+        "name": "general"
+    },
+    "version": "0.1.1",
+    "metadata": {
+        "namespace": "community",
+        "name": "general",
+        "version": "0.1.1",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "description": null,
+        "repository": "https://github.com/ansible-collections/community.general",
+        "documentation": "https://github.com/ansible-collection-migration/community.general/tree/master/docs",
+        "homepage": "https://github.com/ansible-collections/community.general",
+        "issues": "https://github.com/ansible-collections/community.general/issues",
+        "authors": [
+            "Ansible (https://github.com/ansible)"
+        ],
+        "tags": [],
+        "license_file": "COPYING",
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "community-general-0.1.1.tar.gz",
+        "sha256": "993af9f56f750cb647b2ffa105d04b4fa70b0ac4c6361f3ef82ee2ed0cf8edad",
+        "size": 8986984
+    }
+}

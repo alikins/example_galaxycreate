@@ -1,0 +1,39 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/dynatrace_innovationlab.dynatrace_collection-1.0.6.tar.gz",
+    "namespace": {
+        "name": "dynatrace_innovationlab"
+    },
+    "collection": {
+        "name": "dynatrace_collection"
+    },
+    "version": "1.0.6",
+    "metadata": {
+        "namespace": "dynatrace_innovationlab",
+        "name": "dynatrace_collection",
+        "version": "1.0.6",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "Collection comprising capabilities to send comments to a problem ticket and send custom deployment information.",
+        "repository": "https://github.com/dynatrace-innovationlab/ansible-collection",
+        "documentation": "https://github.com/dynatrace-innovationlab/ansible-collection",
+        "homepage": "https://www.dynatrace.com",
+        "issues": "https://github.com/dynatrace-innovationlab/ansible-collection",
+        "authors": [
+            "Juergen Etzlstorfer <juergen.etzlstorfer@dyntrace.com>"
+        ],
+        "tags": [
+            "dynatrace",
+            "monitoring",
+            "deployment"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "dynatrace_innovationlab.dynatrace_collection-1.0.6.tar.gz",
+        "sha256": "abde1461e14b50f29b6716842dba0ba31679951bfb731217b8013caba2f3e3e3",
+        "size": 197983
+    }
+}

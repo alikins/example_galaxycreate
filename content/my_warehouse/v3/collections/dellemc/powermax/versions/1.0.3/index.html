@@ -1,0 +1,61 @@
+<h1>Ansible Modules for Dell EMC PowerMax</h1>
+<p>The Ansible Modules for Dell EMC PowerMax allow Data Center and IT administrators to use RedHat Ansible to automate and orchestrate the configuration and management of Dell EMC PowerMax arrays.</p>
+<p>The capabilities of Ansible modules are managing volumes, storage groups, ports, port groups, hosts, host groups, masking views, snapshots, and gather high-level facts about the arrays. The options available for each capability are list, show, create, delete, and modify. These tasks can be executed by running simple playbooks written in yaml syntax. The modules are written so that all the operations are idempotent, so making multiple identical requests has the same effect as making a single request.</p>
+<h2>Supported Platforms</h2>
+<ul>
+<li>Dell EMC PowerMax Arrays with Unisphere version 9.0</li>
+</ul>
+<h2>Prerequisites</h2>
+<ul>
+<li>Ansible 2.9 or higher</li>
+<li>Python 3.5 or higher</li>
+<li>Red Hat Enterprise Linux 7.5</li>
+<li>Python Library for PowerMax (PyU4V) 3.1.3 or higher</li>
+<li>Please follow Py4UV installation instructions on https://pyu4v.readthedocs.io/</li>
+</ul>
+<h2>Idempotency</h2>
+<p>The modules are written in such a way that all requests are idempotent and hence fault-tolerant. It essentially means that the result of a successfully performed request is independent of the number of times it is executed.</p>
+<h2>List of Ansible Modules for Dell EMC PowerMax</h2>
+<ul>
+<li>Volume module</li>
+<li>Host module</li>
+<li>Host group module</li>
+<li>Snapshot module</li>
+<li>Maskingview module</li>
+<li>Port module</li>
+<li>Port group module</li>
+<li>Storage group module  </li>
+<li>Gather facts module</li>
+</ul>
+<h2>Installing Collections</h2>
+<ul>
+<li>
+<p>Download the tar build and follow the below command to install the collection anywhere in your system:
+        ansible-galaxy collection install dellemc-powermax-1.0.3.tar.gz -p ./collections</p>
+</li>
+<li>
+<p>Set the environemnt variable:
+        export ANSIBLE_COLLECTIONS_PATHS=$ANSIBLE_COLLECTIONS_PATHS:/collections</p>
+</li>
+</ul>
+<h2>Using Collections</h2>
+<ul>
+<li>
+<p>In order to use any  Ansible module, ensure that the importing of proper FQCN(Fully Qualified Collection Name) must be embedded in the playbook. Below example can be refered.
+        collections:
+        - dellemc.powermax</p>
+</li>
+<li>
+<p>For generating Ansible documentaion for a specific module, embed the FQCN  before the module name. Below example can be refered.
+        ansible-doc dellemc.powermax.dellemc_powermax_gatherfacts</p>
+</li>
+</ul>
+<h2>Running Ansible Modules</h2>
+<p>The Ansible server must be configured with Python library for Unisphere to run the Ansible playbooks. The <a href="https://github.com/dell/ansible-powermax/tree/1.0.0/dellemc_ansible/docs">Documents</a> provide information on different Ansible modules along with their functions and syntax. The parameters table in the Product Guide provides information on various parameters which needs to be configured before running the modules.</p>
+<h2>Results</h2>
+<p>Each module returns the updated state and details of the entity, for example, if you are using the Volume module, all calls will return the updated details of the volume. Sample result is shown in each module's documentation.</p>
+<h2>Support</h2>
+<p>Ansible for PowerMax Modules are supported by Dell EMC and are provided under the terms of the license attached to the source code.
+For any setup, configuration issues, questions or feedback, join the <a href="https://www.dell.com/community/Automation/bd-p/Automation">Dell EMC Automation community</a>.
+For any Dell EMC storage issues, please contact Dell support at: https://www.dell.com/support.
+For clarity, Dell EMC does not provide support for any source code modifications.</p>

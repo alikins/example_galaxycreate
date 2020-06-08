@@ -1,0 +1,25 @@
+{
+    "meta": {
+        "count": 2
+    },
+    "links": {
+        "first": "content/my_warehouse/v3/collections/tirasa/syncope/versions/",
+        "last": "content/my_warehouse/v3/collections/tirasa/syncope/versions/",
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "version": "1.0.2",
+            "href": "content/my_warehouse/v3/collections/tirasa/syncope/versions/1.0.2/",
+            "created_at": "2020-06-08T14:09:17.463837",
+            "modified_at": "2020-06-08T14:09:17.463837"
+        },
+        {
+            "version": "1.0.2",
+            "href": "content/my_warehouse/v3/collections/tirasa/syncope/versions/1.0.2/",
+            "created_at": "2020-06-08T14:09:17.464926",
+            "modified_at": "2020-06-08T14:09:17.464926"
+        }
+    ]
+}

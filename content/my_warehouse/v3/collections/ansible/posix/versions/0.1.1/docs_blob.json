@@ -1,0 +1,2155 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>ansible.posix</h1>\n<p>\n<a href=\"\"><img alt=\"Run Status\" src=\"https://api.shippable.com/projects/5e669aaf8b17a60007e4d18d/badge?branch=master\"></a> <a href=\"https://codecov.io/gh/ansible-collections/ansible.posix\"><img alt=\"Codecov\" src=\"https://img.shields.io/codecov/c/github/ansible-collections/ansible.posix\"></a></p>\n\n\n<h2>Tested with Ansible</h2>\n\n\n<ul>\n<li>ansible-base 2.10 (devel)</li>\n</ul>\n<h2>External requirements</h2>\n<p>None</p>\n<h2>Included content</h2>\n\n\n<h2>Using this collection</h2>\n\n\n<p>See <a href=\"https://docs.ansible.com/ansible/latest/user_guide/collections_using.html\">Ansible Using collections</a> for more details.</p>\n<h2>Contributing to this collection</h2>\n\n\n<ul>\n<li><a href=\"https://github.com/ansible-collections/ansible.posix/issues\">Issues</a></li>\n<li><a href=\"https://github.com/ansible-collections/ansible.posix/pulls\">Pull Requests</a></li>\n<li><a href=\"https://docs.ansible.com/ansible/latest/community/index.html\">Ansible Community Guide</a></li>\n</ul>\n<h2>Release notes</h2>\n<ul>\n<li>0.1.1 Initial stable build</li>\n<li>0.1.0 Internal only build</li>\n</ul>\n<h2>Roadmap</h2>\n\n\n<h2>More information</h2>\n\n\n<ul>\n<li><a href=\"https://github.com/ansible-collections/overview\">Ansible Collection overview</a></li>\n<li><a href=\"https://docs.ansible.com/ansible/latest/user_guide/index.html\">Ansible User guide</a></li>\n<li><a href=\"https://docs.ansible.com/ansible/latest/dev_guide/index.html\">Ansible Developer guide</a></li>\n<li><a href=\"https://docs.ansible.com/ansible/latest/community/code_of_conduct.html\">Ansible Community code of conduct</a></li>\n</ul>\n<h2>Licensing</h2>\n<p>GNU General Public License v3.0 or later.</p>\n<p>See <a href=\"https://www.gnu.org/licenses/gpl-3.0.txt\">LICENCE</a> to see the full text.</p>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "selinux",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Derek Carter (@goozbach) <goozbach@friocorte.com>"
+                    ],
+                    "description": [
+                        "Configures the SELinux mode and policy.",
+                        "A reboot may be required after usage.",
+                        "Ansible will not issue this reboot but will let you know when it is required."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/selinux.py",
+                    "module": "selinux",
+                    "options": [
+                        {
+                            "name": "configfile",
+                            "aliases": [
+                                "conf",
+                                "file"
+                            ],
+                            "default": "/etc/selinux/config",
+                            "description": [
+                                "The path to the SELinux configuration file, if non-standard."
+                            ]
+                        },
+                        {
+                            "name": "policy",
+                            "description": [
+                                "The name of the SELinux policy to use (e.g. C(targeted)) will be required if state is not C(disabled)."
+                            ]
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "disabled",
+                                "enforcing",
+                                "permissive"
+                            ],
+                            "description": [
+                                "The SELinux mode."
+                            ],
+                            "required": true
+                        }
+                    ],
+                    "requirements": [
+                        "libselinux-python"
+                    ],
+                    "short_description": "Change policy and state of SELinux"
+                },
+                "examples": "\n- name: Enable SELinux\n  selinux:\n    policy: targeted\n    state: enforcing\n\n- name: Put SELinux in permissive mode, logging actions that would be blocked.\n  selinux:\n    policy: targeted\n    state: permissive\n\n- name: Disable SELinux\n  selinux:\n    state: disabled\n",
+                "metadata": {
+                    "status": [
+                        "stableinterface"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": [
+                    {
+                        "name": "configfile",
+                        "description": "Path to SELinux configuration file.",
+                        "returned": "always",
+                        "sample": "/etc/selinux/config",
+                        "type": "str"
+                    },
+                    {
+                        "name": "msg",
+                        "description": "Messages that describe changes that were made.",
+                        "returned": "always",
+                        "sample": "Config SELinux state changed from 'disabled' to 'permissive'",
+                        "type": "str"
+                    },
+                    {
+                        "name": "policy",
+                        "description": "Name of the SELinux policy.",
+                        "returned": "always",
+                        "sample": "targeted",
+                        "type": "str"
+                    },
+                    {
+                        "name": "reboot_required",
+                        "description": "Whether or not an reboot is required for the changes to take effect.",
+                        "returned": "always",
+                        "sample": true,
+                        "type": "bool"
+                    },
+                    {
+                        "name": "state",
+                        "description": "SELinux mode.",
+                        "returned": "always",
+                        "sample": "enforcing",
+                        "type": "str"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "acl",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Brian Coca (@bcoca)",
+                        "J\u00e9r\u00e9mie Astori (@astorije)"
+                    ],
+                    "description": [
+                        "Set and retrieve file ACL information."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/acl.py",
+                    "module": "acl",
+                    "notes": [
+                        "The C(acl) module requires that ACLs are enabled on the target filesystem and that the C(setfacl) and C(getfacl) binaries are installed.",
+                        "As of Ansible 2.0, this module only supports Linux distributions.",
+                        "As of Ansible 2.3, the I(name) option has been changed to I(path) as default, but I(name) still works as well."
+                    ],
+                    "options": [
+                        {
+                            "name": "default",
+                            "default": false,
+                            "description": [
+                                "If the target is a directory, setting this to C(yes) will make it the default ACL for entities created inside the directory.",
+                                "Setting C(default) to C(yes) causes an error if the path is a file."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "entity",
+                            "description": [
+                                "The actual user or group that the ACL applies to when matching entity types user or group are selected."
+                            ]
+                        },
+                        {
+                            "name": "entry",
+                            "description": [
+                                "DEPRECATED.",
+                                "The ACL to set or remove.",
+                                "This must always be quoted in the form of C(<etype>:<qualifier>:<perms>).",
+                                "The qualifier may be empty for some types, but the type and perms are always required.",
+                                "C(-) can be used as placeholder when you do not care about permissions.",
+                                "This is now superseded by entity, type and permissions fields."
+                            ]
+                        },
+                        {
+                            "name": "etype",
+                            "choices": [
+                                "group",
+                                "mask",
+                                "other",
+                                "user"
+                            ],
+                            "description": [
+                                "The entity type of the ACL to apply, see C(setfacl) documentation for more info."
+                            ]
+                        },
+                        {
+                            "name": "follow",
+                            "default": true,
+                            "description": [
+                                "Whether to follow symlinks on the path if a symlink is encountered."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "path",
+                            "aliases": [
+                                "name"
+                            ],
+                            "description": [
+                                "The full path of the file or object."
+                            ],
+                            "required": true,
+                            "type": "path"
+                        },
+                        {
+                            "name": "permissions",
+                            "description": [
+                                "The permissions to apply/remove can be any combination of C(r), C(w) and C(x) (read, write and execute respectively)"
+                            ]
+                        },
+                        {
+                            "name": "recalculate_mask",
+                            "choices": [
+                                "default",
+                                "mask",
+                                "no_mask"
+                            ],
+                            "default": "default",
+                            "description": [
+                                "Select if and when to recalculate the effective right masks of the files.",
+                                "See C(setfacl) documentation for more info.",
+                                "Incompatible with C(state=query)."
+                            ]
+                        },
+                        {
+                            "name": "recursive",
+                            "default": false,
+                            "description": [
+                                "Recursively sets the specified ACL.",
+                                "Incompatible with C(state=query)."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present",
+                                "query"
+                            ],
+                            "default": "query",
+                            "description": [
+                                "Define whether the ACL should be present or not.",
+                                "The C(query) state gets the current ACL without changing it, for use in C(register) operations."
+                            ]
+                        },
+                        {
+                            "name": "use_nfsv4_acls",
+                            "default": false,
+                            "description": [
+                                "Use NFSv4 ACLs instead of POSIX ACLs."
+                            ],
+                            "type": "bool"
+                        }
+                    ],
+                    "short_description": "Set and retrieve file ACL information."
+                },
+                "examples": "\n- name: Grant user Joe read access to a file\n  acl:\n    path: /etc/foo.conf\n    entity: joe\n    etype: user\n    permissions: r\n    state: present\n\n- name: Removes the ACL for Joe on a specific file\n  acl:\n    path: /etc/foo.conf\n    entity: joe\n    etype: user\n    state: absent\n\n- name: Sets default ACL for joe on /etc/foo.d/\n  acl:\n    path: /etc/foo.d/\n    entity: joe\n    etype: user\n    permissions: rw\n    default: yes\n    state: present\n\n- name: Same as previous but using entry shorthand\n  acl:\n    path: /etc/foo.d/\n    entry: default:user:joe:rw-\n    state: present\n\n- name: Obtain the ACL for a specific file\n  acl:\n    path: /etc/foo.conf\n  register: acl_info\n",
+                "metadata": {
+                    "status": [
+                        "stableinterface"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": [
+                    {
+                        "name": "acl",
+                        "description": "Current ACL on provided path (after changes, if any)",
+                        "returned": "success",
+                        "sample": [
+                            "user::rwx",
+                            "group::rwx",
+                            "other::rwx"
+                        ],
+                        "type": "list"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "mount",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Ansible Core Team",
+                        "Seth Vidal (@skvidal)"
+                    ],
+                    "description": [
+                        "This module controls active and configured mount points in C(/etc/fstab)."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/mount.py",
+                    "module": "mount",
+                    "notes": [
+                        "As of Ansible 2.3, the I(name) option has been changed to I(path) as default, but I(name) still works as well."
+                    ],
+                    "options": [
+                        {
+                            "name": "backup",
+                            "default": false,
+                            "description": [
+                                "Create a backup file including the timestamp information so you can get the original file back if you somehow clobbered it incorrectly."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "boot",
+                            "default": true,
+                            "description": [
+                                "Determines if the filesystem should be mounted on boot.",
+                                "Only applies to Solaris systems."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "dump",
+                            "default": 0,
+                            "description": [
+                                "Dump (see fstab(5)).",
+                                "Note that if set to C(null) and I(state) set to C(present), it will cease to work and duplicate entries will be made with subsequent runs.",
+                                "Has no effect on Solaris systems."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "fstab",
+                            "description": [
+                                "File to use instead of C(/etc/fstab).",
+                                "You should not use this option unless you really know what you are doing.",
+                                "This might be useful if you need to configure mountpoints in a chroot environment.",
+                                "OpenBSD does not allow specifying alternate fstab files with mount so do not use this on OpenBSD with any state that operates on the live filesystem.",
+                                "This parameter defaults to /etc/fstab or /etc/vfstab on Solaris."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "fstype",
+                            "description": [
+                                "Filesystem type.",
+                                "Required when I(state) is C(present) or C(mounted)."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "opts",
+                            "description": [
+                                "Mount options (see fstab(5), or vfstab(4) on Solaris)."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "passno",
+                            "default": 0,
+                            "description": [
+                                "Passno (see fstab(5)).",
+                                "Note that if set to C(null) and I(state) set to C(present), it will cease to work and duplicate entries will be made with subsequent runs.",
+                                "Deprecated on Solaris systems."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "path",
+                            "aliases": [
+                                "name"
+                            ],
+                            "description": [
+                                "Path to the mount point (e.g. C(/mnt/files)).",
+                                "Before Ansible 2.3 this option was only usable as I(dest), I(destfile) and I(name)."
+                            ],
+                            "required": true,
+                            "type": "path"
+                        },
+                        {
+                            "name": "src",
+                            "description": [
+                                "Device to be mounted on I(path).",
+                                "Required when I(state) set to C(present) or C(mounted)."
+                            ],
+                            "type": "path"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "mounted",
+                                "present",
+                                "unmounted",
+                                "remounted"
+                            ],
+                            "description": [
+                                "If C(mounted), the device will be actively mounted and appropriately configured in I(fstab). If the mount point is not present, the mount point will be created.",
+                                "If C(unmounted), the device will be unmounted without changing I(fstab).",
+                                "C(present) only specifies that the device is to be configured in I(fstab) and does not trigger or require a mount.",
+                                "C(absent) specifies that the device mount's entry will be removed from I(fstab) and will also unmount the device and remove the mount point.",
+                                "C(remounted) specifies that the device will be remounted for when you want to force a refresh on the mount itself (added in 2.9). This will always return changed=true."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Control active and configured mount points"
+                },
+                "examples": "\n# Before 2.3, option 'name' was used instead of 'path'\n- name: Mount DVD read-only\n  mount:\n    path: /mnt/dvd\n    src: /dev/sr0\n    fstype: iso9660\n    opts: ro,noauto\n    state: present\n\n- name: Mount up device by label\n  mount:\n    path: /srv/disk\n    src: LABEL=SOME_LABEL\n    fstype: ext4\n    state: present\n\n- name: Mount up device by UUID\n  mount:\n    path: /home\n    src: UUID=b3e48f45-f933-4c8e-a700-22a159ec9077\n    fstype: xfs\n    opts: noatime\n    state: present\n\n- name: Unmount a mounted volume\n  mount:\n    path: /tmp/mnt-pnt\n    state: unmounted\n\n- name: Mount and bind a volume\n  mount:\n    path: /system/new_volume/boot\n    src: /boot\n    opts: bind\n    state: mounted\n    fstype: none\n\n- name: Mount an NFS volume\n  mount:\n    src: 192.168.1.100:/nfs/ssd/shared_data\n    path: /mnt/shared_data\n    opts: rw,sync,hard,intr\n    state: mounted\n    fstype: nfs\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "patch",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Jakub Jirutka (@jirutka)",
+                        "Luis Alberto Perez Lazaro (@luisperlaz)"
+                    ],
+                    "description": [
+                        "Apply patch files using the GNU patch tool."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/patch.py",
+                    "module": "patch",
+                    "notes": [
+                        "This module requires GNU I(patch) utility to be installed on the remote host."
+                    ],
+                    "options": [
+                        {
+                            "name": "backup",
+                            "default": false,
+                            "description": [
+                                "Passes C(--backup --version-control=numbered) to patch, producing numbered backup copies."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "basedir",
+                            "description": [
+                                "Path of a base directory in which the patch file will be applied.",
+                                "May be omitted when C(dest) option is specified, otherwise required."
+                            ],
+                            "type": "path"
+                        },
+                        {
+                            "name": "binary",
+                            "default": false,
+                            "description": [
+                                "Setting to C(yes) will disable patch's heuristic for transforming CRLF line endings into LF.",
+                                "Line endings of src and dest must match.",
+                                "If set to C(no), C(patch) will replace CRLF in C(src) files on POSIX."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "dest",
+                            "aliases": [
+                                "originalfile"
+                            ],
+                            "description": [
+                                "Path of the file on the remote machine to be patched.",
+                                "The names of the files to be patched are usually taken from the patch file, but if there's just one file to be patched it can specified with this option."
+                            ],
+                            "type": "path"
+                        },
+                        {
+                            "name": "remote_src",
+                            "default": false,
+                            "description": [
+                                "If C(no), it will search for src at originating/master machine, if C(yes) it will go to the remote/target machine for the C(src)."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "src",
+                            "aliases": [
+                                "patchfile"
+                            ],
+                            "description": [
+                                "Path of the patch file as accepted by the GNU patch tool. If C(remote_src) is 'no', the patch source file is looked up from the module's I(files) directory."
+                            ],
+                            "required": true,
+                            "type": "path"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "Whether the patch should be applied or reverted."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "strip",
+                            "default": 0,
+                            "description": [
+                                "Number that indicates the smallest prefix containing leading slashes that will be stripped from each file name found in the patch file.",
+                                "For more information see the strip parameter of the GNU patch tool."
+                            ],
+                            "type": "int"
+                        }
+                    ],
+                    "short_description": "Apply patch files using the GNU patch tool"
+                },
+                "examples": "\n- name: Apply patch to one file\n  patch:\n    src: /tmp/index.html.patch\n    dest: /var/www/index.html\n\n- name: Apply patch to multiple files under basedir\n  patch:\n    src: /tmp/customize.patch\n    basedir: /var/www\n    strip: 1\n\n- name: Revert patch to one file\n  patch:\n    src: /tmp/index.html.patch\n    dest: /var/www/index.html\n    state: absent\n",
+                "metadata": {
+                    "status": [
+                        "stableinterface"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "seboolean",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Stephen Fromm (@sfromm)"
+                    ],
+                    "description": [
+                        "Toggles SELinux booleans."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/seboolean.py",
+                    "module": "seboolean",
+                    "notes": [
+                        "Not tested on any Debian based system."
+                    ],
+                    "options": [
+                        {
+                            "name": "ignore_selinux_state",
+                            "default": false,
+                            "description": [
+                                "Useful for scenarios (chrooted environment) that you can't get the real SELinux state."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "name",
+                            "description": [
+                                "Name of the boolean to configure."
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "persistent",
+                            "default": "no",
+                            "description": [
+                                "Set to C(yes) if the boolean setting should survive a reboot."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "state",
+                            "description": [
+                                "Desired boolean value"
+                            ],
+                            "required": true,
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "libselinux-python",
+                        "libsemanage-python"
+                    ],
+                    "short_description": "Toggles SELinux booleans"
+                },
+                "examples": "\n- name: Set httpd_can_network_connect flag on and keep it persistent across reboots\n  seboolean:\n    name: httpd_can_network_connect\n    state: yes\n    persistent: yes\n",
+                "metadata": {
+                    "status": [
+                        "stableinterface"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "sysctl",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "David CHANIAL (@davixx) <david.chanial@gmail.com>",
+                    "description": [
+                        "This module manipulates sysctl entries and optionally performs a C(/sbin/sysctl -p) after changing them."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/sysctl.py",
+                    "module": "sysctl",
+                    "options": [
+                        {
+                            "name": "ignoreerrors",
+                            "default": "no",
+                            "description": [
+                                "Use this option to ignore errors about unknown keys."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "name",
+                            "aliases": [
+                                "key"
+                            ],
+                            "description": [
+                                "The dot-separated path (aka I(key)) specifying the sysctl variable."
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "reload",
+                            "default": "yes",
+                            "description": [
+                                "If C(yes), performs a I(/sbin/sysctl -p) if the C(sysctl_file) is updated. If C(no), does not reload I(sysctl) even if the C(sysctl_file) is updated."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "Whether the entry should be present or absent in the sysctl file."
+                            ]
+                        },
+                        {
+                            "name": "sysctl_file",
+                            "default": "/etc/sysctl.conf",
+                            "description": [
+                                "Specifies the absolute path to C(sysctl.conf), if not C(/etc/sysctl.conf)."
+                            ]
+                        },
+                        {
+                            "name": "sysctl_set",
+                            "default": "no",
+                            "description": [
+                                "Verify token value with the sysctl command and set with -w if necessary"
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "value",
+                            "aliases": [
+                                "val"
+                            ],
+                            "description": [
+                                "Desired value of the sysctl key."
+                            ]
+                        }
+                    ],
+                    "short_description": "Manage entries in sysctl.conf."
+                },
+                "examples": "\n# Set vm.swappiness to 5 in /etc/sysctl.conf\n- sysctl:\n    name: vm.swappiness\n    value: '5'\n    state: present\n\n# Remove kernel.panic entry from /etc/sysctl.conf\n- sysctl:\n    name: kernel.panic\n    state: absent\n    sysctl_file: /etc/sysctl.conf\n\n# Set kernel.panic to 3 in /tmp/test_sysctl.conf\n- sysctl:\n    name: kernel.panic\n    value: '3'\n    sysctl_file: /tmp/test_sysctl.conf\n    reload: no\n\n# Set ip forwarding on in /proc and verify token value with the sysctl command\n- sysctl:\n    name: net.ipv4.ip_forward\n    value: '1'\n    sysctl_set: yes\n\n# Set ip forwarding on in /proc and in the sysctl file and reload if necessary\n- sysctl:\n    name: net.ipv4.ip_forward\n    value: '1'\n    sysctl_set: yes\n    state: present\n    reload: yes\n",
+                "metadata": {
+                    "status": [
+                        "stableinterface"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "synchronize",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Timothy Appnel (@tima)"
+                    ],
+                    "description": [
+                        "C(synchronize) is a wrapper around rsync to make common tasks in your playbooks quick and easy.",
+                        "It is run and originates on the local host where Ansible is being run.",
+                        "Of course, you could just use the C(command) action to call rsync yourself, but you also have to add a fair number of boilerplate options and host facts.",
+                        "This module is not intended to provide access to the full power of rsync, but does make the most common invocations easier to implement. You `still` may need to call rsync directly via C(command) or C(shell) depending on your use case."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/synchronize.py",
+                    "module": "synchronize",
+                    "notes": [
+                        "rsync must be installed on both the local and remote host.",
+                        "For the C(synchronize) module, the \"local host\" is the host `the synchronize task originates on`, and the \"destination host\" is the host `synchronize is connecting to`.",
+                        "The \"local host\" can be changed to a different host by using `delegate_to`.  This enables copying between two remote hosts or entirely on one remote machine.",
+                        "The user and permissions for the synchronize `src` are those of the user running the Ansible task on the local host (or the remote_user for a delegate_to host when delegate_to is used).\n",
+                        "The user and permissions for the synchronize `dest` are those of the `remote_user` on the destination host or the `become_user` if `become=yes` is active.",
+                        "In Ansible 2.0 a bug in the synchronize module made become occur on the \"local host\".  This was fixed in Ansible 2.0.1.",
+                        "Currently, synchronize is limited to elevating permissions via passwordless sudo.  This is because rsync itself is connecting to the remote machine and rsync doesn't give us a way to pass sudo credentials in.",
+                        "Currently there are only a few connection types which support synchronize (ssh, paramiko, local, and docker) because a sync strategy has been determined for those connection types.  Note that the connection for these must not need a password as rsync itself is making the connection and rsync does not provide us a way to pass a password to the connection.",
+                        "Expect that dest=~/x will be ~<remote_user>/x even if using sudo.",
+                        "Inspect the verbose output to validate the destination user/host/path are what was expected.",
+                        "To exclude files and directories from being synchronized, you may add C(.rsync-filter) files to the source directory.",
+                        "rsync daemon must be up and running with correct permission when using rsync protocol in source or destination path.",
+                        "The C(synchronize) module forces `--delay-updates` to avoid leaving a destination in a broken in-between state if the underlying rsync process encounters an error. Those synchronizing large numbers of files that are willing to trade safety for performance should call rsync directly.",
+                        "link_destination is subject to the same limitations as the underlying rsync daemon. Hard links are only preserved if the relative subtrees of the source and destination are the same. Attempts to hardlink into a directory that is a subdirectory of the source will be prevented."
+                    ],
+                    "options": [
+                        {
+                            "name": "archive",
+                            "default": true,
+                            "description": [
+                                "Mirrors the rsync archive flag, enables recursive, links, perms, times, owner, group flags and -D."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "checksum",
+                            "default": false,
+                            "description": [
+                                "Skip based on checksum, rather than mod-time & size; Note that that \"archive\" option is still enabled by default - the \"checksum\" option will not disable it."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "compress",
+                            "default": true,
+                            "description": [
+                                "Compress file data during the transfer.",
+                                "In most cases, leave this enabled unless it causes problems."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "copy_links",
+                            "default": false,
+                            "description": [
+                                "Copy symlinks as the item that they point to (the referent) is copied, rather than the symlink."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "delete",
+                            "default": false,
+                            "description": [
+                                "Delete files in C(dest) that don't exist (after transfer, not before) in the C(src) path.",
+                                "This option requires C(recursive=yes).",
+                                "This option ignores excluded files and behaves like the rsync opt --delete-excluded."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "dest",
+                            "description": [
+                                "Path on the destination host that will be synchronized from the source.",
+                                "The path can be absolute or relative."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "dest_port",
+                            "description": [
+                                "Port number for ssh on the destination host.",
+                                "Prior to Ansible 2.0, the ansible_ssh_port inventory var took precedence over this value.",
+                                "This parameter defaults to the value of C(ansible_ssh_port) or C(ansible_port), the C(remote_port) config setting or the value from ssh client configuration if none of the former have been set."
+                            ],
+                            "type": "int"
+                        },
+                        {
+                            "name": "dirs",
+                            "default": false,
+                            "description": [
+                                "Transfer directories without recursing."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "existing_only",
+                            "default": false,
+                            "description": [
+                                "Skip creating new files on receiver."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "group",
+                            "description": [
+                                "Preserve group.",
+                                "This parameter defaults to the value of the archive option."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "link_dest",
+                            "default": null,
+                            "description": [
+                                "Add a destination to hard link against during the rsync."
+                            ],
+                            "type": "list"
+                        },
+                        {
+                            "name": "links",
+                            "description": [
+                                "Copy symlinks as symlinks.",
+                                "This parameter defaults to the value of the archive option."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "mode",
+                            "choices": [
+                                "pull",
+                                "push"
+                            ],
+                            "default": "push",
+                            "description": [
+                                "Specify the direction of the synchronization.",
+                                "In push mode the localhost or delegate is the source.",
+                                "In pull mode the remote host in context is the source."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "owner",
+                            "description": [
+                                "Preserve owner (super user only).",
+                                "This parameter defaults to the value of the archive option."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "partial",
+                            "default": false,
+                            "description": [
+                                "Tells rsync to keep the partial file which should make a subsequent transfer of the rest of the file much faster."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "perms",
+                            "description": [
+                                "Preserve permissions.",
+                                "This parameter defaults to the value of the archive option."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "private_key",
+                            "description": [
+                                "Specify the private key to use for SSH-based rsync connections (e.g. C(~/.ssh/id_rsa))."
+                            ],
+                            "type": "path"
+                        },
+                        {
+                            "name": "recursive",
+                            "description": [
+                                "Recurse into directories.",
+                                "This parameter defaults to the value of the archive option."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "rsync_opts",
+                            "default": null,
+                            "description": [
+                                "Specify additional rsync options by passing in an array.",
+                                "Note that an empty string in C(rsync_opts) will end up transfer the current working directory."
+                            ],
+                            "type": "list"
+                        },
+                        {
+                            "name": "rsync_path",
+                            "description": [
+                                "Specify the rsync command to run on the remote host. See C(--rsync-path) on the rsync man page.",
+                                "To specify the rsync command to run on the local host, you need to set this your task var C(ansible_rsync_path)."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "rsync_timeout",
+                            "default": 0,
+                            "description": [
+                                "Specify a C(--timeout) for the rsync command in seconds."
+                            ],
+                            "type": "int"
+                        },
+                        {
+                            "name": "set_remote_user",
+                            "default": true,
+                            "description": [
+                                "Put user@ for the remote paths.",
+                                "If you have a custom ssh config to define the remote user for a host that does not match the inventory user, you should set this parameter to C(no)."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "src",
+                            "description": [
+                                "Path on the source host that will be synchronized to the destination.",
+                                "The path can be absolute or relative."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "times",
+                            "description": [
+                                "Preserve modification times.",
+                                "This parameter defaults to the value of the archive option."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "use_ssh_args",
+                            "default": false,
+                            "description": [
+                                "Use the ssh_args specified in ansible.cfg."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "verify_host",
+                            "default": false,
+                            "description": [
+                                "Verify destination host key."
+                            ],
+                            "type": "bool"
+                        }
+                    ],
+                    "seealso": [
+                        {
+                            "module": "copy"
+                        },
+                        {
+                            "module": "community.windows.win_robocopy"
+                        }
+                    ],
+                    "short_description": "A wrapper around rsync to make common tasks in your playbooks quick and easy"
+                },
+                "examples": "\n- name: Synchronization of src on the control machine to dest on the remote hosts\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n\n- name: Synchronization using rsync protocol (push)\n  synchronize:\n    src: some/relative/path/\n    dest: rsync://somehost.com/path/\n\n- name: Synchronization using rsync protocol (pull)\n  synchronize:\n    mode: pull\n    src: rsync://somehost.com/path/\n    dest: /some/absolute/path/\n\n- name:  Synchronization using rsync protocol on delegate host (push)\n  synchronize:\n    src: /some/absolute/path/\n    dest: rsync://somehost.com/path/\n  delegate_to: delegate.host\n\n- name: Synchronization using rsync protocol on delegate host (pull)\n  synchronize:\n    mode: pull\n    src: rsync://somehost.com/path/\n    dest: /some/absolute/path/\n  delegate_to: delegate.host\n\n- name: Synchronization without any --archive options enabled\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n    archive: no\n\n- name: Synchronization with --archive options enabled except for --recursive\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n    recursive: no\n\n- name: Synchronization with --archive options enabled except for --times, with --checksum option enabled\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n    checksum: yes\n    times: no\n\n- name: Synchronization without --archive options enabled except use --links\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n    archive: no\n    links: yes\n\n- name: Synchronization of two paths both on the control machine\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n  delegate_to: localhost\n\n- name: Synchronization of src on the inventory host to the dest on the localhost in pull mode\n  synchronize:\n    mode: pull\n    src: some/relative/path\n    dest: /some/absolute/path\n\n- name: Synchronization of src on delegate host to dest on the current inventory host.\n  synchronize:\n    src: /first/absolute/path\n    dest: /second/absolute/path\n  delegate_to: delegate.host\n\n- name: Synchronize two directories on one remote host.\n  synchronize:\n    src: /first/absolute/path\n    dest: /second/absolute/path\n  delegate_to: \"{{ inventory_hostname }}\"\n\n- name: Synchronize and delete files in dest on the remote host that are not found in src of localhost.\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n    delete: yes\n    recursive: yes\n\n# This specific command is granted su privileges on the destination\n- name: Synchronize using an alternate rsync command\n  synchronize:\n    src: some/relative/path\n    dest: /some/absolute/path\n    rsync_path: su -c rsync\n\n# Example .rsync-filter file in the source directory\n# - var       # exclude any path whose last part is 'var'\n# - /var      # exclude any path starting with 'var' starting at the source directory\n# + /var/conf # include /var/conf even though it was previously excluded\n\n- name: Synchronize passing in extra rsync options\n  synchronize:\n    src: /tmp/helloworld\n    dest: /var/www/helloworld\n    rsync_opts:\n      - \"--no-motd\"\n      - \"--exclude=.git\"\n\n# Hardlink files if they didn't change\n- name: Use hardlinks when synchronizing filesystems\n  synchronize:\n    src: /tmp/path_a/foo.txt\n    dest: /tmp/path_b/foo.txt\n    link_dest: /tmp/path_a/\n\n# Specify the rsync binary to use on remote host and on local host\n- hosts: groupofhosts\n  vars:\n        ansible_rsync_path: /usr/gnu/bin/rsync\n\n  tasks:\n    - name: copy /tmp/localpath/ to remote location /tmp/remotepath\n      synchronize:\n        src: /tmp/localpath/\n        dest: /tmp/remotepath\n        rsync_path: /usr/gnu/bin/rsync\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "at",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Richard Isaacson (@risaacson)"
+                    ],
+                    "description": [
+                        "Use this module to schedule a command or script file to run once in the future.",
+                        "All jobs are executed in the 'a' queue."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/at.py",
+                    "module": "at",
+                    "options": [
+                        {
+                            "name": "command",
+                            "description": [
+                                "A command to be executed in the future."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "count",
+                            "description": [
+                                "The count of units in the future to execute the command or script file."
+                            ],
+                            "required": true,
+                            "type": "int"
+                        },
+                        {
+                            "name": "script_file",
+                            "description": [
+                                "An existing script file to be executed in the future."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "The state dictates if the command or script file should be evaluated as present(added) or absent(deleted)."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "unique",
+                            "default": false,
+                            "description": [
+                                "If a matching job is present a new job will not be added."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "units",
+                            "choices": [
+                                "minutes",
+                                "hours",
+                                "days",
+                                "weeks"
+                            ],
+                            "description": [
+                                "The type of units in the future to execute the command or script file."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "requirements": [
+                        "at"
+                    ],
+                    "short_description": "Schedule the execution of a command or script file via the at command"
+                },
+                "examples": "\n- name: Schedule a command to execute in 20 minutes as root\n  at:\n    command: ls -d / >/dev/null\n    count: 20\n    units: minutes\n\n- name: Match a command to an existing job and delete the job\n  at:\n    command: ls -d / >/dev/null\n    state: absent\n\n- name: Schedule a command to execute in 20 minutes making sure it is unique in the queue\n  at:\n    command: ls -d / >/dev/null\n    count: 20\n    units: minutes\n    unique: yes\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "authorized_key",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Core Team",
+                    "description": [
+                        "Adds or removes SSH authorized keys for particular user accounts."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/modules/authorized_key.py",
+                    "module": "authorized_key",
+                    "options": [
+                        {
+                            "name": "comment",
+                            "description": [
+                                "Change the comment on the public key.",
+                                "Rewriting the comment is useful in cases such as fetching it from GitHub or GitLab.",
+                                "If no comment is specified, the existing comment will be kept."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "exclusive",
+                            "default": false,
+                            "description": [
+                                "Whether to remove all other non-specified keys from the authorized_keys file.",
+                                "Multiple keys can be specified in a single C(key) string value by separating them by newlines.",
+                                "This option is not loop aware, so if you use C(with_) , it will be exclusive per iteration of the loop.",
+                                "If you want multiple keys in the file you need to pass them all to C(key) in a single batch as mentioned above."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "follow",
+                            "default": false,
+                            "description": [
+                                "Follow path symlink instead of replacing it."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "key",
+                            "description": [
+                                "The SSH public key(s), as a string or (since Ansible 1.9) url (https://github.com/username.keys)."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "key_options",
+                            "description": [
+                                "A string of ssh key options to be prepended to the key in the authorized_keys file."
+                            ]
+                        },
+                        {
+                            "name": "manage_dir",
+                            "default": true,
+                            "description": [
+                                "Whether this module should manage the directory of the authorized key file.",
+                                "If set to C(yes), the module will create the directory, as well as set the owner and permissions of an existing directory.",
+                                "Be sure to set C(manage_dir=no) if you are using an alternate directory for authorized_keys, as set with C(path), since you could lock yourself out of SSH access.",
+                                "See the example below."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "path",
+                            "description": [
+                                "Alternate path to the authorized_keys file.",
+                                "When unset, this value defaults to I(~/.ssh/authorized_keys)."
+                            ],
+                            "type": "path"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "Whether the given key (with the given key_options) should or should not be in the file."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "The username on the remote host whose authorized_keys file will be modified."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "validate_certs",
+                            "default": true,
+                            "description": [
+                                "This only applies if using a https url as the source of the keys.",
+                                "If set to C(no), the SSL certificates will not be validated.",
+                                "This should only set to C(no) used on personally controlled sites using self-signed certificates as it avoids verifying the source site.",
+                                "Prior to 2.1 the code worked as if this was set to C(yes)."
+                            ],
+                            "type": "bool"
+                        }
+                    ],
+                    "short_description": "Adds or removes an SSH authorized key"
+                },
+                "examples": "\n- name: Set authorized key taken from file\n  authorized_key:\n    user: charlie\n    state: present\n    key: \"{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}\"\n\n- name: Set authorized keys taken from url\n  authorized_key:\n    user: charlie\n    state: present\n    key: https://github.com/charlie.keys\n\n- name: Set authorized key in alternate location\n  authorized_key:\n    user: charlie\n    state: present\n    key: \"{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}\"\n    path: /etc/ssh/authorized_keys/charlie\n    manage_dir: False\n\n- name: Set up multiple authorized keys\n  authorized_key:\n    user: deploy\n    state: present\n    key: '{{ item }}'\n  with_file:\n    - public_keys/doe-jane\n    - public_keys/doe-john\n\n- name: Set authorized key defining key options\n  authorized_key:\n    user: charlie\n    state: present\n    key: \"{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}\"\n    key_options: 'no-port-forwarding,from=\"10.0.1.1\"'\n\n- name: Set authorized key without validating the TLS/SSL certificates\n  authorized_key:\n    user: charlie\n    state: present\n    key: https://github.com/user.keys\n    validate_certs: False\n\n- name: Set authorized key, removing all the authorized keys already set\n  authorized_key:\n    user: root\n    key: \"{{ lookup('file', 'public_keys/doe-jane') }}\"\n    state: present\n    exclusive: True\n\n- name: Set authorized key for user ubuntu copying it from current user\n  authorized_key:\n    user: ubuntu\n    state: present\n    key: \"{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}\"\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "core"
+                },
+                "return": [
+                    {
+                        "name": "exclusive",
+                        "description": "If the key has been forced to be exclusive or not.",
+                        "returned": "success",
+                        "sample": false,
+                        "type": "bool"
+                    },
+                    {
+                        "name": "key",
+                        "description": "The key that the module was running against.",
+                        "returned": "success",
+                        "sample": "https://github.com/user.keys",
+                        "type": "str"
+                    },
+                    {
+                        "name": "key_option",
+                        "description": "Key options related to the key.",
+                        "returned": "success",
+                        "sample": null,
+                        "type": "str"
+                    },
+                    {
+                        "name": "keyfile",
+                        "description": "Path for authorized key file.",
+                        "returned": "success",
+                        "sample": "/home/user/.ssh/authorized_keys",
+                        "type": "str"
+                    },
+                    {
+                        "name": "manage_dir",
+                        "description": "Whether this module managed the directory of the authorized key file.",
+                        "returned": "success",
+                        "sample": true,
+                        "type": "bool"
+                    },
+                    {
+                        "name": "path",
+                        "description": "Alternate path to the authorized_keys file",
+                        "returned": "success",
+                        "sample": null,
+                        "type": "str"
+                    },
+                    {
+                        "name": "state",
+                        "description": "Whether the given key (with the given key_options) should or should not be in the file",
+                        "returned": "success",
+                        "sample": "present",
+                        "type": "str"
+                    },
+                    {
+                        "name": "unique",
+                        "description": "Whether the key is unique",
+                        "returned": "success",
+                        "sample": false,
+                        "type": "bool"
+                    },
+                    {
+                        "name": "user",
+                        "description": "The username on the remote host whose authorized_keys file will be modified",
+                        "returned": "success",
+                        "sample": "user",
+                        "type": "str"
+                    },
+                    {
+                        "name": "validate_certs",
+                        "description": "This only applies if using a https url as the source of the keys. If set to C(no), the SSL certificates will not be validated.",
+                        "returned": "success",
+                        "sample": true,
+                        "type": "bool"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ismount",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "patch",
+            "content_type": "action",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "synchronize",
+            "content_type": "action",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "json",
+            "content_type": "callback",
+            "doc_strings": {
+                "doc": {
+                    "callback": "json",
+                    "description": [
+                        "This callback converts all events into JSON output to stdout"
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/callback/json.py",
+                    "options": [
+                        {
+                            "name": "Show custom stats",
+                            "default": false,
+                            "description": "This adds the custom stats set via the set_stats plugin to the play recap",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_SHOW_CUSTOM_STATS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "show_custom_stats",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "Set as stdout in config"
+                    ],
+                    "short_description": "Ansible screen output as JSON",
+                    "type": "stdout"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "timer",
+            "content_type": "callback",
+            "doc_strings": {
+                "doc": {
+                    "callback": "timer",
+                    "callback_type": "aggregate",
+                    "description": [
+                        "This callback just adds total play duration to the play stats."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/callback/timer.py",
+                    "requirements": [
+                        "whitelist in configuration"
+                    ],
+                    "short_description": "Adds time to play stats"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "profile_tasks",
+            "content_type": "callback",
+            "doc_strings": {
+                "doc": {
+                    "callback": "profile_tasks",
+                    "description": [
+                        "Ansible callback plugin for timing individual tasks and overall execution time.",
+                        "Mashup of 2 excellent original works: https://github.com/jlafon/ansible-profile, https://github.com/junaid18183/ansible_home/blob/master/ansible_plugins/callback_plugins/timestamp.py.old",
+                        "Format: C(<task start timestamp> (<length of previous task>) <current elapsed playbook execution time>)",
+                        "It also lists the top/bottom time consuming tasks in the summary (configurable)",
+                        "Before 2.4 only the environment variables were available for configuration."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/callback/profile_tasks.py",
+                    "options": [
+                        {
+                            "name": "output_limit",
+                            "default": 20,
+                            "description": "Number of tasks to display in the summary",
+                            "env": [
+                                {
+                                    "name": "PROFILE_TASKS_TASK_OUTPUT_LIMIT"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "task_output_limit",
+                                    "section": "callback_profile_tasks"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "sort_order",
+                            "choices": [
+                                "descending",
+                                "ascending",
+                                "none"
+                            ],
+                            "default": "descending",
+                            "description": "Adjust the sorting output of summary tasks",
+                            "env": [
+                                {
+                                    "name": "PROFILE_TASKS_SORT_ORDER"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "sort_order",
+                                    "section": "callback_profile_tasks"
+                                }
+                            ]
+                        }
+                    ],
+                    "requirements": [
+                        "whitelisting in configuration - see examples section below for details."
+                    ],
+                    "short_description": "adds time information to tasks",
+                    "type": "aggregate"
+                },
+                "examples": "\nexample: >\n  To enable, add this to your ansible.cfg file in the defaults block\n    [defaults]\n    callback_whitelist = profile_tasks\nsample output: >\n#\n#    TASK: [ensure messaging security group exists] ********************************\n#    Thursday 11 June 2017  22:50:53 +0100 (0:00:00.721)       0:00:05.322 *********\n#    ok: [localhost]\n#\n#    TASK: [ensure db security group exists] ***************************************\n#    Thursday 11 June 2017  22:50:54 +0100 (0:00:00.558)       0:00:05.880 *********\n#    changed: [localhost]\n#\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "profile_roles",
+            "content_type": "callback",
+            "doc_strings": {
+                "doc": {
+                    "callback": "profile_roles",
+                    "description": [
+                        "This callback module provides profiling for ansible roles."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/callback/profile_roles.py",
+                    "requirements": [
+                        "whitelisting in configuration"
+                    ],
+                    "short_description": "adds timing information to roles",
+                    "type": "aggregate"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "debug",
+            "content_type": "callback",
+            "doc_strings": {
+                "doc": {
+                    "callback": "debug",
+                    "description": [
+                        "Use this callback to sort through extensive debug output"
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/callback/debug.py",
+                    "options": [
+                        {
+                            "name": "Use STDERR for failed and unreachable tasks",
+                            "default": false,
+                            "description": "Toggle to control whether failed and unreachable tasks are displayed to STDERR (vs. STDOUT)",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_DISPLAY_FAILED_STDERR"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "display_failed_stderr",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool",
+                            "version_added": "2.7"
+                        },
+                        {
+                            "name": "Show 'ok' hosts",
+                            "default": true,
+                            "description": "Toggle to control displaying 'ok' task/host results in a task",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_DISPLAY_OK_HOSTS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "display_ok_hosts",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool",
+                            "version_added": "2.7"
+                        },
+                        {
+                            "name": "Show skipped hosts",
+                            "default": true,
+                            "description": "Toggle to control displaying skipped task/host results in a task",
+                            "env": [
+                                {
+                                    "deprecated": {
+                                        "alternatives": "the \"ANSIBLE_DISPLAY_SKIPPED_HOSTS\" environment variable",
+                                        "version": "2.12",
+                                        "why": "environment variables without \"ANSIBLE_\" prefix are deprecated"
+                                    },
+                                    "name": "DISPLAY_SKIPPED_HOSTS"
+                                },
+                                {
+                                    "name": "ANSIBLE_DISPLAY_SKIPPED_HOSTS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "display_skipped_hosts",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "Show custom stats",
+                            "default": false,
+                            "description": "This adds the custom stats set via the set_stats plugin to the play recap",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_SHOW_CUSTOM_STATS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "show_custom_stats",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "Show per host task start",
+                            "default": false,
+                            "description": "This adds output that shows when a task is started to execute for each host",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_SHOW_PER_HOST_START"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "show_per_host_start",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool",
+                            "version_added": "2.9"
+                        }
+                    ],
+                    "requirements": [
+                        "set as stdout in configuration"
+                    ],
+                    "short_description": "formatted stdout/stderr display",
+                    "type": "stdout"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cgroup_perf_recap",
+            "content_type": "callback",
+            "doc_strings": {
+                "doc": {
+                    "callback": "cgroup_perf_recap",
+                    "callback_type": "aggregate",
+                    "description": [
+                        "This is an ansible callback plugin utilizes cgroups to profile system activity of ansible and individual tasks, and display a recap at the end of the playbook execution"
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/callback/cgroup_perf_recap.py",
+                    "notes": [
+                        "Requires ansible to be run from within a cgroup, such as with C(cgexec -g cpuacct,memory,pids:ansible_profile ansible-playbook ...)",
+                        "This cgroup should only be used by ansible to get accurate results",
+                        "To create the cgroup, first use a command such as C(sudo cgcreate -a ec2-user:ec2-user -t ec2-user:ec2-user -g cpuacct,memory,pids:ansible_profile)"
+                    ],
+                    "options": [
+                        {
+                            "name": "control_group",
+                            "description": "Name of cgroups control group",
+                            "env": [
+                                {
+                                    "name": "CGROUP_CONTROL_GROUP"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "control_group",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "required": true
+                        },
+                        {
+                            "name": "cpu_poll_interval",
+                            "default": 0.25,
+                            "description": "Interval between CPU polling for determining CPU usage. A lower value may produce inaccurate results, a higher value may not be short enough to collect results for short tasks.",
+                            "env": [
+                                {
+                                    "name": "CGROUP_CPU_POLL_INTERVAL"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "cpu_poll_interval",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "float"
+                        },
+                        {
+                            "name": "display_recap",
+                            "default": true,
+                            "description": "Controls whether the recap is printed at the end, useful if you will automatically process the output files",
+                            "env": [
+                                {
+                                    "name": "CGROUP_DISPLAY_RECAP"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "display_recap",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "file_name_format",
+                            "default": "%(feature)s.%(ext)s",
+                            "description": "Format of filename. Accepts C(%(counter)s), C(%(task_uuid)s), C(%(feature)s), C(%(ext)s). Defaults to C(%(feature)s.%(ext)s) when C(file_per_task) is C(False) and C(%(counter)s-%(task_uuid)s-%(feature)s.%(ext)s) when C(True)",
+                            "env": [
+                                {
+                                    "name": "CGROUP_FILE_NAME_FORMAT"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "file_name_format",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "file_per_task",
+                            "default": false,
+                            "description": "When set as C(True) along with C(write_files), this callback will write 1 file per task instead of 1 file for the entire playbook run",
+                            "env": [
+                                {
+                                    "name": "CGROUP_FILE_PER_TASK"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "file_per_task",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "memory_poll_interval",
+                            "default": 0.25,
+                            "description": "Interval between memory polling for determining memory usage. A lower value may produce inaccurate results, a higher value may not be short enough to collect results for short tasks.",
+                            "env": [
+                                {
+                                    "name": "CGROUP_MEMORY_POLL_INTERVAL"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "memory_poll_interval",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "float"
+                        },
+                        {
+                            "name": "output_dir",
+                            "default": "/tmp/ansible-perf-%s",
+                            "description": "Output directory for files containing recorded performance readings. If the value contains a single %s, the start time of the playbook run will be inserted in that space. Only the deepest level directory will be created if it does not exist, parent directories will not be created.",
+                            "env": [
+                                {
+                                    "name": "CGROUP_OUTPUT_DIR"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "output_dir",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "path"
+                        },
+                        {
+                            "name": "output_format",
+                            "choices": [
+                                "csv",
+                                "json"
+                            ],
+                            "default": "csv",
+                            "description": "Output format, either CSV or JSON-seq",
+                            "env": [
+                                {
+                                    "name": "CGROUP_OUTPUT_FORMAT"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "output_format",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "pid_poll_interval",
+                            "default": 0.25,
+                            "description": "Interval between PID polling for determining PID count. A lower value may produce inaccurate results, a higher value may not be short enough to collect results for short tasks.",
+                            "env": [
+                                {
+                                    "name": "CGROUP_PID_POLL_INTERVAL"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "pid_poll_interval",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "float"
+                        },
+                        {
+                            "name": "write_files",
+                            "default": false,
+                            "description": "Dictates whether files will be written containing performance readings",
+                            "env": [
+                                {
+                                    "name": "CGROUP_WRITE_FILES"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "write_files",
+                                    "section": "callback_cgroup_perf_recap"
+                                }
+                            ],
+                            "type": "bool"
+                        }
+                    ],
+                    "requirements": [
+                        "whitelist in configuration",
+                        "cgroups"
+                    ],
+                    "short_description": "Profiles system activity of tasks and full execution using cgroups"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "skippy",
+            "content_type": "callback",
+            "doc_strings": {
+                "doc": {
+                    "callback": "skippy",
+                    "callback_type": "stdout",
+                    "deprecated": {
+                        "alternative": "'default' callback plugin with 'display_skipped_hosts = no' option",
+                        "removed_in": "2.11",
+                        "why": "The 'default' callback plugin now supports this functionality"
+                    },
+                    "description": [
+                        "This callback does the same as the default except it does not output skipped host/task/item status"
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/callback/skippy.py",
+                    "options": [
+                        {
+                            "name": "Use STDERR for failed and unreachable tasks",
+                            "default": false,
+                            "description": "Toggle to control whether failed and unreachable tasks are displayed to STDERR (vs. STDOUT)",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_DISPLAY_FAILED_STDERR"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "display_failed_stderr",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool",
+                            "version_added": "2.7"
+                        },
+                        {
+                            "name": "Show 'ok' hosts",
+                            "default": true,
+                            "description": "Toggle to control displaying 'ok' task/host results in a task",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_DISPLAY_OK_HOSTS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "display_ok_hosts",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool",
+                            "version_added": "2.7"
+                        },
+                        {
+                            "name": "Show skipped hosts",
+                            "default": true,
+                            "description": "Toggle to control displaying skipped task/host results in a task",
+                            "env": [
+                                {
+                                    "deprecated": {
+                                        "alternatives": "the \"ANSIBLE_DISPLAY_SKIPPED_HOSTS\" environment variable",
+                                        "version": "2.12",
+                                        "why": "environment variables without \"ANSIBLE_\" prefix are deprecated"
+                                    },
+                                    "name": "DISPLAY_SKIPPED_HOSTS"
+                                },
+                                {
+                                    "name": "ANSIBLE_DISPLAY_SKIPPED_HOSTS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "display_skipped_hosts",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "Show custom stats",
+                            "default": false,
+                            "description": "This adds the custom stats set via the set_stats plugin to the play recap",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_SHOW_CUSTOM_STATS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "show_custom_stats",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "Show per host task start",
+                            "default": false,
+                            "description": "This adds output that shows when a task is started to execute for each host",
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_SHOW_PER_HOST_START"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "show_per_host_start",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "bool",
+                            "version_added": "2.9"
+                        }
+                    ],
+                    "requirements": [
+                        "set as main display callback"
+                    ],
+                    "short_description": "Ansible screen output that ignores skipped status"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "fish",
+            "content_type": "shell",
+            "doc_strings": {
+                "doc": {
+                    "description": [
+                        "This is here because some people are restricted to fish."
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/shell/fish.py",
+                    "name": "fish",
+                    "options": [
+                        {
+                            "name": "admin_users",
+                            "default": [
+                                "root",
+                                "toor"
+                            ],
+                            "description": [
+                                "list of users to be expected to have admin privileges. This is used by the controller to determine how to share temporary files between the remote user and the become user."
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_ADMIN_USERS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "admin_users",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "list",
+                            "vars": [
+                                {
+                                    "name": "ansible_admin_users"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "async_dir",
+                            "default": "~/.ansible_async",
+                            "description": [
+                                "Directory in which ansible will keep async job information"
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_ASYNC_DIR"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "async_dir",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "vars": [
+                                {
+                                    "name": "ansible_async_dir"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "environment",
+                            "default": {},
+                            "description": [
+                                "dictionary of environment variables and their values to use when executing commands."
+                            ],
+                            "type": "dict"
+                        },
+                        {
+                            "name": "remote_tmp",
+                            "default": "~/.ansible/tmp",
+                            "description": [
+                                "Temporary directory to use on targets when executing tasks."
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_REMOTE_TEMP"
+                                },
+                                {
+                                    "name": "ANSIBLE_REMOTE_TMP"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "remote_tmp",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "vars": [
+                                {
+                                    "name": "ansible_remote_tmp"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "system_tmpdirs",
+                            "default": [
+                                "/var/tmp",
+                                "/tmp"
+                            ],
+                            "description": [
+                                "List of valid system temporary directories for Ansible to choose when it cannot use ``remote_tmp``, normally due to permission issues.  These must be world readable, writable, and executable."
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_SYSTEM_TMPDIRS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "system_tmpdirs",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "list",
+                            "vars": [
+                                {
+                                    "name": "ansible_system_tmpdirs"
+                                }
+                            ]
+                        }
+                    ],
+                    "plugin_type": "shell",
+                    "short_description": "fish shell (/bin/fish)"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "csh",
+            "content_type": "shell",
+            "doc_strings": {
+                "doc": {
+                    "description": [
+                        "When you have no other option than to use csh"
+                    ],
+                    "filename": "/tmp/tmp3cukrkdh/ansible_collections/ansible/posix/plugins/shell/csh.py",
+                    "name": "csh",
+                    "options": [
+                        {
+                            "name": "admin_users",
+                            "default": [
+                                "root",
+                                "toor"
+                            ],
+                            "description": [
+                                "list of users to be expected to have admin privileges. This is used by the controller to determine how to share temporary files between the remote user and the become user."
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_ADMIN_USERS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "admin_users",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "list",
+                            "vars": [
+                                {
+                                    "name": "ansible_admin_users"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "async_dir",
+                            "default": "~/.ansible_async",
+                            "description": [
+                                "Directory in which ansible will keep async job information"
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_ASYNC_DIR"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "async_dir",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "vars": [
+                                {
+                                    "name": "ansible_async_dir"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "environment",
+                            "default": {},
+                            "description": [
+                                "dictionary of environment variables and their values to use when executing commands."
+                            ],
+                            "type": "dict"
+                        },
+                        {
+                            "name": "remote_tmp",
+                            "default": "~/.ansible/tmp",
+                            "description": [
+                                "Temporary directory to use on targets when executing tasks."
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_REMOTE_TEMP"
+                                },
+                                {
+                                    "name": "ANSIBLE_REMOTE_TMP"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "remote_tmp",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "vars": [
+                                {
+                                    "name": "ansible_remote_tmp"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "system_tmpdirs",
+                            "default": [
+                                "/var/tmp",
+                                "/tmp"
+                            ],
+                            "description": [
+                                "List of valid system temporary directories for Ansible to choose when it cannot use ``remote_tmp``, normally due to permission issues.  These must be world readable, writable, and executable."
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_SYSTEM_TMPDIRS"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "system_tmpdirs",
+                                    "section": "defaults"
+                                }
+                            ],
+                            "type": "list",
+                            "vars": [
+                                {
+                                    "name": "ansible_system_tmpdirs"
+                                }
+                            ]
+                        }
+                    ],
+                    "plugin_type": "shell",
+                    "short_description": "C shell (/bin/csh)"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/google.cloud-0.0.9.tar.gz",
+    "namespace": {
+        "name": "google"
+    },
+    "collection": {
+        "name": "cloud"
+    },
+    "version": "0.0.9",
+    "metadata": {
+        "namespace": "google",
+        "name": "cloud",
+        "version": "0.0.9",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "The Google Cloud Platform collection.",
+        "repository": "http://github.com/ansible/ansible_collections_google",
+        "documentation": null,
+        "homepage": "http://cloud.google.com",
+        "issues": null,
+        "authors": [
+            "Google <alexstephen@google.com>"
+        ],
+        "tags": [],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "google.cloud-0.0.9.tar.gz",
+        "sha256": "7a47f636f6e826a29801f3b2a3592af2d59c6b468212fdf0f76ea46848d40384",
+        "size": 540514
+    }
+}

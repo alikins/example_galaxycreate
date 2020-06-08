@@ -1,0 +1,42 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/wti.remote-1.0.1.tar.gz",
+    "namespace": {
+        "name": "wti"
+    },
+    "collection": {
+        "name": "remote"
+    },
+    "version": "1.0.1",
+    "metadata": {
+        "namespace": "wti",
+        "name": "remote",
+        "version": "1.0.1",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Modules for interacting with  WTI remote OOB and PDU devices",
+        "repository": "https://github.com/wtinetworkgear/wti-collection",
+        "documentation": "https://github.com/wtinetworkgear/wti-collection/tree/master/wti/remote/docs",
+        "homepage": "https://www.wti.com",
+        "issues": "https://github.com/wtinetworkgear/wti-collection/issues",
+        "authors": [
+            "Ken Partridge <kenp@wti.com> (@wtinetworkgear)"
+        ],
+        "tags": [
+            "wti",
+            "remote",
+            "oob",
+            "pdu",
+            "management",
+            "control"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "wti.remote-1.0.1.tar.gz",
+        "sha256": "fe3614fef7dd4a4b7b8bf90ba7f4187114b8f30ee78c0cf8bd35f361fca2fb5c",
+        "size": 38296
+    }
+}

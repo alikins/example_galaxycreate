@@ -1,0 +1,38 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/sensu.sensu_go-1.4.0.tar.gz",
+    "namespace": {
+        "name": "sensu"
+    },
+    "collection": {
+        "name": "sensu_go"
+    },
+    "version": "1.4.0",
+    "metadata": {
+        "namespace": "sensu",
+        "name": "sensu_go",
+        "version": "1.4.0",
+        "license": [],
+        "description": "Roles and modules for installing and using Sensu Go",
+        "repository": "https://github.com/sensu/sensu-go-ansible",
+        "documentation": "https://sensu.github.io/sensu-go-ansible/",
+        "homepage": "https://sensu.github.io/sensu-go-ansible/",
+        "issues": "https://github.com/sensu/sensu-go-ansible/issues",
+        "authors": [
+            "Paul Arthur <paul.arthur@flowerysong.com> (@flowerysong)",
+            "XLAB Steampunk <steampunk@xlab.si>"
+        ],
+        "tags": [
+            "sensu",
+            "sensugo",
+            "monitoring"
+        ],
+        "license_file": "COPYING",
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "sensu.sensu_go-1.4.0.tar.gz",
+        "sha256": "26167dddb92824e79d9e5837166c2a93f52f82424f3e196220c99b5cbf0725a6",
+        "size": 128168
+    }
+}

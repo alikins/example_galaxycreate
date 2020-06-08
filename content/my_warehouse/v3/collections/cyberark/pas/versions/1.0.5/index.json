@@ -1,0 +1,48 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/cyberark.pas-1.0.5.tar.gz",
+    "namespace": {
+        "name": "cyberark"
+    },
+    "collection": {
+        "name": "pas"
+    },
+    "version": "1.0.5",
+    "metadata": {
+        "namespace": "cyberark",
+        "name": "pas",
+        "version": "1.0.5",
+        "license": [
+            "MIT"
+        ],
+        "description": "This is a Collection of the CyberArk Ansible Security Automation toolkit.",
+        "repository": "https://github.com/cyberark/ansible-security-automation-collection",
+        "documentation": null,
+        "homepage": null,
+        "issues": null,
+        "authors": [
+            "CyberArk Business Development (@cyberark-bizdev)",
+            "Edward Nunez (@enunez-cyberark)",
+            "James Stutes (@JimmyJamCABD)"
+        ],
+        "tags": [
+            "cyberark",
+            "access",
+            "security",
+            "account",
+            "epv",
+            "vault",
+            "identity",
+            "credential",
+            "secret",
+            "privileged"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "cyberark.pas-1.0.5.tar.gz",
+        "sha256": "cadad10bc3b496b2bf07fbddd6ba5df50b6282045cbe3910780b869df1b12217",
+        "size": 346208
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/community-network-0.1.0.tar.gz",
+    "namespace": {
+        "name": "community"
+    },
+    "collection": {
+        "name": "network"
+    },
+    "version": "0.1.0",
+    "metadata": {
+        "namespace": "community",
+        "name": "network",
+        "version": "0.1.0",
+        "license": [],
+        "description": null,
+        "repository": "https://github.com/ansible-collections/community.network",
+        "documentation": "https://github.com/ansible-collection-migration/community.network/tree/master/docs",
+        "homepage": "https://github.com/ansible-collections/community.network",
+        "issues": "https://github.com/ansible-collections/community.network/issues",
+        "authors": [
+            "Ansible (https://github.com/ansible)"
+        ],
+        "tags": [
+            "community",
+            "network"
+        ],
+        "license_file": "COPYING",
+        "readme": "README.md",
+        "dependencies": {
+            "ansible.netcommon": ">=0.0.1",
+            "cisco.mso": ">=0.0.1",
+            "cisco.aci": ">=0.0.1",
+            "check_point.mgmt": ">=0.1.0",
+            "fortinet.fortios": ">=0.1.0"
+        }
+    },
+    "artifact": {
+        "filename": "community-network-0.1.0.tar.gz",
+        "sha256": "9a5ded953096721e4b5638fa6dd8ae5b6318d3b810ac13bc6fdceb36508d81fe",
+        "size": 3780864
+    }
+}

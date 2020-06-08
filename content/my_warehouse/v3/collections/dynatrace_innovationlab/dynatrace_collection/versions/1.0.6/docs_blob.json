@@ -1,0 +1,201 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>Dynatrace Ansible Collection</h1>\n<p>This Ansible collection comprises several resources that allow you to send comments and deployment information directly from your Ansible playbooks to your Dynatrace tenant.</p>\n<p>Capabilities:</p>\n<ul>\n<li>Comment on a Dynatrace problem ticket</li>\n<li>Send deployment information to Dynatrace</li>\n</ul>\n<h2>Getting started:</h2>\n<h3>Send deployment information to Dynatrace</h3>\n<p>If Ansible is taking care of deploying your artifacts, the Dynatrace provided role can be used to inform your Dynatrace tenant about this deployment to provide more context information in your Dynatrace tenant.\nTo help you get started, please take a look at the following example:</p>\n<p>Example:</p>\n<pre><code>---\n- hosts: localhost\ncollections:\n    - dynatrace_innovationlab.dynatrace_collection\nvars:\n    tenant_url: 'https://xxx.dynatrace.com'\n    api_token:  'your-api-token'\n\ntasks:\n- include_role:\n    name: dynatrace_custom_deployment\n    vars:\n    attach_rules:\n        tagRule:\n        -\n            meTypes: ['SERVICE']\n            tags: \n            -\n            context: 'CONTEXTLESS'\n            key: 'service'\n            value: 'my-microservice'\n    deploymentVersion: '1.2.3'\n    deploymentName: 'production-deployment'\n    deploymentProject: 'My Webshop'\n    source: 'Ansible'\n</code></pre>\n\n<p>The result might look similar as can be seen in the right bottom corner of the screenshot:</p>\n\n\n<p><img alt=\"custom deployment|\" src=\"https://raw.githubusercontent.com/dynatrace-innovationlab/ansible-collection/master/collection/assets/custom-deployment.png\"></p>\n<h3>Comment on a Dynatrace problem ticket</h3>\n<p>If Ansible is taking care of taking counter actions to any problem Dynatrace detects or just forwards information, it is simple to add comments to a Dynatrace problem ticket with this role.</p>\n<pre><code>---\n- hosts: localhost\n  collections:\n    - dynatrace_innovationlab.dynatrace_collection\n  vars:\n    tenant_url: 'https://xxx.dynatrace.com'\n    api_token:  'your-api-token'\n\n  tasks:\n  - include_role:\n      name: dynatrace_problem_comment\n    vars:\n      problem_id: '14959299420367201_1563984V2'\n      comment: 'Hello from Ansible'\n      user: 'myname@email.com'\n      context: 'Ansible'\n</code></pre>\n\n<p>The result might will look similar to the screenshot:</p>\n\n\n<p><img alt=\"problem comment\" src=\"https://raw.githubusercontent.com/dynatrace-innovationlab/ansible-collection/master/collection/assets/comment.png\"></p>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "dynatrace_custom_deployment",
+            "content_type": "role",
+            "doc_strings": {},
+            "readme_file": "README.md",
+            "readme_html": "<h1>Ansible Role: Dynatrace Deployment</h1>\n<p>This role sends custom deployment information to Dynatrace.</p>\n<h2>Download</h2>\n<p>The role is available via:</p>\n<ul>\n<li>Ansible Galaxy</li>\n<li>GitHub</li>\n</ul>\n<h2>Configuration</h2>\n<p>Please find below a list of variables that have to be configured:</p>\n<table>\n<thead>\n<tr>\n<th>Name</th>\n<th>Default</th>\n<th>Description</th>\n</tr>\n</thead>\n\n<tr>\n<td>tenant_url</td>\n<td></td>\n<td>URL of your Dynatrace tenant</td>\n</tr>\n<tr>\n<td>api_token</td>\n<td></td>\n<td>API Token from your Dynatrace tenant</td>\n</tr>\n<tr>\n<td>deploymentVersion</td>\n<td>0.1.0</td>\n<td>version of the artifact to be deployed</td>\n</tr>\n<tr>\n<td>deploymentName</td>\n<td>Default Deployment</td>\n<td>name of this deployment</td>\n</tr>\n<tr>\n<td>deploymentProject</td>\n<td>Default Project</td>\n<td>project this deployment belongs to</td>\n</tr>\n<tr>\n<td>source</td>\n<td>Ansible</td>\n<td>source of this deployment</td>\n</tr>\n<tr>\n<td>attach_rules</td>\n<td></td>\n<td>rules that describe to which entities this deployment event is attached to</td>\n</tr>\n<tr>\n<td>remediationAction</td>\n<td></td>\n<td>action that can be called in case of problems with this deployment</td>\n</tr>\n<tr>\n<td>customProperties</td>\n<td></td>\n<td>custom properties for this deployment</td>\n</tr>\n\n</table>\n<h2>Usage (Example):</h2>\n<pre><code>---\n- hosts: localhost\n  vars:\n    tenant_url: 'https://XXXXXX.live.dynatrace.com'\n    api_token: 'XXXXX'\n\n\n  tasks:\n  - include_role:\n      name: dynatrace_deployment_event\n    vars:\n      deploymentVersion: '1.1'\n      attach_rules:\n        tagRule:\n          meTypes: 'SERVICE'\n          tags: 'ansible-deployment'\n\n  - include_role:\n      name: dynatrace_deployment_event\n    vars:\n      deploymentVersion: '1.2'\n      attach_rules:\n        entity_ids: 'SERVICE-ID'\n\n  - include_role:\n      name: dynatrace_deployment_event\n    vars:\n      deploymentVersion: '1.3'\n      attach_rules:\n        tagRule:\n            -\n              meTypes: ['SERVICE']\n              tags:\n              -\n                context: 'CONTEXTLESS'\n                key: 'Deployment'\n                value: '10.1.0.5:80'\n      customProperties:\n          'CI Tool': 'Ansible'\n          'Build Number': '12321'\n          'Git Commit': '23422323233332'\n\n</code></pre>"
+        },
+        {
+            "content_name": "dynatrace_problem_comment",
+            "content_type": "role",
+            "doc_strings": {},
+            "readme_file": "README.md",
+            "readme_html": "<h1>Ansible Role: Dynatrace Comment</h1>\n<p>This role will send a comment to a Dynatrace problem ticket.</p>\n<h2>Download</h2>\n<p>The role is available via:</p>\n<ul>\n<li>Ansible Galaxy</li>\n<li>GitHub</li>\n</ul>\n<h2>Configuration</h2>\n<p>Please find below a list of variables that have to be configured:</p>\n<table>\n<thead>\n<tr>\n<th>Name</th>\n<th>Default</th>\n<th>Description</th>\n</tr>\n</thead>\n\n<tr>\n<td>tenant_url</td>\n<td></td>\n<td>URL of your Dynatrace tenant</td>\n</tr>\n<tr>\n<td>api_token</td>\n<td></td>\n<td>API Token from your Dynatrace tenant</td>\n</tr>\n<tr>\n<td>problem_id</td>\n<td></td>\n<td>Problem ID of the Dynatrace problem ticket you want to comment on</td>\n</tr>\n<tr>\n<td>comment</td>\n<td></td>\n<td>actual comment text</td>\n</tr>\n<tr>\n<td>user</td>\n<td>Ansible</td>\n<td>user the comment is sent from (String or email address)</td>\n</tr>\n<tr>\n<td>context</td>\n<td>Ansible</td>\n<td>context the comment was sent from</td>\n</tr>\n\n</table>\n<h2>Usage (Example):</h2>\n<pre><code>---\n- hosts: localhost\n  vars:\n    tenant_url: 'https://XXXXXX.live.dynatrace.com'\n    api_token: 'XXXXX'\n\n  tasks:\n  - include_role:\n      name: dynatrace_problem_comment\n    vars:\n      problem_id: 'XXXX'\n      comment: 'Hello from Ansible'\n      user: 'your@email.com'\n      context: 'Ansible'\n\n</code></pre>"
+        },
+        {
+            "content_name": "dynatrace_deployment",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Juergen Etzlstorfer (@jetzlstorfer)",
+                    "description": [
+                        "Push deployment information to Dynatrace"
+                    ],
+                    "filename": "/tmp/tmp4bvfoaee/ansible_collections/dynatrace_innovationlab/dynatrace_collection/plugins/modules/dynatrace_deployment.py",
+                    "module": "dynatrace_deployment",
+                    "options": [
+                        {
+                            "name": "api_token",
+                            "description": [
+                                "Dynatrace API Token"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "attach_rules",
+                            "description": [
+                                "Structure that contains rules which monitored entities the event is to be attached to."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "customProperties",
+                            "description": [
+                                "Custom properties to attach to your deployment (dict)"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "deploymentName",
+                            "description": [
+                                "Name of the deployment"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "deploymentProject",
+                            "description": [
+                                "Name of the project of the deployment"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "deploymentVersion",
+                            "description": [
+                                "A deployment version number"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "remediationAction",
+                            "description": [
+                                "A remediation action in case Dynatrace detects issues related to this deployment"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "source",
+                            "description": [
+                                "Source of the deployment information (default Ansible)"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "tenant_url",
+                            "description": [
+                                "Tenant URL for the Dynatrace Tenant"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "requirements": [],
+                    "short_description": "Notify Dynatrace about new deployments of a service",
+                    "version_added": "2.3"
+                },
+                "examples": "\n- dynatrace_deployment:\n    tenant_url: 'https://mytenant.live.dynatrace.com'\n    api_token: 'XXXXXXXX'\n    attach_rules:\n      tagRule:\n        meTypes: 'SERVICE'\n        tags: 'my-service-tag'\n    remediationAction: 'url-to-remediation'\n    deploymentVersion: '2.0'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dynatrace_comment",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Juergen Etzlstorfer (@jetzlstorfer)",
+                    "description": [
+                        "Push a comment to a Dynatrace problem ticket"
+                    ],
+                    "filename": "/tmp/tmp4bvfoaee/ansible_collections/dynatrace_innovationlab/dynatrace_collection/plugins/modules/dynatrace_comment.py",
+                    "module": "dynatrace_comment",
+                    "options": [
+                        {
+                            "name": "api_token",
+                            "description": [
+                                "Dynatrace API Token"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "comment",
+                            "description": [
+                                "Content of comment to push to Dynatrace"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "context",
+                            "description": [
+                                "Source where the comment originates from (default Ansible)"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "problem_id",
+                            "description": [
+                                "Dynatrace Problem ID to add the comment to"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "tenant_url",
+                            "description": [
+                                "Tenant URL for the Dynatrace Tenant"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "user",
+                            "description": [
+                                "User that pushes the comments"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "requirements": [],
+                    "short_description": "Comment on Dynatrace detected problems",
+                    "version_added": "2.3"
+                },
+                "examples": "\n- dynatrace_comment:\n    tenant_url: https://mytenant.live.dynatrace.com\n    api_token: XXXXXXXX\n    comment: 'Comment sent from Ansible'\n    user: 'user@dynatrace.com'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

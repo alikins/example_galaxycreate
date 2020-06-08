@@ -1,0 +1,1037 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "\n\n<p><img alt=\"cyberark logo|\" src=\"https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/images/full-cyberark-logo.jpg?raw=true\"></p>\n<h2>CyberArk Ansible Security Automation Collection</h2>\n<hr>\n<h2>Collection</h2>\n<h4>cyberark.pas</h4>\n<p>This collection is the CyberArk Ansible Security Automation project.  This is aimed to enable the automation of securing privileged access by storing privileged accounts in the Enterprise Password Vault (EPV), controlling user's access to privileged accounts in EPV, and securely retreiving secrets using Application Access Manager (AAM).  The following modules will allow CyberArk administrators to automate the following tasks:</p>\n<h4>Requirements</h4>\n<ul>\n<li>CyberArk Privileged Account Security Web Services SDK</li>\n<li>CyberArk AAM Central Credential Provider (<strong>Only required for cyberark_credential</strong>)</li>\n</ul>\n<h4>Role Variables</h4>\n<p>None.\n<br>\n<br></p>\n<h2>Modules</h2>\n<h4>cyberark_authentication</h4>\n<ul>\n<li>Using the CyberArk Web Services SDK, authenticate and obtain an auth token to be passed as a variable in playbooks</li>\n<li>Logoff of an authenticated REST API session<br>\n<a href=\"https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_authentication.md\">Playbooks and Module Info</a></li>\n</ul>\n<h4>cyberark_user</h4>\n<ul>\n<li>Add a CyberArk User</li>\n<li>Delete a CyberArk User</li>\n<li>Update a CyberArk User's account parameters<ul>\n<li>Enable/Disable, change password, mark for change at next login, etc\n<br><a href=\"https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_user.md\">Playbooks and Module Info</a><br></li>\n</ul>\n</li>\n</ul>\n<h4>cyberark_account</h4>\n<ul>\n<li>Add Privileged Account to the EPV</li>\n<li>Delete account objects</li>\n<li>Modify account properties</li>\n<li>Rotatate privileged credentials<br>\n<a href=\"https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_account.md\">Playbooks and Module Info</a></li>\n</ul>\n<h4>cyberark_credential</h4>\n<ul>\n<li>Using AAM Central Credential Provider (CCP), to securely retreive secrets and account properties from EPV to be registered for use in playbooks<br>\n<a href=\"https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_credential.md\">Playbooks and Module Info</a></li>\n</ul>\n<h4>Author Information</h4>\n<ul>\n<li>CyberArk Business Development Technical Team <ul>\n<li>@enunez-cyberark</li>\n<li>@cyberark-bizdev</li>\n<li>@jimmyjamcabd</li>\n</ul>\n</li>\n</ul>"
+    },
+    "documentation_files": [
+        {
+            "name": "cyberark_authentication.md",
+            "html": "<h1>cyberark_authentication</h1>\n<p>Authenticates to CyberArk Vault using Privileged Account Security Web Services SDK and creates a session fact that can be used by other modules. It returns an Ansible fact called <code>cyberark_session</code>. Every module can use this fact as <code>cyberark_session</code> parameter.</p>\n<h4>Available Fields</h4>\n<pre><code>options:\n    state:\n        default: present\n        choices: [present, absent]\n        description:\n            - Specifies if an authentication logon/logoff and a cyberark_session should be added/removed.\n    username:\n        description:\n            - The name of the user who will logon to the Vault.\n    password:\n        description:\n            - The password of the user.\n    new_password:\n        description:\n            - The new password of the user. This parameter is optional, and enables you to change a password.\n    api_base_url:\n        description:\n            - A string containing the base URL of the server hosting CyberArk's Privileged Account Security Web Services SDK.\n    validate_certs:\n        type: bool\n        default: 'yes'\n        description:\n            - If C(false), SSL certificates will not be validated.  This should only\n              set to C(false) used on personally controlled sites using self-signed\n              certificates.\n    use_shared_logon_authentication:\n        type: bool\n        default: 'no'\n        description:\n            - Whether or not Shared Logon Authentication will be used.\n    use_radius_authentication:\n        type: bool\n        default: 'no'\n        description:\n            - Whether or not users will be authenticated via a RADIUS server. Valid values are true/false.\n    cyberark_session:\n        description:\n            - Dictionary set by a CyberArk authentication containing the different values to perform actions on a logged-on CyberArk session.\n</code></pre>\n\n<h2>Example Playbooks</h2>\n<p><strong>Shared Logon Authentication.</strong><br>\nShared authentication is based on a user credential file that is stored in the PVWA web server. During shared authentication, only the user defined in the credential file can log on to the PVWA, but multiple users can use the logon token.</p>\n<p>This type of authentication requires the playbook to manage the users as the Vault can't identify which specific user performs each action.</p>\n<p>Multiple concurrent connections can be created using the same token, without affecting each other.</p>\n<p>The shared user is defined in a user credential file, whose location is specified in the WSCredentialFile parameter, in the appsettings section of the PVWAweb.config file:</p>\n<pre><code>&lt;add key=&quot;WSCredentialFile&quot; value=&quot;C:\\CyberArk\\Password Vault Web Access\\CredFiles\\WSUser.ini&quot;/&gt;\n</code></pre>\n\n<blockquote>\n<p>Make sure that this user can access the PVWA interface.<br>\nMake sure the user only has the permissions in the Vault that they require.</p>\n</blockquote>\n<p>It is recommended to secure connections between Ansible and the REST Web Services when using Shared Logon Authentication, using Client Authentication.</p>\n<p>In addition to SSL, use Client Authentication to authenticate Ansible using a client certificate.</p>\n<p><a href=\"https://docs.cyberark.com/Product-Doc/OnlineHelp/PAS/Latest/en/Content/SDK/Configuring%20Client%20Authentication%20via%20Client%20Certificates.htm\">Configuring client authentication via certificates</a></p>\n<pre><code>- name: Logon to CyberArk Vault using PAS Web Services SDK - use_shared_logon_authentication\n  cyberark_authentication:\n    api_base_url: &quot;{{ web_services_base_url }}&quot;\n    use_shared_logon_authentication: yes\n</code></pre>\n\n<p><strong>CyberArk Authentication</strong><br>\nThis method authenticates a user to the Vault and returns a token that can be used in subsequent web services calls. In addition, this method allows you to set a new password.</p>\n<p>Users can authenticate using <strong>CyberArk</strong>, <strong>LDAP</strong> or <strong>RADIUS</strong> authentication.</p>\n<pre><code>- name: Logon to CyberArk Vault using PAS Web Services SDK - Not use_shared_logon_authentication\n  cyberark_authentication:\n    api_base_url: &quot;{{ web_services_base_url }}&quot;\n    username: &quot;{{ password_object.password }}&quot;\n    password: &quot;{{ password_object.passprops.username }}&quot;\n    use_shared_logon_authentication: no\n</code></pre>\n\n<p><strong>Logoff</strong><br>\nThis method logs off the user and removes the Vault session.</p>\n<pre><code>- name: Logoff from CyberArk Vault\n  cyberark_authentication:\n    state: absent\n    cyberark_session: &quot;{{ cyberark_session }}\n</code></pre>"
+        },
+        {
+            "name": "cyberark_credential.md",
+            "html": "<h1>cyberark_credential</h1>\n<p>Creates a URI for retrieving a credential from a password object stored in the Cyberark Vault.  The request uses the Privileged Account Security Web Services SDK through the Central Credential Provider by requesting access with an Application ID.</p>\n<p><strong>Requirements:</strong>\n- CyberArk AAM Central Credential Provider\n- ApplicationID with the following permissions on the safe containing the credential being requested:\n  - List Accounts\n  - Retrieve Accounts</p>\n<blockquote>\n<p><strong>NOTE:</strong> The CCP's Provider user (Prov_hostaname) needs to have the following permissions on the safe containing the credential being requested:</p>\n<blockquote>\n<p>List Accounts<br>\nRetrieve Accounts<br>\nView Safe Members<br></p>\n</blockquote>\n</blockquote>\n<h2>Query</h2>\n<p>This field is semicolon delimited value that is the exact syntax that goes in the URI<br>\nIf you use the <code>object</code> parameter then there is no need to use any other parameter as the ObjectID is a unique value.<br>\n<strong>Example:</strong></p>\n<pre><code>    query: &quot;Safe=test;UserName=admin&quot;\n      OR\n    query: &quot;Object=OperatingSystem-administrator-dev.local&quot;\n</code></pre>\n\n<h2>Available Fields</h2>\n<pre><code>options:\n    api_base_url:\n        description:\n            - A string containing the base URL of the server hosting the Central Credential Provider\n        required: true\n        type: string\n    validate_certs:\n        description:\n            - If C(false), SSL certificate chain will not be validated.  This should only set to C(true) if you have a root CA certificate installed on each node.\n        type: bool\n        required: false\n        default: false\n        type: bool\n    app_id:\n        description:\n            - A string containing the Application ID authorized for retrieving the credential\n        required: true\n        type: string\n    query:\n        description:\n            - A string containing details of the object being queried\n        required: true\n        parameters:\n            Safe=&lt;safe name&gt;\n            Folder=&lt;folder name within safe&gt;\n            Object=&lt;object name&gt;\n            UserName=&lt;username of object&gt;\n            Address=&lt;address listed for object&gt;\n            Database=&lt;optional file category for database objects&gt;\n            PolicyID=&lt;platform id managing object&gt;\n    connection_timeout:\n        description:\n            - An integer value of the allowed time before the request returns failed\n        required: false\n        default: '30'\n        type: integer\n    query_format:\n        description:\n            - The format for which your Query will be received by the CCP\n        required: false\n        default: 'Exact'\n        choices: [Exact, Regexp]\n        type: choice\n    fail_request_on_password_change:\n        description:\n            - A boolean parameter for completing the request in the middle of a password change of the requested credential\n        required: false\n        default: false\n        type: bool\n    client_cert:\n        description:\n            - A string containing the file location and name of the client certificate used for authentication\n        required: false\n        type: string\n    client_key:\n        description:\n            - A string containing the file location and name of the private key of the client certificate used for authentication\n        required: false\n        type: string\n    reason:\n        description:\n            - Reason for requesting credential if required by policy\n        required: false\n        type: string\n</code></pre>\n\n<h2>Example Playbooks</h2>\n<pre><code>- name: credential retrieval basic\n  cyberark_credential:\n    api_base_url: &quot;http://10.10.0.1&quot;\n    app_id: &quot;TestID&quot;\n    query: &quot;Safe=test;UserName=admin&quot;\n  register: {{ result }}\n\n  result:\n     { api_base_url }&quot;/AIMWebService/api/Accounts?AppId=&quot;{ app_id }&quot;&amp;Query=&quot;{ query }\n\n\n- name: credential retrieval advanced\n  cyberark_credential:\n    api_base_url: &quot;https://components.cyberark.local&quot;\n    validate_certs: yes\n    client_cert: /etc/pki/ca-trust/source/client.pem\n    client_key: /etc/pki/ca-trust/source/priv-key.pem\n    app_id: &quot;TestID&quot;\n    query: &quot;Safe=test;UserName=admin&quot;\n    connection_timeout: 60\n    query_format: Exact\n    fail_request_on_password_change: True\n    reason: &quot;requesting credential for Ansible deployment&quot;\n  register: {{ result }}\n\n  result:\n     { api_base_url }&quot;/AIMWebService/api/Accounts?AppId=&quot;{ app_id }&quot;&amp;Query=&quot;{ query }&quot;&amp;ConnectionTimeout=&quot;{ connection_timeout }&quot;&amp;QueryFormat=&quot;{ query_format }&quot;&amp;FailRequestOnPasswordChange=&quot;{ fail_request_on_password_change }\n\n</code></pre>"
+        },
+        {
+            "name": "cyberark_user.md",
+            "html": "<h1>cyberark_user</h1>\n<p>This module allows admins to Add, Delete, and Modify CyberArk Vault Users.  The ability to modify consists of the following:</p>\n<ul>\n<li>Enable User<br></li>\n<li>Disable User<br></li>\n<li>Add/Remove Group<br></li>\n<li>Set New Password<br></li>\n<li>Force \"change password at next login\"<br></li>\n<li>Modify User Information Fields<br></li>\n<li>Email<br></li>\n<li>First Name<br></li>\n<li>Last Name<br></li>\n<li>Expiry Date<br></li>\n<li>User Type<br></li>\n<li>Location<br></li>\n</ul>\n<h4>Limitations</h4>\n<p><strong>Idempotency</strong> - All actions taken in the playbook adhere to the Ansible idempotency guidelines <em>except</em> for password change.  If you have the playbook set to modify a password it will \"modify\" the password every time the playbook is run, even if it is the same password.<br>\n<strong>Group Creation</strong> - If the value for <code>group_name</code> does not exist in the Vault it will not create that group, the user action that was expected will fail.</p>\n<h4>Available Fields</h4>\n<pre><code>options:\n    username:\n        description:\n            - The name of the user who will be queried (for details), added, updated or deleted.\n        type: str\n        required: True\n    state:\n        description:\n            - Specifies the state needed for the user present for create user, absent for delete user.\n        type: str\n        choices: [ absent, present ]\n        default: present\n    cyberark_session:\n        description:\n            - Dictionary set by a CyberArk authentication containing the different values to perform actions on a logged-on CyberArk session,\n              please see M(cyberark_authentication) module for an example of cyberark_session.\n        type: dict\n        required: True\n    initial_password:\n        description:\n            - The password that the new user will use to log on the first time.\n            - This password must meet the password policy requirements.\n            - This parameter is required when state is present -- Add User.\n        type: str\n    new_password:\n        description:\n            - The user updated password. Make sure that this password meets the password policy requirements.\n        type: str\n    email:\n        description:\n            - The user email address.\n        type: str\n    first_name:\n        description:\n            - The user first name.\n        type: str\n    last_name:\n        description:\n            - The user last name.\n        type: str\n    change_password_on_the_next_logon:\n        description:\n            - Whether or not the user must change their password in their next logon.\n        type: bool\n        default: no\n    expiry_date:\n        description:\n            - The date and time when the user account will expire and become disabled.\n        type: str\n    user_type_name:\n        description:\n            - The type of user.\n            - The parameter defaults to C(EPVUser).\n        type: str\n    disabled:\n        description:\n            - Whether or not the user will be disabled.\n        type: bool\n        default: no\n    location:\n        description:\n            - The Vault Location for the user.\n        type: str\n    group_name:\n        description:\n            - The name of the group the user will be added to.\n        type: str\n</code></pre>\n\n<h2>Example Playbooks</h2>\n<p>This playbook will check if username <code>admin</code> exists, if it does not, it will provision the user in the Vault, add it to the <code>Auditors</code> group and set the account to be changed at first logon.</p>\n<pre><code>- name: Logon to CyberArk Vault using PAS Web Services SDK\n  cyberark_authentication:\n    api_base_url: https://components.cyberark.local\n    use_shared_logon_authentication: yes\n\n- name: Create user, add to Group\n  cyberark_user:\n    username: admin\n    first_name: &quot;Cyber&quot;\n    last_name: &quot;Admin&quot;\n    email: &quot;cyber.admin@ansibledev.com&quot;\n    initial_password: PA$$Word123\n    user_type_name: EPVUser\n    change_password_on_the_next_logon: yes\n    group_name: Auditors\n    state: present\n    cyberark_session: '{{ cyberark_session }}'\n  register: cyberarkaction\n\n- name: Logoff from CyberArk Vault\n  cyberark_authentication:\n    state: absent\n    cyberark_session: '{{ cyberark_session }}'\n</code></pre>\n\n<p>This playbook will identify the user and delete it from the CyberArk Vault based on the <code>state: absent</code> parameter.</p>\n<pre><code>- name: Logon to CyberArk Vault using PAS Web Services SDK - use_shared_logon_authentication\n  cyberark_authentication:\n    api_base_url: &quot;{{ web_services_base_url }}&quot;\n    use_shared_logon_authentication: yes\n\n- name: Removing a CyberArk User\n  cyberark_user:\n    username: &quot;ansibleuser&quot;\n    state: absent\n    cyberark_session: &quot;{{ cyberark_session }}&quot;\n  register: cyberarkaction\n\n- name: Logoff from CyberArk Vault\n  cyberark_authentication:\n    state: absent\n    cyberark_session: &quot;{{ cyberark_session }}&quot;\n</code></pre>\n\n<p>This playbook is an example of disabling a user based on the <code>disabled: true</code> value with that authentication using the credential set in Tower.</p>\n<pre><code>- name: Logon to CyberArk Vault using PAS Web Services SDK - Not use_shared_logon_authentication\n  cyberark_authentication:\n    api_base_url: &quot;{{ web_services_base_url }}&quot;\n    username: &quot;{{ password_object.password }}&quot;\n    password: &quot;{{ password_object.passprops.username }}&quot;\n    use_shared_logon_authentication: no\n\n- name: Disabling a CyberArk User\n  cyberark_user:\n    username: &quot;ansibleuser&quot;\n    disabled: true\n    cyberark_session: &quot;{{ cyberark_session }}&quot;\n  register: cyberarkaction\n\n- name: Logoff from CyberArk Vault\n  cyberark_authentication:\n    state: absent\n    cyberark_session: &quot;{{ cyberark_session }}&quot;\n</code></pre>"
+        },
+        {
+            "name": "cyberark_account.md",
+            "html": "<h1>cyberark_account</h1>\n<p>Allows for adding, deleting, modifying a privileged credential within the Cyberark Vault.  The request uses the Privileged Account Security Web Services SDK.<br></p>\n<p>The ability to modify consists of the following:</p>\n<ul>\n<li>Password (see secret_management)</li>\n<li>Safe</li>\n<li>Platform</li>\n<li>Address</li>\n<li>Object Name</li>\n<li>Username</li>\n<li>Platform Account Properties</li>\n<li>These are the parameters listed in the Platform under <code>UI &amp; Workflows -&gt; Properties</code> and are unique to each Platform (see image below)</li>\n<li>Remote Machines Access</li>\n</ul>\n<p><img alt=\"Platform Account Properties\" src=\"https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/images/platform_account_properties.JPG?raw=true\"></p>\n<h3>secret_management</h3>\n<p>The <code>secret_management</code> dictionary provides the capability to set a CPM password rotation flag on an existing account.</p>\n<p>The available options are as follows:<br></p>\n<p><code>automatic_management_enabled</code>: bool<br>\n<code>manual_management_reason</code>: This is a string value that populates the Reason field is you have set an account to not be managed by the CPM.  This value is only necessary if <code>automatic_management_enabled</code> is set to false.<br>\n<code>management_action</code>: This value indicates what type CPM management flag will be placed on the account\n* change - <br>\n* change_immediately - <br>\n* reconcile - <br></p>\n<p><code>new_secret</code>: This parameter is available to set the value of the new password<br>\n<code>perform_secret_management</code>: This parameter was allows the option to place a CPM management flag on an account upon creation of an account object.\n* always - All <code>secret_management</code> actions will follow the table below at all times.\n* on_create - Will place a CPM management flag according to the table below ONLY on creation of an account object.</p>\n<h4>Secret Management Action Table</h4>\n<table>\n<thead>\n<tr>\n<th>management_action</th>\n<th>new_secret</th>\n<th>Action</th>\n</tr>\n</thead>\n\n<tr>\n<td>change</td>\n<td>populated</td>\n<td>change password to set value at next scheduled rotation</td>\n</tr>\n<tr>\n<td>change</td>\n<td>NULL</td>\n<td>rotate password at next scheduled rotation</td>\n</tr>\n<tr>\n<td>change_immediately</td>\n<td>populated</td>\n<td>change immediately to the set value</td>\n</tr>\n<tr>\n<td>change_immediately</td>\n<td>NULL</td>\n<td>rotate immediately</td>\n</tr>\n<tr>\n<td>reconcile</td>\n<td>populated</td>\n<td>reconcile immediately NOT to set value</td>\n</tr>\n<tr>\n<td>reconcile</td>\n<td>NULL</td>\n<td>reconcile immediately</td>\n</tr>\n<tr>\n<td>NULL</td>\n<td>populated</td>\n<td>set value in Vault ONLY</td>\n</tr>\n\n</table>\n<h3>identified_by</h3>\n<p>This property allows for the module to confidently identify the account object needing to be identified.  If multiple accounts are returned from the modules initial <code>Get Accounts</code> it will use the value(s) set in the <code>identified_by</code> parameter to direct which account is selected from the list.</p>\n<p><strong>EXAMPLE:</strong></p>\n<pre><code>-Playbook Parameters-\n\ncyberark_account:\n  identified_by: &quot;address,username,platform_id&quot;\n  safe: &quot;testSafe&quot;\n  address: &quot;dev.local&quot;\n  username: &quot;admin&quot;\n  platform_id: WinDomain\n\n  -This is the query sent to CyberArk Web SDK:\n/api/Accounts?filter=safeName eq testSafe&amp;search= admin dev.local\n\n**This could return multiple accounts in the testSafe**\n\nRETURNED:\naccount1\n  username: administrator\n  address: cyberark.dev.local\n  safe: testSafe\n  policyID: WinDomain\n\naccount2\n  username: admin\n  address: dev.local\n  safe: testSafe\n  policyID: WinDomain\n</code></pre>\n\n<p>With the <code>identified_by</code> parameter set the <code>cyberark_account</code> module will select the account2 object becauses the values of the <code>address</code>, <code>username</code> and <code>platform_id</code> parameters are identical matches to the values of account2 properties.</p>\n<h4>Limitations</h4>\n<p><strong>Idempotency</strong> - All actions taken in the module adhere to the Ansible idempotency guidelines <em>except</em> for password change.  If you have the playbook set to modify a password it will send a password change request every time the playbook is run, even if you are defining the next password value and it is the same password that is set in other runs.<br>\n<strong>Remote Machines Access</strong> - When modifying the values in the <code>remote_machines_access</code> dictionary be mindful of the <code>platform_id</code> value.  Remote Machines Access values are stored at the Vault database level and not stored as File Categories.  It is a function that is only available with the <code>WinDomain</code> platform and if you attempt to assign these values to another platform it will cause errors in the PSM functionality.</p>\n<h4>Available Fields</h4>\n<pre><code>options:\n    state:\n        description:\n            - Assert the desired state of the account C(present) to creat or update and account object. Set to C(absent) for deletion of an account object\n        required: true\n        default: present\n        choices: [present, absent]\n        type: str\n    logging_level:\n        description:\n            - Parameter used to define the level of troubleshooting output to the C(logging_file) value\n        required: true\n        choices: [NOTSET, DEBUG, INFO]\n        type: str\n    logging_file:\n        description:\n            - Setting the log file name and location for troubleshooting logs\n        required: false\n        default: /tmp/ansible_cyberark.log\n        type: str\n    api_base_url:\n        description:\n            - A string containing the base URL of the server hosting CyberArk's Privileged Account Security Web Services SDK\n            - Example: U(https://&lt;IIS_Server_Ip&gt;/PasswordVault/api/)\n        required: true\n        type: str\n    validate_certs:\n        description:\n            - If C(false), SSL certificate chain will not be validated.  This should only set to C(true) if you have a root CA certificate installed on each node.\n        required: false\n        default: true\n        type: bool\n    cyberark_session:\n        description:\n            - Dictionary set by a CyberArk authentication containing the different values to perform actions on a logged-on CyberArk session, please see M(cyberark_authentication) module for an example of cyberark_session.\n        required: true\n        type: dict\n    identified_by: \n        description:\n            - When an API call is made to Get Accounts, often times the default parameters passed will identify more than one account. This parameter is used to confidently identify a single account when the default query can return multiple results.\n        required: false\n        default: username,address,platform_id\n        type: str        \n    safe:\n        description:\n            - The safe in the Vault where the privileged account is to be located\n        required: true\n        type: str\n    platform_id:\n        description:\n            - The PolicyID of the Platform that is to be managing the account\n        required: false\n        type: str\n    address:\n        description:\n            - The adress of the endpoint where the privileged account is located\n        required: false\n        type: str\n    name:\n        description:\n            - The ObjectID of the account\n        required: false\n        type: str\n    secret_type:\n        description:\n            - The value that identifies what type of account it will be.\n        required: false\n        default: password\n        choices: [password, key]\n        type: str\n    secret:\n        description:\n            - The initial password for the creation of the account\n        required: false\n        type: str\n    username:\n        description:\n            - The username associated with the account\n        required: false\n        type: str\n    secret_management\n        description:\n            - Set of parameters associated with the management of the credential\n        required: false\n            suboptions:\n                automatic_management_enabled:\n                    description:\n                        - Parameter that indicates whether the CPM will manage the password or not\n                    default: True\n                    type: bool\n                manual_management_reason:\n                    description:\n                        - String value indicating why the CPM will NOT manage the password\n                    type: str\n                management_action:\n                    description:\n                        - CPM action flag to be placed on the account object for credential rotation\n                    choices: [change, change_immediately, reconcile]\n                    type: str\n                new_secret:\n                    description:\n                        - The actual password value that will be assigned for the CPM action to be taken\n                    type: str\n                perform_management_action:\n                    description:\n                        - C(always) will perform the management action in every action\n                        - C(on_create) will only perform the management action right after the account is created\n                    choices: [always, on_create]\n                    default: always\n                    type: str\n    remote_machines_access:\n        description:\n            - Set of parameters for defining PSM endpoint access targets\n        required: false\n        type: dict\n            suboptions:\n                remote_machines:\n                    description:\n                        - List of targets allowed for this account \n                    type: str\n                access_restricted_to_remote_machines:\n                    description:\n                        - Whether or not to restrict access only to specified remote machines\n                    type: bool\n    platform_account_properties:\n        description:\n            - Object containing key-value pairs to associate with the account, as defined by the account platform. These properties are validated against the mandatory and optional properties of the specified platform's definition. Optional properties that do not exist on the account will not be returned here. Internal properties are not returned.\n        required: false\n        type: dict\n            suboptions:\n                KEY:\n                    description:\n                        - Freeform key value associated to the mandatory or optional property assigned to the specified Platform's definition.\n                    aliases: [Port, ExtrPass1Name, database]\n                    type: str\n</code></pre>\n\n<h2>Example Playbooks</h2>\n<pre><code>  tasks:\n\n    - name: Logon to CyberArk Vault using PAS Web Services SDK\n      cyberark.pas.cyberark_authentication:\n        api_base_url: &quot;http://components.cyberark.local&quot;\n        validate_certs: no\n        username: &quot;bizdev&quot;\n        password: &quot;Cyberark1&quot;\n\n    - name: Creating an Account using the PAS WebServices SDK\n      cyberark.pas.cyberark_account:\n        logging_level: DEBUG\n        identified_by: &quot;address,username&quot;\n        safe: &quot;Test&quot;\n        address: &quot;cyberark.local&quot;\n        username: &quot;administrator-x&quot;\n        platform_id: WinServerLocal\n        secret: &quot;@N&amp;Ibl3!&quot;\n        platform_account_properties:\n            LogonDomain: &quot;cyberark&quot;\n            OwnerName: &quot;ansible_user&quot;\n        secret_management:\n            automatic_management_enabled: true\n        state: present\n        cyberark_session: &quot;{{ cyberark_session }}&quot;\n      register: cyberarkaction\n\n    - name: Rotate credential via reconcile and providing the password to be changed to\n      cyberark.pas.cyberark_account:\n        identified_by: &quot;address,username&quot;\n        safe: &quot;Domain_Admins&quot;\n        address: &quot;prod.cyberark.local&quot;\n        username: &quot;admin&quot;\n        platform_id: WinDomain\n        platform_account_properties:\n            LogonDomain: &quot;PROD&quot;\n        secret_management:\n            new_secret: &quot;Ama123ah12@#!Xaamdjbdkl@#112&quot;\n            management_action: &quot;reconcile&quot;\n            automatic_management_enabled: true\n        state: present\n        cyberark_session: &quot;{{ cyberark_session }}&quot;\n      register: reconcileaccount\n\n    - name: Logoff from CyberArk Vault\n      cyberark.pas.cyberark_authentication:\n        state: absent\n        cyberark_session: &quot;{{ cyberark_session }}&quot;\n</code></pre>"
+        }
+    ],
+    "contents": [
+        {
+            "content_name": "cyberark_authentication",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Edward Nunez (@enunez-cyberark) CyberArk BizDev",
+                        "Cyberark Bizdev (@cyberark-bizdev)",
+                        "Erasmo Acosta (@erasmix)"
+                    ],
+                    "description": [
+                        "Authenticates to CyberArk Vault using Privileged Account Security Web Services SDK and creates a session fact that can be used by other modules. It returns an Ansible fact called I(cyberark_session). Every module can use this fact as C(cyberark_session) parameter."
+                    ],
+                    "filename": "/tmp/tmpaek2hm6r/ansible_collections/cyberark/pas/plugins/modules/cyberark_authentication.py",
+                    "module": "cyberark_authentication",
+                    "options": [
+                        {
+                            "name": "api_base_url",
+                            "description": [
+                                "A string containing the base URL of the server hosting CyberArk's Privileged Account Security Web Services SDK."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "connection_number",
+                            "description": [
+                                "To support multiple connections for same user specify",
+                                "different value for this parameter."
+                            ],
+                            "type": "int"
+                        },
+                        {
+                            "name": "cyberark_session",
+                            "description": [
+                                "Dictionary set by a CyberArk authentication containing the different values to perform actions on a logged-on CyberArk session."
+                            ],
+                            "type": "dict"
+                        },
+                        {
+                            "name": "new_password",
+                            "description": [
+                                "The new password of the user. This parameter is optional, and enables you to change a password."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "password",
+                            "description": [
+                                "The password of the user."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "Specifies if an authentication logon/logoff and a cyberark_session should be added/removed."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "use_radius_authentication",
+                            "default": "no",
+                            "description": [
+                                "Whether or not users will be authenticated via a RADIUS server. Valid values are true/false."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "use_shared_logon_authentication",
+                            "default": "no",
+                            "description": [
+                                "Whether or not Shared Logon Authentication will be used."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "username",
+                            "description": [
+                                "The name of the user who will logon to the Vault."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "validate_certs",
+                            "default": "yes",
+                            "description": [
+                                "If C(false), SSL certificates will not be validated.  This should only set to C(false) used on personally controlled sites using self-signed certificates."
+                            ],
+                            "type": "bool"
+                        }
+                    ],
+                    "short_description": "CyberArk Authentication using PAS Web Services SDK.",
+                    "version_added": 2.4
+                },
+                "examples": "\n- name: Logon - use_shared_logon_authentication\n  cyberark_authentication:\n    api_base_url: \"{{ web_services_base_url }}\"\n    use_shared_logon_authentication: yes\n\n- name: Logon - Not use_shared_logon_authentication\n  cyberark_authentication:\n    api_base_url: \"{{ web_services_base_url }}\"\n    username: \"{{ password_object.password }}\"\n    password: \"{{ password_object.passprops.username }}\"\n    use_shared_logon_authentication: no\n\n- name: Logoff from CyberArk Vault\n  cyberark_authentication:\n    state: absent\n    cyberark_session: \"{{ cyberark_session }}\"\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": [
+                    {
+                        "name": "cyberark_session",
+                        "contains": [
+                            {
+                                "name": "api_base_url",
+                                "description": [
+                                    "Base URL for API calls. Returned in the cyberark_session, so it can be used in subsequent calls."
+                                ],
+                                "returned": "always",
+                                "type": "str"
+                            },
+                            {
+                                "name": "token",
+                                "description": [
+                                    "The token that identifies the session, encoded in BASE 64."
+                                ],
+                                "returned": "always",
+                                "type": "str"
+                            },
+                            {
+                                "name": "use_shared_logon_authentication",
+                                "description": [
+                                    "Whether or not Shared Logon Authentication was used to establish the session."
+                                ],
+                                "returned": "always",
+                                "type": "bool"
+                            },
+                            {
+                                "name": "validate_certs",
+                                "description": "Whether or not SSL certificates should be validated.",
+                                "returned": "always",
+                                "type": "bool"
+                            }
+                        ],
+                        "description": "Authentication facts.",
+                        "returned": "success",
+                        "type": "complex"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cyberark_account",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "CyberArk BizDev (@cyberark-bizdev)",
+                        "Edward Nunez (@enunez-cyberark)",
+                        "James Stutes (@jimmyjamcabd)"
+                    ],
+                    "description": [
+                        "Creates a URI for adding, deleting, modifying a privileged credential within the Cyberark Vault.  The request uses the Privileged Account Security Web Services SDK."
+                    ],
+                    "filename": "/tmp/tmpaek2hm6r/ansible_collections/cyberark/pas/plugins/modules/cyberark_account.py",
+                    "module": "cyberark_account",
+                    "options": [
+                        {
+                            "name": "address",
+                            "description": [
+                                "The address of the endpoint where the privileged account is located."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "api_base_url",
+                            "description": [
+                                "A string containing the base URL of the server hosting CyberArk's Privileged Account Security Web Services SDK.",
+                                "Example U(https://<IIS_Server_Ip>/PasswordVault/api/)"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "cyberark_session",
+                            "description": [
+                                "Dictionary set by a CyberArk authentication containing the different values to perform actions on a logged-on CyberArk session, please see M(cyberark_authentication) module for an example of cyberark_session."
+                            ],
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "identified_by",
+                            "default": "username,address,platform_id",
+                            "description": [
+                                "When an API call is made to Get Accounts, often times the default parameters passed will identify more than one account. This parameter is used to confidently identify a single account when the default query can return multiple results."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "logging_file",
+                            "default": "/tmp/ansible_cyberark.log",
+                            "description": [
+                                "Setting the log file name and location for troubleshooting logs."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "logging_level",
+                            "choices": [
+                                "NOTSET",
+                                "DEBUG",
+                                "INFO"
+                            ],
+                            "description": [
+                                "Parameter used to define the level of troubleshooting output to the C(logging_file) value."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "name",
+                            "description": [
+                                "The ObjectID of the account"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "new_secret",
+                            "description": [
+                                "The new secret/password to be stored in CyberArk Vault."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "platform_account_properties",
+                            "description": [
+                                "Object containing key-value pairs to associate with the account, as defined by the account platform. These properties are validated against the mandatory and optional properties of the specified platform's definition. Optional properties that do not exist on the account will not be returned here. Internal properties are not returned."
+                            ],
+                            "required": false,
+                            "suboptions": [
+                                {
+                                    "name": "KEY",
+                                    "aliases": [
+                                        "Port",
+                                        "ExtrPass1Name",
+                                        "database"
+                                    ],
+                                    "description": [
+                                        "Freeform key value associated to the mandatory or optional property assigned to the specified Platform's definition."
+                                    ],
+                                    "type": "str"
+                                }
+                            ],
+                            "type": "dict"
+                        },
+                        {
+                            "name": "platform_id",
+                            "description": [
+                                "The PolicyID of the Platform that is to be managing the account"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "remote_machines_access",
+                            "description": [
+                                "Set of parameters for defining PSM endpoint access targets."
+                            ],
+                            "required": false,
+                            "suboptions": [
+                                {
+                                    "name": "access_restricted_to_remote_machines",
+                                    "description": [
+                                        "Whether or not to restrict access only to specified remote machines."
+                                    ],
+                                    "type": "bool"
+                                },
+                                {
+                                    "name": "remote_machines",
+                                    "description": [
+                                        "List of targets allowed for this account."
+                                    ],
+                                    "type": "str"
+                                }
+                            ],
+                            "type": "dict"
+                        },
+                        {
+                            "name": "safe",
+                            "description": [
+                                "The safe in the Vault where the privileged account is to be located."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "secret",
+                            "description": [
+                                "The initial password for the creation of the account"
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "secret_management",
+                            "description": [
+                                "Set of parameters associated with the management of the credential."
+                            ],
+                            "required": false,
+                            "suboptions": [
+                                {
+                                    "name": "automatic_management_enabled",
+                                    "default": false,
+                                    "description": [
+                                        "Parameter that indicates whether the CPM will manage the password or not."
+                                    ],
+                                    "type": "bool"
+                                },
+                                {
+                                    "name": "management_action",
+                                    "choices": [
+                                        "change",
+                                        "change_immediately",
+                                        "reconcile"
+                                    ],
+                                    "description": [
+                                        "CPM action flag to be placed on the account object for credential rotation."
+                                    ],
+                                    "type": "str"
+                                },
+                                {
+                                    "name": "manual_management_reason",
+                                    "description": [
+                                        "String value indicating why the CPM will NOT manage the password."
+                                    ],
+                                    "type": "str"
+                                },
+                                {
+                                    "name": "new_secret",
+                                    "description": [
+                                        "The actual password value that will be assigned for the CPM action to be taken."
+                                    ],
+                                    "type": "str"
+                                },
+                                {
+                                    "name": "perform_management_action",
+                                    "choices": [
+                                        "always",
+                                        "on_create"
+                                    ],
+                                    "default": "always",
+                                    "description": [
+                                        "C(always) will perform the management action in every action.",
+                                        "C(on_create) will only perform the management action right after the account is created."
+                                    ],
+                                    "type": "str"
+                                }
+                            ],
+                            "type": "dict"
+                        },
+                        {
+                            "name": "secret_type",
+                            "choices": [
+                                "password",
+                                "key"
+                            ],
+                            "default": "password",
+                            "description": [
+                                "The value that identifies what type of account it will be."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "present",
+                                "absent"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "Assert the desired state of the account C(present) to creat or update and account object. Set to C(absent) for deletion of an account object."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "username",
+                            "description": [
+                                "The username associated with the account."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "validate_certs",
+                            "default": true,
+                            "description": [
+                                "If C(false), SSL certificate chain will not be validated.  This should only set to C(true) if you have a root CA certificate installed on each node."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        }
+                    ],
+                    "short_description": "Module for CyberArk Account object creation, deletion, and modification using PAS Web Services SDK.",
+                    "version_added": 2.4
+                },
+                "examples": "\n  collections:\n    - cyberark.pas\n\n  tasks:\n\n    - name: Logon to CyberArk Vault using PAS Web Services SDK\n      cyberark_authentication:\n        api_base_url: \"http://components.cyberark.local\"\n        validate_certs: no\n        username: \"bizdev\"\n        password: \"Cyberark1\"\n\n    - name: Creating an Account using the PAS WebServices SDK\n      cyberark_account:\n        logging_level: DEBUG\n        identified_by: \"address,username\"\n        safe: \"Test\"\n        address: \"cyberark.local\"\n        username: \"administrator-x\"\n        platform_id: WinServerLocal\n        secret: \"@N&Ibl3!\"\n        platform_account_properties:\n            LogonDomain: \"cyberark\"\n            OwnerName: \"ansible_user\"\n        secret_management:\n            automatic_management_enabled: true\n        state: present\n        cyberark_session: \"{{ cyberark_session }}\"\n      register: cyberarkaction\n\n    - name:\n        - Rotate credential via reconcile and providing the password to\n          bechanged to.\n      cyberark_account:\n        identified_by: \"address,username\"\n        safe: \"Domain_Admins\"\n        address: \"prod.cyberark.local\"\n        username: \"admin\"\n        platform_id: WinDomain\n        platform_account_properties:\n            LogonDomain: \"PROD\"\n        secret_management:\n            new_secret: \"Ama123ah12@#!Xaamdjbdkl@#112\"\n            management_action: \"reconcile\"\n            automatic_management_enabled: true\n        state: present\n        cyberark_session: \"{{ cyberark_session }}\"\n      register: reconcileaccount\n\n    - name: Logoff from CyberArk Vault\n      cyberark_authentication:\n        state: absent\n        cyberark_session: \"{{ cyberark_session }}\"\n\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": [
+                    {
+                        "name": "changed",
+                        "description": [
+                            "Identify if the playbook run resulted in a change to the account in any way."
+                        ],
+                        "returned": "always",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "failed",
+                        "description": "Whether playbook run resulted in a failure of any kind.",
+                        "returned": "always",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "result",
+                        "contains": [
+                            {
+                                "name": "address",
+                                "description": [
+                                    "The adress of the endpoint where the privileged account is located."
+                                ],
+                                "returned": "successful addition and modification",
+                                "sample": "dev.local",
+                                "type": "str"
+                            },
+                            {
+                                "name": "createdTime",
+                                "description": [
+                                    "Timeframe calculation of the timestamp of account creation."
+                                ],
+                                "returned": "successful addition and modification",
+                                "sample": "1567824520",
+                                "type": "int"
+                            },
+                            {
+                                "name": "id",
+                                "description": "Internal ObjectID for the account object identified",
+                                "returned": "successful addition and modification",
+                                "sample": "25_21",
+                                "type": "int"
+                            },
+                            {
+                                "name": "name",
+                                "description": "The external ObjectID of the account",
+                                "returned": "successful addition and modification",
+                                "sample": [
+                                    "Operating System-WinServerLocal-cyberark.local-administrator"
+                                ],
+                                "type": "str"
+                            },
+                            {
+                                "name": "platformAccountProperties",
+                                "contains": [
+                                    {
+                                        "name": "KEY VALUE",
+                                        "description": [
+                                            "Object containing key-value pairs to associate with the account, as defined by the account platform."
+                                        ],
+                                        "returned": "successful addition and modification",
+                                        "sample": [
+                                            {
+                                                "LogonDomain": "cyberark"
+                                            },
+                                            {
+                                                "Port": "22"
+                                            }
+                                        ],
+                                        "type": "str"
+                                    }
+                                ],
+                                "description": [
+                                    "Object containing key-value pairs to associate with the account, as defined by the account platform."
+                                ],
+                                "returned": "successful addition and modification",
+                                "type": "complex"
+                            },
+                            {
+                                "name": "platformId",
+                                "description": [
+                                    "The PolicyID of the Platform that is to be managing the account."
+                                ],
+                                "returned": "successful addition and modification",
+                                "sample": "WinServerLocal",
+                                "type": "str"
+                            },
+                            {
+                                "name": "safeName",
+                                "description": [
+                                    "The safe in the Vault where the privileged account is to be located."
+                                ],
+                                "returned": "successful addition and modification",
+                                "sample": "Domain_Admins",
+                                "type": "str"
+                            },
+                            {
+                                "name": "secretManagement",
+                                "description": [
+                                    "Set of parameters associated with the management of the credential."
+                                ],
+                                "returned": "successful addition and modification",
+                                "sample": {
+                                    "automaticManagementEnabled": {
+                                        "description": [
+                                            "Parameter that indicates whether the CPM will manage the password or not."
+                                        ],
+                                        "returned": "successful addition and modification",
+                                        "type": "bool"
+                                    },
+                                    "lastModifiedTime": {
+                                        "description": [
+                                            "Timeframe calculation of the timestamp of account modification."
+                                        ],
+                                        "returned": "successful addition and modification",
+                                        "sample": "1567824520",
+                                        "type": "int"
+                                    },
+                                    "manualManagementReason": {
+                                        "description": null,
+                                        "returned": "if C(automaticManagementEnabled) is set to false",
+                                        "sample": "This is a static account",
+                                        "type": "str"
+                                    }
+                                },
+                                "type": "complex"
+                            },
+                            {
+                                "name": "secretType",
+                                "description": [
+                                    "The value that identifies what type of account it will be"
+                                ],
+                                "returned": "successful addition and modification",
+                                "sample": [
+                                    "key",
+                                    "password"
+                                ],
+                                "type": "list"
+                            },
+                            {
+                                "name": "userName",
+                                "description": "The username associated with the account",
+                                "returned": "successful addition and modification",
+                                "sample": "administrator",
+                                "type": "str"
+                            }
+                        ],
+                        "description": "A json dump of the resulting action.",
+                        "returned": "success",
+                        "type": "complex"
+                    },
+                    {
+                        "name": "status_code",
+                        "description": "Result HTTP Status code.",
+                        "returned": "success",
+                        "sample": "200, 201, -1, 204",
+                        "type": "int"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cyberark_user",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Edward Nunez (@enunez-cyberark)",
+                        "Cyberark Bizdev (@cyberark-bizdev)",
+                        "Erasmo Acosta (@erasmix)",
+                        "James Stutes (@jimmyjamcabd)"
+                    ],
+                    "description": [
+                        "CyberArk User Management using PAS Web Services SDK, It currently supports the following actions Get User Details, Add User, Update User, Delete User."
+                    ],
+                    "filename": "/tmp/tmpaek2hm6r/ansible_collections/cyberark/pas/plugins/modules/cyberark_user.py",
+                    "module": "cyberark_user",
+                    "options": [
+                        {
+                            "name": "change_password_on_the_next_logon",
+                            "default": false,
+                            "description": [
+                                "Whether or not the user must change their password in their next logon."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "cyberark_session",
+                            "description": [
+                                "Dictionary set by a CyberArk authentication containing the different values to perform actions on a logged-on CyberArk session, please see M(cyberark_authentication) module for an example of cyberark_session."
+                            ],
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "disabled",
+                            "default": false,
+                            "description": [
+                                "Whether or not the user will be disabled."
+                            ],
+                            "type": "bool"
+                        },
+                        {
+                            "name": "email",
+                            "description": [
+                                "The user email address."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "expiry_date",
+                            "description": [
+                                "The date and time when the user account will expire and become disabled."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "first_name",
+                            "description": [
+                                "The user first name."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "group_name",
+                            "description": [
+                                "The name of the group the user will be added to."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "initial_password",
+                            "description": [
+                                "The password that the new user will use to log on the first time.",
+                                "This password must meet the password policy requirements.",
+                                "This parameter is required when state is present -- Add User."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "last_name",
+                            "description": [
+                                "The user last name."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "location",
+                            "description": [
+                                "The Vault Location for the user."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "logging_file",
+                            "default": "/tmp/ansible_cyberark.log",
+                            "description": [
+                                "Setting the log file name and location for troubleshooting logs."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "logging_level",
+                            "choices": [
+                                "NOTSET",
+                                "DEBUG",
+                                "INFO"
+                            ],
+                            "default": "NOTSET",
+                            "description": [
+                                "Parameter used to define the level of troubleshooting output to the C(logging_file) value."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "new_password",
+                            "description": [
+                                "The user updated password. Make sure that this password meets the password policy requirements."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "absent",
+                                "present"
+                            ],
+                            "default": "present",
+                            "description": [
+                                "Specifies the state needed for the user present for create user, absent for delete user."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "user_type_name",
+                            "description": [
+                                "The type of user.",
+                                "The parameter defaults to C(EPVUser)."
+                            ],
+                            "type": "str"
+                        },
+                        {
+                            "name": "username",
+                            "description": [
+                                "The name of the user who will be queried (for details), added, updated or deleted."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "CyberArk User Management using PAS Web Services SDK.",
+                    "version_added": 2.4
+                },
+                "examples": "\n- name: Logon to CyberArk Vault using PAS Web Services SDK\n  cyberark_authentication:\n    api_base_url: https://components.cyberark.local\n    use_shared_logon_authentication: yes\n\n- name: Create user & immediately add it to a group\n  cyberark_user:\n    username: username\n    initial_password: password\n    user_type_name: EPVUser\n    change_password_on_the_next_logon: no\n    group_name: GroupOfUser\n    state: present\n    cyberark_session: '{{ cyberark_session }}'\n\n- name: Make sure user is present and reset user credential if present\n  cyberark_user:\n    username: Username\n    new_password: password\n    disabled: no\n    state: present\n    cyberark_session: '{{ cyberark_session }}'\n\n- name: Logoff from CyberArk Vault\n  cyberark_authentication:\n    state: absent\n    cyberark_session: '{{ cyberark_session }}'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": [
+                    {
+                        "name": "changed",
+                        "description": "Whether there was a change done.",
+                        "returned": "always",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "cyberark_user",
+                        "contains": [
+                            {
+                                "name": "result",
+                                "description": "user properties when state is present",
+                                "returned": "success",
+                                "type": "dict"
+                            }
+                        ],
+                        "description": "Dictionary containing result properties.",
+                        "returned": "always",
+                        "type": "complex"
+                    },
+                    {
+                        "name": "status_code",
+                        "description": "Result HTTP Status code",
+                        "returned": "success",
+                        "sample": 200,
+                        "type": "int"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cyberark_credential",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Edward Nunez (@enunez-cyberark)",
+                        "CyberArk BizDev (@cyberark-bizdev)",
+                        "Erasmo Acosta (@erasmix)",
+                        "James Stutes (@JimmyJamCABD)"
+                    ],
+                    "description": [
+                        "Creates a URI for retrieving a credential from a password object stored in the Cyberark Vault.  The request uses the Privileged Account Security Web Services SDK through the Central Credential Provider by requesting access with an Application ID."
+                    ],
+                    "filename": "/tmp/tmpaek2hm6r/ansible_collections/cyberark/pas/plugins/modules/cyberark_credential.py",
+                    "module": "cyberark_credential",
+                    "options": [
+                        {
+                            "name": "api_base_url",
+                            "description": [
+                                "A string containing the base URL of the server hosting the Central Credential Provider."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "app_id",
+                            "description": [
+                                "A string containing the Application ID authorized for retrieving the credential."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "client_cert",
+                            "description": [
+                                "A string containing the file location and name of the client certificate used for authentication."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "client_key",
+                            "description": [
+                                "A string containing the file location and name of the private key of the client certificate used for authentication."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "connection_timeout",
+                            "default": "30",
+                            "description": [
+                                "An integer value of the allowed time before the request returns failed."
+                            ],
+                            "required": false,
+                            "type": "int"
+                        },
+                        {
+                            "name": "fail_request_on_password_change",
+                            "default": false,
+                            "description": [
+                                "A boolean parameter for completing the request in the middle of a password change of the requested credential."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "query",
+                            "description": [
+                                "A string containing details of the object being queried;",
+                                "Possible parameters could be Safe, Folder, Object",
+                                "(internal account name), UserName, Address, Database,",
+                                "PolicyID."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "query_format",
+                            "choices": [
+                                "Exact",
+                                "Regexp"
+                            ],
+                            "default": "Exact",
+                            "description": [
+                                "The format for which your Query will be received by the CCP."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "reason",
+                            "description": [
+                                "Reason for requesting credential if required by policy;",
+                                "It must be specified if the Policy managing the object",
+                                "requires it."
+                            ],
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "validate_certs",
+                            "default": true,
+                            "description": [
+                                "If C(false), SSL certificate chain will not be validated.  This should only set to C(true) if you have a root CA certificate installed on each node."
+                            ],
+                            "required": false,
+                            "type": "bool"
+                        }
+                    ],
+                    "short_description": "Credential retrieval using AAM Central Credential Provider.",
+                    "version_added": 2.4
+                },
+                "examples": "\n  tasks:\n    - name: credential retrieval basic\n      cyberark_credential:\n        api_base_url: \"http://10.10.0.1\"\n        app_id: \"TestID\"\n        query: \"Safe=test;UserName=admin\"\n      register: result\n\n    - name: credential retrieval advanced\n      cyberark_credential:\n        api_base_url: \"https://components.cyberark.local\"\n        validate_certs: yes\n        client_cert: /etc/pki/ca-trust/source/client.pem\n        client_key: /etc/pki/ca-trust/source/priv-key.pem\n        app_id: \"TestID\"\n        query: \"Safe=test;UserName=admin\"\n        connection_timeout: 60\n        query_format: Exact\n        fail_request_on_password_change: True\n        reason: \"requesting credential for Ansible deployment\"\n      register: result\n\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": [
+                    {
+                        "name": "changed",
+                        "description": [
+                            "Identify if the playbook run resulted in a change to the account in any way."
+                        ],
+                        "returned": "always",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "failed",
+                        "description": "Whether playbook run resulted in a failure of any kind.",
+                        "returned": "always",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "result",
+                        "contains": [
+                            {
+                                "name": "Address",
+                                "description": "The target address of the credential being queried",
+                                "returned": "if required",
+                                "type": "str"
+                            },
+                            {
+                                "name": "CPMDisabled",
+                                "description": [
+                                    "A description of why this vaulted credential is not being managed by the CPM."
+                                ],
+                                "returned": "if CPM management is disabled and a reason is given",
+                                "type": "str"
+                            },
+                            {
+                                "name": "Content",
+                                "description": "The password for the object being queried",
+                                "returned": "always",
+                                "type": "str"
+                            },
+                            {
+                                "name": "CreationMethod",
+                                "description": "This is how the object was created in the Vault",
+                                "returned": "always",
+                                "type": "str"
+                            },
+                            {
+                                "name": "DeviceType",
+                                "description": [
+                                    "An internal File Category for more granular management of Platforms."
+                                ],
+                                "returned": "always",
+                                "type": "str"
+                            },
+                            {
+                                "name": "Folder",
+                                "description": [
+                                    "The folder within the Safe where the credential is stored."
+                                ],
+                                "returned": "always",
+                                "type": "str"
+                            },
+                            {
+                                "name": "LogonDomain",
+                                "description": "The Address friendly name resolved by the CPM",
+                                "returned": "if populated",
+                                "type": "str"
+                            },
+                            {
+                                "name": "Name",
+                                "description": [
+                                    "The Cyberark unique object ID of the credential being queried."
+                                ],
+                                "returned": "always",
+                                "type": "str"
+                            },
+                            {
+                                "name": "PasswordChangeInProcess",
+                                "description": "If the password has a change flag placed by the CPM",
+                                "returned": "always",
+                                "type": "bool"
+                            },
+                            {
+                                "name": "PolicyID",
+                                "description": "Whether or not SSL certificates should be validated.",
+                                "returned": "if assigned to a policy",
+                                "type": "str"
+                            },
+                            {
+                                "name": "Safe",
+                                "description": "The safe where the queried credential is stored",
+                                "returned": "always",
+                                "type": "string"
+                            },
+                            {
+                                "name": "Username",
+                                "description": "The username of the credential being queried",
+                                "returned": "if required",
+                                "type": "str"
+                            }
+                        ],
+                        "description": "A json dump of the resulting action.",
+                        "returned": "success",
+                        "type": "complex"
+                    },
+                    {
+                        "name": "status_code",
+                        "description": "Result HTTP Status code.",
+                        "returned": "success",
+                        "sample": "200, 201, -1, 204",
+                        "type": "int"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

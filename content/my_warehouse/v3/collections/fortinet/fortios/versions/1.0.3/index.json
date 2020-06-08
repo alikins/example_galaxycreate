@@ -1,0 +1,44 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/fortinet.fortios-1.0.3.tar.gz",
+    "namespace": {
+        "name": "fortinet"
+    },
+    "collection": {
+        "name": "fortios"
+    },
+    "version": "1.0.3",
+    "metadata": {
+        "namespace": "fortinet",
+        "name": "fortios",
+        "version": "1.0.3",
+        "license": [
+            "MIT"
+        ],
+        "description": "A collection of Ansible Modules for FortiOS",
+        "repository": "https://github.com/fortinet-ansible-dev/fortinet-ansible-collection",
+        "documentation": "https://docs.ansible.com/ansible/latest/modules/list_of_all_modules.html?highlight=fortios",
+        "homepage": "https://www.fortinet.com",
+        "issues": "https://github.com/fortinet-ansible-dev/fortinet-ansible-collection/issues",
+        "authors": [
+            "Frank Shen (@frankshen01)",
+            "Hongbin Lu (@fgtdev-hblu)",
+            "Miguel Angel Munoz (@mamunozgonzalez)",
+            "Nicolas Thomas (@thomnico)"
+        ],
+        "tags": [
+            "fortios",
+            "networking",
+            "firewall",
+            "security",
+            "fortinet"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "fortinet.fortios-1.0.3.tar.gz",
+        "sha256": "3b24cc0cc044de33a2e0b4444f7121ebcf4f0e4c10f9c768908258e0e3178433",
+        "size": 883694
+    }
+}

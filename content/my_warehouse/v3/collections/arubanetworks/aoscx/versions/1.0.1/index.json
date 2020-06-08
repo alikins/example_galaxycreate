@@ -1,0 +1,46 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/arubanetworks.aoscx-1.0.1.tar.gz",
+    "namespace": {
+        "name": "arubanetworks"
+    },
+    "collection": {
+        "name": "aoscx"
+    },
+    "version": "1.0.1",
+    "metadata": {
+        "namespace": "arubanetworks",
+        "name": "aoscx",
+        "version": "1.0.1",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": null,
+        "repository": "https://github.com/aruba/aoscx-ansible-collection",
+        "documentation": null,
+        "homepage": null,
+        "issues": "https://github.com/aruba/aoscx-ansible-collection/issues",
+        "authors": [
+            "Madhusudan Pranav Venugopal",
+            "Tiffany Chiapuzio-Wong",
+            "Yang Liu "
+        ],
+        "tags": [
+            "networking",
+            "aruba",
+            "arubaoscx",
+            "aoscx",
+            "switch",
+            "switches",
+            "hpe",
+            "datacenter"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "arubanetworks.aoscx-1.0.1.tar.gz",
+        "sha256": "b2421452112f91adbb468fb6b137e1ec42d321416b0a45ab7b45f484f2d4673d",
+        "size": 20632
+    }
+}

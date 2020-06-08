@@ -1,0 +1,91 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>IBM QRadar Ansible Collection</h1>\n<h2>Tech Preview</h2>\n<p>This is the <a href=\"https://docs.ansible.com/ansible/devel/collections_tech_preview.html\">Ansible\nCollection</a>\nprovided by the <a href=\"https://github.com/ansible-security\">Ansible Security Automation\nTeam</a> for automating actions in <a href=\"https://www.ibm.com/us-en/marketplace/ibm-qradar-siem\">IBM\nQRadar SIEM</a>.</p>\n<p>This Collection is meant for distribution via\n<a href=\"https://galaxy.ansible.com/\">Ansible Galaxy</a> as is available for all\n<a href=\"https://github.com/ansible/ansible\">Ansible</a> users to utilize, contribute to,\nand provide feedback about.</p>\n<h3>Using IBM QRadar Ansible Collection</h3>\n<p>An example for using this collection to manage a log source with <a href=\"https://www.ibm.com/security/security-intelligence/qradar\">IBM QRadar</a> is as follows.</p>\n<p><code>inventory.ini</code> (Note the password should be managed by a <a href=\"https://docs.ansible.com/ansible/latest/user_guide/vault.html\">Vault</a> for a production environment.</p>\n<pre><code>[qradar]\nqradar.example.com\n\n[qradar:vars]\nansible_network_os=ibm.qradar.qradar\nansible_user=admin\nansible_httpapi_pass=SuperSekretPassword\nansible_httpapi_use_ssl=yes\nansible_httpapi_validate_certs=yes\nansible_connection=httpapi\n</code></pre>\n\n<h4>Define your collection search path at the Play level</h4>\n<p>Below we specify our collection at the Play level which allows us to use the\n<code>qradar_log_source_management</code> module without specifying the need for the\nAnsible Collection Namespace.</p>\n<p><code>qradar_with_collections_example.yml</code></p>\n<pre><code>---\n- name: Testing URI manipulation of QRadar\n  hosts: qradar\n  gather_facts: false\n  collections:\n    - ibm.qradar\n  tasks:\n    - name: collection namespace block\n      block:\n        - name: create log source\n          qradar_log_source_management:\n            name: &quot;Ansible Collections Example Log Source&quot;\n            type_name: &quot;Linux OS&quot;\n            state: present\n            description: &quot;Ansible Collections Example Log Source Description&quot;\n</code></pre>\n\n<h4>Define your collection search path at the Block level</h4>\n<p>Below we use the <a href=\"https://docs.ansible.com/ansible/latest/user_guide/playbooks_blocks.html\"><code>block</code></a> level keyword, we are able to use the <code>qradar_log_source_management</code> module without the need for the Ansible Collection Namespace.</p>\n<p><code>qradar_with_collections_block_example.yml</code></p>\n<pre><code>---\n- name: Testing URI manipulation of QRadar\n  hosts: qradar\n  gather_facts: false\n  tasks:\n    - name: collection namespace block\n      block:\n        - name: create log source\n          qradar_log_source_management:\n            name: &quot;Ansible Collections Example Log Source&quot;\n            type_name: &quot;Linux OS&quot;\n            state: present\n            description: &quot;Ansible Collections Example Log Source Description&quot;\n      collections:\n        - ibm.qradar\n</code></pre>\n\n<h3>Directory Structure</h3>\n<ul>\n<li><code>docs/</code>: local documentation for the collection</li>\n<li><code>license.txt</code>: optional copy of license(s) for this collection</li>\n<li><code>galaxy.yml</code>: source data for the MANIFEST.json that will be part of the collection package</li>\n<li><code>playbooks/</code>: playbooks reside here</li>\n<li><code>tasks/</code>: this holds 'task list files' for <code>include_tasks</code>/<code>import_tasks</code> usage</li>\n<li><code>plugins/</code>: all ansible plugins and modules go here, each in its own subdir</li>\n<li><code>modules/</code>: ansible modules</li>\n<li><code>lookups/</code>: lookup plugins</li>\n<li><code>filters/</code>: Jinja2 filter plugins</li>\n<li>... rest of plugins</li>\n<li><code>README.md</code>: information file (this file)</li>\n<li><code>roles/</code>: directory for ansible roles</li>\n<li><code>tests/</code>: tests for the collection's content</li>\n</ul>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "cloud_log_source_management",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloud_deploy_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloud_deploy_action",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloud_rule",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloud_rule_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloud_deploy_note",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloud_deploy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloud",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "qradar",
+            "content_type": "httpapi",
+            "doc_strings": {
+                "doc": {
+                    "author": "Ansible Security Automation Team",
+                    "description": [
+                        "This HttpApi plugin provides methods to connect to IBM QRadar over a HTTP(S)-based api."
+                    ],
+                    "filename": "/tmp/tmpnxkwv9jn/ansible_collections/ansible/cloud/plugins/httpapi/qradar.py",
+                    "httpapi": "qradar",
+                    "short_description": "HttpApi Plugin for IBM QRadar",
+                    "version_added": "2.9"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

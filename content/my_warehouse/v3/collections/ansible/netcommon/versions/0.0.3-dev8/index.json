@@ -1,0 +1,41 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/ansible-netcommon-0.0.3-dev8.tar.gz",
+    "namespace": {
+        "name": "ansible"
+    },
+    "collection": {
+        "name": "netcommon"
+    },
+    "version": "0.0.3-dev8",
+    "metadata": {
+        "namespace": "ansible",
+        "name": "netcommon",
+        "version": "0.0.3-dev8",
+        "license": [],
+        "description": null,
+        "repository": "https://github.com/ansible-collections/netcommon",
+        "documentation": null,
+        "homepage": null,
+        "issues": null,
+        "authors": [
+            "Ansible Network Community (ansible-network)"
+        ],
+        "tags": [
+            "networking",
+            "security",
+            "cloud",
+            "network_cli",
+            "netconf",
+            "httpapi",
+            "grpc"
+        ],
+        "license_file": "LICENSE",
+        "readme": "README.rst",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "ansible-netcommon-0.0.3-dev8.tar.gz",
+        "sha256": "fba95ddc0e96ac3faa90c5fa6f793f45dc4b37f30013e8beec5750400e68db6a",
+        "size": 132346
+    }
+}

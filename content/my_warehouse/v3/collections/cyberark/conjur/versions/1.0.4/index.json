@@ -1,0 +1,49 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/cyberark.conjur-1.0.4.tar.gz",
+    "namespace": {
+        "name": "cyberark"
+    },
+    "collection": {
+        "name": "conjur"
+    },
+    "version": "1.0.4",
+    "metadata": {
+        "namespace": "cyberark",
+        "name": "conjur",
+        "version": "1.0.4",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "This is a Collection of CyberArk Conjur/DAP toolkit.",
+        "repository": "https://github.com/cyberark/ansible-conjur-collection",
+        "documentation": null,
+        "homepage": null,
+        "issues": null,
+        "authors": [
+            "CyberArk Business Development (@cyberark-bizdev)",
+            "Edward Nunez (@enunez-cyberark)",
+            "James Stutes (@JimmyJamCABD)"
+        ],
+        "tags": [
+            "cyberark",
+            "conjur",
+            "access",
+            "security",
+            "account",
+            "vault",
+            "identity",
+            "credential",
+            "secret",
+            "privileged",
+            "devops"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "cyberark.conjur-1.0.4.tar.gz",
+        "sha256": "59d5b4947bfed2b4a70960341edc38d1451b2ef8c0f0b6572704637075d8f7de",
+        "size": 11441
+    }
+}

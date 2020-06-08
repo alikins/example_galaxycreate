@@ -1,0 +1,40 @@
+<h1>f5networks.f5_modules</h1>
+<p>This collection includes the most recently released ansible modules for BIG-IP and BIG-IQ from F5Networks. This collection packages and distributes playbooks, roles, modules, and plugins.</p>
+<h2>Requirements</h2>
+<ul>
+<li>ansible &gt;= 2.9</li>
+</ul>
+<h2>Installation</h2>
+<p>To install in ansible default or defined paths use:</p>
+<pre><code>ansible-galaxy collection install f5networks.f5_modules
+</code></pre>
+
+<p>To specify the installation location use <code>-p</code>. If specifying a folder, make sure to update the <code>ansible.cfg</code> so ansible will check this folder as well.</p>
+<pre><code>ansible-galaxy collection install f5networks.f5_modules -p collections/
+</code></pre>
+
+<p>To specify the version of the collection to install, include it at the end of the collection with <code>:==1.0.0</code>:</p>
+<pre><code>ansible-galaxy collection install f5networks.f5_modules:==1.0.0
+</code></pre>
+
+<p>Sematic Versioning examples below:
+- Increment major (for example: x in x.y.z) version number for an incompatible API change.
+- Increment minor (for example: y in x.y.z) version number for new functionality in a backwards compatible manner.
+- Increment patch (for example: z in x.y.z) version number for backwards compatible bug fixes.</p>
+<h2>Example Usage</h2>
+<p>To use a module from a collection, reference the full namespace, collection, and modules name that you want to use:</p>
+<pre><code>---
+- name: Using Collections
+  hosts: f5
+  connection: local
+
+  tasks:
+    - f5networks.f5_modules.bigip_pool:
+        name: my-pool
+        ....
+
+</code></pre>
+
+<h2>Author Information</h2>
+<p>F5 Networks
+<a href="http://www.f5.com">F5 Networks</a></p>

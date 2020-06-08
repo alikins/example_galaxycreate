@@ -1,0 +1,106 @@
+<h1>Ansible Collection: chocolatey.chocolatey</h1>
+<table>
+<thead>
+<tr>
+<th>Build Status</th>
+</tr>
+</thead>
+
+<tr>
+<td><a href="https://dev.azure.com/ChocolateyCI/Chocolatey-Ansible/_build/latest?definitionId=2&amp;branchName=master"><img alt="Build Status" src="https://dev.azure.com/ChocolateyCI/Chocolatey-Ansible/_apis/build/status/Chocolatey%20Collection%20CI?branchName=master"></a></td>
+</tr>
+
+</table>
+<p>This repo hosts the <code>chocolatey.chocolatey</code> Ansible Collection.</p>
+<p>The collection includes the modules required to configure Chocolatey, as well as manage packages on Windows using Chocolatey.</p>
+<h2>Installation and Usage</h2>
+<h3>Installing the Collection from Ansible Galaxy</h3>
+<p>Before using the Chocolatey collection, you need to install it with the <code>ansible-galaxy</code> CLI:</p>
+<pre><code>ansible-galaxy collection install chocolatey.chocolatey
+</code></pre>
+<p>You can also include it in a <code>requirements.yml</code> file and install it via <code>ansible-galaxy collection install -r requirements.yml</code> using the format:</p>
+<pre><code>collections:
+- name: chocolatey.chocolatey
+</code></pre>
+
+<h3>Modules</h3>
+<p>This collection provides the following modules you can use in your own roles:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tr>
+<td><code>win_chocolatey</code></td>
+<td>Manage packages using chocolatey</td>
+</tr>
+<tr>
+<td><code>win_chocolatey_config</code></td>
+<td>Manage Chocolatey config settings</td>
+</tr>
+<tr>
+<td><code>win_chocolatey_facts</code></td>
+<td>Create a facts collection for Chocolatey</td>
+</tr>
+<tr>
+<td><code>win_chocolatey_feature</code></td>
+<td>Manage Chocolatey features</td>
+</tr>
+<tr>
+<td><code>win_chocolatey_source</code></td>
+<td>Manage Chocolatey sources</td>
+</tr>
+
+</table>
+<h3>Examples</h3>
+<p>Some example usages of the modules in this collection are below.</p>
+<p>Upgrade all packages with Chocolatey:</p>
+<pre><code>- name: Upgrade installed packages
+  win_chocolatey:
+    name: all
+    state: latest
+</code></pre>
+
+<p>Install version 6.6 of <code>notepadplusplus</code>:</p>
+<pre><code>- name: Install notepadplusplus version 6.6
+  win_chocolatey:
+    name: notepadplusplus
+    version: '6.6'
+</code></pre>
+
+<p>Set the Chocolatey cache location:</p>
+<pre><code>- name: Set the cache location
+  win_chocolatey_config:
+    name: cacheLocation
+    state: present
+    value: C:\Temp
+</code></pre>
+
+<p>Use Background Mode for Self-Service (C4B):</p>
+<pre><code>- name: Use background mode for self-service
+  win_chocolatey_feature:
+    name: useBackgroundService
+    state: enabled
+</code></pre>
+
+<p>Disable the Community Package Repository</p>
+<pre><code>- name: Disable Community Repo
+  win_chocolatey_source:
+    name: chocolatey
+    state: disabled
+</code></pre>
+
+<h2>Testing and Development</h2>
+<p>If you want to develop new content for this collection or improve what's already here, the easiest way to work on the collection is to clone it into one of the configured <a href="https://docs.ansible.com/ansible/latest/reference_appendices/config.html#collections-paths"><code>COLLECTIONS_PATHS</code></a>, and work on it there.</p>
+<h3>Testing with <code>ansible-test</code></h3>
+<p>The <code>tests</code> directory contains configuration for running integration tests using <a href="https://docs.ansible.com/ansible/latest/dev_guide/testing_integration.html"><code>ansible-test</code></a>.</p>
+<p>You can run the collection's test suites with the commands:</p>
+<pre><code>ansible-test windows-integration --docker -v --color
+</code></pre>
+
+<h2>License</h2>
+<p>GPL v3.0 License</p>
+<p>See <a href="LICENSE">LICENSE</a> to see full text.</p>

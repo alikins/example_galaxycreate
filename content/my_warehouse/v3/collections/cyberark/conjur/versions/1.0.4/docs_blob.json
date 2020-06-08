@@ -1,0 +1,96 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<p><img alt=\"\" src=\"https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md\"></p>\n<h2>CyberArk Ansible Conjur Collection</h2>\n<hr>\n<h3>cyberark.conjur</h3>\n<p>This collection contains plugins to be used for CyberArk Conjur &amp; DAP hosted in <a href=\"https://galaxy.ansible.com/cyberark/conjur\">ansible galaxy</a>.</p>\n<h3>Requirements</h3>\n<ul>\n<li><a href=\"https://www.conjur.org\">CyberArk Conjur Open Source</a> v1.x+ or</li>\n<li><a href=\"https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Resources/_TopNav/cc_Home.htm\">CyberArk Dynamic Access Provider</a> v10.x+</li>\n<li>Ansible v2.9+</li>\n</ul>\n<h3>Role Variables</h3>\n<p>None.\n<br>\n<br></p>\n<h2>Plugins</h2>\n<h3>conjur_variable Lookup Plugin</h3>\n<p>Fetch credentials from CyberArk Conjur using the controlling host's Conjur identity or environment variables.</p>\n<ul>\n<li>The controlling host running Ansible has a Conjur identity. <a href=\"https://docs.conjur.org/latest/en/Content/Get%20Started/key_concepts/machine_identity.html\">More Information here</a> and here in <a href=\"https://github.com/cyberark/ansible-conjur-host-identity/\">Conjur Ansible role project</a></li>\n<li>Environment variables could be CONJUR_ACCOUNT, CONJUR_APPLIANCE_URL, CONJUR_CERT_FILE, CONJUR_AUTHN_LOGIN, CONJUR_AUTHN_API_KEY</li>\n</ul>\n<h4>Example Playbook</h4>\n<pre><code>---\n  - hosts: localhost\n\n    tasks:\n\n      - name: Lookup variable in Conjur\n        debug:\n          msg: &quot;{{ lookup('cyberark.conjur.conjur_variable', '/path/to/secret') }}&quot;\n</code></pre>\n\n<h3>Author Information</h3>\n<ul>\n<li>CyberArk Business Development Technical Team <ul>\n<li>@cyberark-bizdev</li>\n<li>@enunez-cyberark</li>\n<li>@jimmyjamcabd</li>\n</ul>\n</li>\n</ul>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "conjur_variable",
+            "content_type": "lookup",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "CyberArk BizDev (@cyberark-bizdev)",
+                        "Edward Nunez (@enunez-cyberark)",
+                        "James Stutes (@jimmyjamcabd)"
+                    ],
+                    "description": "Retrieves credentials from Conjur using the controlling host's Conjur identity or environment variables. Environment variables could be CONJUR_ACCOUNT, CONJUR_APPLIANCE_URL, CONJUR_CERT_FILE, CONJUR_AUTHN_LOGIN, CONJUR_AUTHN_API_KEY Conjur info - U(https://www.conjur.org/).",
+                    "filename": "/tmp/tmpbdu1_k7_/ansible_collections/cyberark/conjur/plugins/lookup/conjur_variable.py",
+                    "lookup": "conjur_variable",
+                    "options": [
+                        {
+                            "name": "_terms",
+                            "description": "Variable path",
+                            "required": true
+                        },
+                        {
+                            "name": "config_file",
+                            "default": "/etc/conjur.conf",
+                            "description": "Path to the Conjur configuration file. The configuration file is a YAML file.",
+                            "env": [
+                                {
+                                    "name": "CONJUR_CONFIG_FILE"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "config_file_path",
+                                    "section": "conjur,"
+                                }
+                            ],
+                            "required": false,
+                            "type": "path"
+                        },
+                        {
+                            "name": "identity_file",
+                            "default": "/etc/conjur.identity",
+                            "description": "Path to the Conjur identity file. The identity file follows the netrc file format convention.",
+                            "env": [
+                                {
+                                    "name": "CONJUR_IDENTITY_FILE"
+                                }
+                            ],
+                            "ini": [
+                                {
+                                    "key": "identity_file_path",
+                                    "section": "conjur,"
+                                }
+                            ],
+                            "required": false,
+                            "type": "path"
+                        },
+                        {
+                            "name": "validate_certs",
+                            "default": true,
+                            "description": "Flag to control SSL certificate validation",
+                            "type": "boolean"
+                        }
+                    ],
+                    "requirements": [
+                        "The controlling host running Ansible has a Conjur identity. (More: U(https://docs.conjur.org/latest/en/Content/Get%20Started/key_concepts/machine_identity.html))"
+                    ],
+                    "short_description": "Fetch credentials from CyberArk Conjur.",
+                    "version_added": "2.5"
+                },
+                "examples": "\n---\n  - hosts: localhost\n\n    collections:\n      - cyberark.conjur-collection\n\n    tasks:\n\n      - name: Lookup variable in Conjur\n        debug:\n          msg: \"{{ lookup('conjur_variable', '/path/to/secret') }}\"\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": [
+                    {
+                        "name": "_raw",
+                        "description": [
+                            "Value stored in Conjur."
+                        ]
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

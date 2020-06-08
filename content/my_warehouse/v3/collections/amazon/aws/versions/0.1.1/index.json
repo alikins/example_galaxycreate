@@ -1,0 +1,37 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/amazon-aws-0.1.1.tar.gz",
+    "namespace": {
+        "name": "amazon"
+    },
+    "collection": {
+        "name": "aws"
+    },
+    "version": "0.1.1",
+    "metadata": {
+        "namespace": "amazon",
+        "name": "aws",
+        "version": "0.1.1",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "description": null,
+        "repository": "https://github.com/ansible-collections/amazon.aws.git",
+        "documentation": null,
+        "homepage": "https://github.com/ansible-collections/amazon.aws",
+        "issues": "https://github.com/ansible-collections/amazon.aws/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc",
+        "authors": [
+            "Ansible (https://github.com/ansible)"
+        ],
+        "tags": [],
+        "license_file": "COPYING",
+        "readme": "README.md",
+        "dependencies": {
+            "ansible.netcommon": ">=0.0.1"
+        }
+    },
+    "artifact": {
+        "filename": "amazon-aws-0.1.1.tar.gz",
+        "sha256": "6d720bda6e8d6976e0c6173454efcd010c42166d5f2fd4e988585d8a5feafca2",
+        "size": 362129
+    }
+}

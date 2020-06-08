@@ -1,0 +1,19 @@
+{
+    "meta": {
+        "count": 1
+    },
+    "links": {
+        "first": "content/my_warehouse/v3/collections/amazon/aws/versions/",
+        "last": "content/my_warehouse/v3/collections/amazon/aws/versions/",
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "version": "0.1.1",
+            "href": "content/my_warehouse/v3/collections/amazon/aws/versions/0.1.1/",
+            "created_at": "2020-06-08T14:09:14.488652",
+            "modified_at": "2020-06-08T14:09:14.488652"
+        }
+    ]
+}

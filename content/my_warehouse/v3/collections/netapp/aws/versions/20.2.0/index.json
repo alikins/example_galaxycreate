@@ -1,0 +1,38 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/netapp.aws-20.2.0.tar.gz",
+    "namespace": {
+        "name": "netapp"
+    },
+    "collection": {
+        "name": "aws"
+    },
+    "version": "20.2.0",
+    "metadata": {
+        "namespace": "netapp",
+        "name": "aws",
+        "version": "20.2.0",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Cloud Volumes Service (CVS) for AWS",
+        "repository": "https://github.com/ansible-collections/ansible_collections_netapp",
+        "documentation": null,
+        "homepage": "netapp.io",
+        "issues": null,
+        "authors": [
+            "NetApp Ansible Team <ng-ansibleteam@netapp.com>"
+        ],
+        "tags": [
+            "storage",
+            "cloud"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "netapp.aws-20.2.0.tar.gz",
+        "sha256": "6c158f474d7721436346a056261ea40f028bfee11015fd341fed9fb250bb2ddb",
+        "size": 15921
+    }
+}

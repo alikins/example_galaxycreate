@@ -1,0 +1,36 @@
+<p># Ansible Syncope Collection</p>
+<p>## Test module logic</p>
+<ol>
+<li>From the base directory execute the unit test:
+      <code>sh
+         python -m pytest tests/</code></li>
+<li>
+<p>Make sure to edit in a proper way the following conf files:
+       <code>./plugins/modules/args.json</code>
+       <code>./tests/integration/targets/syncope_user_handler/tasks/main.yml</code></p>
+</li>
+<li>
+<p>Test the module logic by running one of the following 2 options:</p>
+<ol>
+<li>
+<p>Providing a json file:
+     from the <code>./plugins/modules/</code> directory run
+     <code>sh
+     python -m syncope_user_handler args.json</code>
+     &gt; <code>-m [MODULE_NAME]</code>:
+     &gt;
+     &gt; the name of the module must be equals to the name
+     &gt; of the <code>plugins/modules/syncope_user_handler</code> class</p>
+</li>
+<li>
+<p>With Playbook:
+     from the base directory:
+     <code>sh
+     ansible-test integration</code>
+     &gt; executing ansible test requires the collection be in a specific path:
+     &gt;
+     &gt; <code>/ansible_collections/{namespace}/SyncopeAnsible/</code></p>
+</li>
+</ol>
+</li>
+</ol>

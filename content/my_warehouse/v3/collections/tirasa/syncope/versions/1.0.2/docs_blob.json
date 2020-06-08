@@ -1,0 +1,114 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<p># Ansible Syncope Collection</p>\n<p>## Test module logic</p>\n<ol>\n<li>From the base directory execute the unit test:\n      <code>sh\n         python -m pytest tests/</code></li>\n<li>\n<p>Make sure to edit in a proper way the following conf files:\n       <code>./plugins/modules/args.json</code>\n       <code>./tests/integration/targets/syncope_user_handler/tasks/main.yml</code></p>\n</li>\n<li>\n<p>Test the module logic by running one of the following 2 options:</p>\n<ol>\n<li>\n<p>Providing a json file:\n     from the <code>./plugins/modules/</code> directory run\n     <code>sh\n     python -m syncope_user_handler args.json</code>\n     &gt; <code>-m [MODULE_NAME]</code>:\n     &gt;\n     &gt; the name of the module must be equals to the name\n     &gt; of the <code>plugins/modules/syncope_user_handler</code> class</p>\n</li>\n<li>\n<p>With Playbook:\n     from the base directory:\n     <code>sh\n     ansible-test integration</code>\n     &gt; executing ansible test requires the collection be in a specific path:\n     &gt;\n     &gt; <code>/ansible_collections/{namespace}/SyncopeAnsible/</code></p>\n</li>\n</ol>\n</li>\n</ol>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "syncope_user_handler",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Tirasa Ansible Team (@mat-ale) (@FedericoPalmitesta) (@mdisabatino) (@ilgrosso)",
+                    "description": [
+                        "Module handle user on Apache Syncope."
+                    ],
+                    "filename": "/tmp/tmpeo5dt2tv/ansible_collections/tirasa/syncope/plugins/modules/syncope_user_handler.py",
+                    "module": "syncope_user_handler",
+                    "options": [
+                        {
+                            "name": "action",
+                            "choices": [
+                                "change status"
+                            ],
+                            "description": [
+                                "This is the message to send to the modules."
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "adminPwd",
+                            "description": [
+                                "Password of the Admin User to login to Syncope"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "adminUser",
+                            "description": [
+                                "Username of the Admin User to login to Syncope"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "changeStatusOnSyncope",
+                            "description": [
+                                "In case the status update must be executed on Syncope too ('true') or only to the resources, if any ('false')"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "newStatus",
+                            "choices": [
+                                "SUSPEND",
+                                "REACTIVATE",
+                                "ACTIVATE"
+                            ],
+                            "description": [
+                                "Value of the new status"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "serverName",
+                            "description": [
+                                "Domain url of the Syncope instance"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "syncopeUser",
+                            "description": [
+                                "Key of the user on Syncope whose status will be updated"
+                            ],
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Handle user on Apache Syncope",
+                    "version_added": "2.4"
+                },
+                "examples": "\n- name: Suspend user\n  syncope_user_handler:\n    \"action\": \"change status\"\n    \"adminUser\": \"admin\"\n    \"adminPwd\": \"password\"\n    \"serverName\": \"https://syncope-vm.apache.org\"\n    \"syncopeUser\": \"c9b2dec2-00a7-4855-97c0-d854842b4b24\"\n    \"changeStatusOnSyncope\": \"true\"\n    \"newStatus\": \"SUSPEND\"\n\n- name: Reactivate user\n  syncope_user_handler:\n    \"action\": \"change status\"\n    \"adminUser\": \"admin\"\n    \"adminPwd\": \"password\"\n    \"serverName\": \"https://syncope-vm.apache.org\"\n    \"syncopeUser\": \"c9b2dec2-00a7-4855-97c0-d854842b4b24\"\n    \"changeStatusOnSyncope\": \"true\"\n    \"newStatus\": \"REACTIVATE\"\n\n- name: Activate user\n  syncope_user_handler:\n    \"action\": \"change status\"\n    \"adminUser\": \"admin\"\n    \"adminPwd\": \"password\"\n    \"serverName\": \"https://syncope-vm.apache.org\"\n    \"syncopeUser\": \"c9b2dec2-00a7-4855-97c0-d854842b4b24\"\n    \"changeStatusOnSyncope\": \"true\"\n    \"newStatus\": \"ACTIVATE\"\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "Tirasa S.r.l."
+                },
+                "return": [
+                    {
+                        "name": "changed",
+                        "description": "The output response from the Apache Syncope endpoint",
+                        "returned": "always",
+                        "type": "str"
+                    },
+                    {
+                        "name": "message",
+                        "description": "To determine whether this modules made any modifications to the target or not",
+                        "returned": "always",
+                        "type": "bool"
+                    }
+                ]
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

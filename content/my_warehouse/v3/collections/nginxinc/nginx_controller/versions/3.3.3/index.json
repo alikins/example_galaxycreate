@@ -1,0 +1,40 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/nginxinc.nginx_controller-3.3.3.tar.gz",
+    "namespace": {
+        "name": "nginxinc"
+    },
+    "collection": {
+        "name": "nginx_controller"
+    },
+    "version": "3.3.3",
+    "metadata": {
+        "namespace": "nginxinc",
+        "name": "nginx_controller",
+        "version": "3.3.3",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "Supporting NGINX Controller 3.x and later in your pipelines.",
+        "repository": "https://github.com/nginxinc/ansible-collection-nginx_controller",
+        "documentation": "https://docs.nginx.com/nginx-controller/",
+        "homepage": null,
+        "issues": "https://github.com/nginxinc/ansible-collection-nginx_controller/issues",
+        "authors": [
+            "brianehlert"
+        ],
+        "tags": [
+            "nginx",
+            "controller",
+            "nginxplus",
+            "plus"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "nginxinc.nginx_controller-3.3.3.tar.gz",
+        "sha256": "08830e65fa89b7bbb095add82183be95ab3733c1852b063237ee104a3fad1883",
+        "size": 134800
+    }
+}

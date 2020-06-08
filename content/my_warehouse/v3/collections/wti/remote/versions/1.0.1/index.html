@@ -1,0 +1,35 @@
+<h1>WTI Ansible Collection</h1>
+<p>This <a href="https://www.ansible.com/">Ansible</a> collection provides a set of platform dependent configuration
+ management modules specifically designed for  <a href="https://wti.com/">WTI OOB and PDU devices</a> .</p>
+<h2>Requirements</h2>
+<ul>
+<li>Python 2.7 or 3.5+</li>
+<li>Ansible 2.9.0 or later</li>
+<li>Supported WTI firmware (DSM/CPM v6.58+, VMR 2.15+)</li>
+<li>Configuration command needs a user with Administrator privileges</li>
+</ul>
+<h2>Installation</h2>
+<p>Through Galaxy:</p>
+<pre><code>ansible-galaxy collection install wti.remote
+</code></pre>
+
+<h2>Inventory Variables</h2>
+<p>The common variables that should be defined in your inventory for your WTI host are:</p>
+<ul>
+<li><code>cpm_url</code>: IP address or name of device.  </li>
+<li><code>cpm_username</code>: Username for device in <code>plaintext</code> format  </li>
+<li><code>cpm_password</code>: Password for device in <code>plaintext</code> format  </li>
+<li><code>use_https</code>: Set <code>True</code> or <code>False</code> depending on if Ansible should use a secure https connection  </li>
+<li><code>validate_certs</code>: Set <code>True</code> or <code>False</code> depending on if Ansible should attempt to validate certificates  </li>
+<li><code>use_proxy</code>: Set <code>True</code> or <code>False</code> depending if Ansible should bypass environment proxies to connect to the WTI device   </li>
+</ul>
+<h2>Contribution</h2>
+<p>At WTI we're dedicated to ensuring the quality of our products, if you find any
+issues at all please open an issue on our <a href="https://github.com/wtinetworkgear/wti-collection">Github</a> and we'll be sure to respond promptly!
+Or you can always email us directly at support@wti.com</p>
+<h2>License</h2>
+<p>Apache-2.0</p>
+<h2>Author Information</h2>
+<ul>
+<li>Ken Partridge (@wtinetworkgear)</li>
+</ul>

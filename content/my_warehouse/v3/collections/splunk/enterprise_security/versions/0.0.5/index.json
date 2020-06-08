@@ -1,0 +1,38 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/splunk.enterprise_security-0.0.5.tar.gz",
+    "namespace": {
+        "name": "splunk"
+    },
+    "collection": {
+        "name": "enterprise_security"
+    },
+    "version": "0.0.5",
+    "metadata": {
+        "namespace": "splunk",
+        "name": "enterprise_security",
+        "version": "0.0.5",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "description": "Ansible Collection of content aiming to automate common tasks of Information Security Professionals using Splunk Enterprise Security SIEM",
+        "repository": "https://github.com/ansible-security/ansible_collections.splunk.enterprise_security",
+        "documentation": "https://github.com/ansible-security/ansible_collections.splunk.enterprise_security",
+        "homepage": "https://github.com/ansible-security/ansible_collections.splunk.enterprise_security",
+        "issues": "https://github.com/ansible-security/ansible_collections.splunk.enterprise_security/issues",
+        "authors": [
+            "Ansible Security Automation Team (https://github.com/ansible-security)"
+        ],
+        "tags": [
+            "security",
+            "splunk"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "splunk.enterprise_security-0.0.5.tar.gz",
+        "sha256": "651d91cd00a76fca151264fdc0ee574af539527b3d1a09bb68becf1e673ca691",
+        "size": 26975
+    }
+}

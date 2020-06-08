@@ -1,0 +1,56 @@
+<h1>Ansible collection for Azure</h1>
+<p>This collection provides a series of Ansible modules and plugins for interacting with the <a href="https://azure.microsoft.com">Azure</a>.</p>
+<h2>Requirements</h2>
+<ul>
+<li>ansible version &gt;= 2.9</li>
+</ul>
+<h2>Installation</h2>
+<pre><code>ansible-galaxy collection install azure.azcollection
+</code></pre>
+
+<h2>Usage</h2>
+<p>To use a module from Azure collection, please reference the full namespace, collection name, and modules name that you want to use:</p>
+<pre><code>---
+- name: Using Azure collection
+  hosts: localhost
+  tasks:
+    - azure.azcollection.azure_rm_storageaccount:
+        resource_group: myResourceGroup
+        name: myStorageAccount
+        account_type: Standard_LRS
+</code></pre>
+
+<p>Or you can add full namepsace and collecton name in the <code>collections</code> element:</p>
+<pre><code>---
+- name: Using Azure collection
+  hosts: localhost
+  collections:
+    - azure.azcollection
+  tasks:
+    - azure_rm_storageaccount:
+        resource_group: myResourceGroup
+        name: myStorageAccount
+        account_type: Standard_LRS
+</code></pre>
+
+<h2>Resource Supported</h2>
+<ul>
+<li>azure_rm_deployment - Create or destroy Azure Resource Manager template deployments</li>
+<li>azure_rm_dnsrecordset - Create, delete and update DNS record sets and records</li>
+<li>azure_rm_dnsrecordset_facts - Get DNS Record Set facts</li>
+<li>azure_rm_dnszone - Manage Azure DNS zones</li>
+<li>azure_rm_dnszone_facts - Get DNS zone facts</li>
+<li>azure_rm_networkinterface - Manage Azure network interfaces</li>
+<li>azure_rm_networkinterface_facts - Get network interface facts</li>
+<li>azure_rm_publicipaddress - Manage Azure Public IP Addresses</li>
+<li>azure_rm_publicipaddress_facts - Get public IP facts</li>
+<li>azure_rm_securitygroup - Manage Azure network security groups</li>
+<li>azure_rm_securitygroup_facts - Get security group facts</li>
+<li>azure_rm_storageaccount - Manage Azure storage accounts</li>
+<li>azure_rm_storageaccount_facts - Get storage account facts</li>
+<li>azure_rm_subnet - Manage Azure subnets</li>
+<li>azure_rm_virtualmachine - Manage Azure virtual machines</li>
+<li>azure_rm_virtualmachine_facts - Get virtual machine facts</li>
+<li>azure_rm_virtualnetwork - Manage Azure virtual networks</li>
+<li>azure_rm_virtualnetwork_facts - Get virtual network facts</li>
+</ul>

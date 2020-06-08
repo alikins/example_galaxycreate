@@ -1,0 +1,42 @@
+<p><img alt="" src="https://img.shields.io/badge/Certification%20Level-Community-28A745?link=https://github.com/cyberark/community/blob/master/Conjur/conventions/certification-levels.md"></p>
+<h2>CyberArk Ansible Conjur Collection</h2>
+<hr>
+<h3>cyberark.conjur</h3>
+<p>This collection contains plugins to be used for CyberArk Conjur &amp; DAP hosted in <a href="https://galaxy.ansible.com/cyberark/conjur">ansible galaxy</a>.</p>
+<h3>Requirements</h3>
+<ul>
+<li><a href="https://www.conjur.org">CyberArk Conjur Open Source</a> v1.x+ or</li>
+<li><a href="https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Resources/_TopNav/cc_Home.htm">CyberArk Dynamic Access Provider</a> v10.x+</li>
+<li>Ansible v2.9+</li>
+</ul>
+<h3>Role Variables</h3>
+<p>None.
+<br>
+<br></p>
+<h2>Plugins</h2>
+<h3>conjur_variable Lookup Plugin</h3>
+<p>Fetch credentials from CyberArk Conjur using the controlling host's Conjur identity or environment variables.</p>
+<ul>
+<li>The controlling host running Ansible has a Conjur identity. <a href="https://docs.conjur.org/latest/en/Content/Get%20Started/key_concepts/machine_identity.html">More Information here</a> and here in <a href="https://github.com/cyberark/ansible-conjur-host-identity/">Conjur Ansible role project</a></li>
+<li>Environment variables could be CONJUR_ACCOUNT, CONJUR_APPLIANCE_URL, CONJUR_CERT_FILE, CONJUR_AUTHN_LOGIN, CONJUR_AUTHN_API_KEY</li>
+</ul>
+<h4>Example Playbook</h4>
+<pre><code>---
+  - hosts: localhost
+
+    tasks:
+
+      - name: Lookup variable in Conjur
+        debug:
+          msg: &quot;{{ lookup('cyberark.conjur.conjur_variable', '/path/to/secret') }}&quot;
+</code></pre>
+
+<h3>Author Information</h3>
+<ul>
+<li>CyberArk Business Development Technical Team <ul>
+<li>@cyberark-bizdev</li>
+<li>@enunez-cyberark</li>
+<li>@jimmyjamcabd</li>
+</ul>
+</li>
+</ul>

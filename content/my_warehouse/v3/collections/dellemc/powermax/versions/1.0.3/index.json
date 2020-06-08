@@ -1,0 +1,40 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/dellemc.powermax.1.0.3.tar.gz",
+    "namespace": {
+        "name": "dellemc"
+    },
+    "collection": {
+        "name": "powermax"
+    },
+    "version": "1.0.3",
+    "metadata": {
+        "namespace": "dellemc",
+        "name": "powermax",
+        "version": "1.0.3",
+        "license": [],
+        "description": "Ansible modules for Dell EMC PowerMax",
+        "repository": "https://github.com/dell/ansible-powermax/tree/1.0.0",
+        "documentation": "https://github.com/dell/ansible-powermax/tree/1.0.0/dellemc_ansible/docs",
+        "homepage": "https://github.com/dell/ansible-powermax/tree/1.0.0",
+        "issues": "https://github.com/dell/ansible-powermax/tree/1.0.0",
+        "authors": [
+            "Akash Shendge <Akash.Shendge@emc.com>",
+            "Ambuj Dubey <Ambuj.Dubey@emc.com>",
+            "Arindam Datta <arindam.datta@dell.com>",
+            "Ashish Verma <Ashish.Verma1@emc.com>",
+            "Manisha Agrawal <manisha.agrawal@dell.com>",
+            "Prashant Rakheja <Prashant.Rakheja@dell.com>",
+            "Rajshree Khare <Rajshree.Khare@emc.com>",
+            "Vasudevu Lakhinana <vasudevu.lakhinana@dell.com>"
+        ],
+        "tags": [],
+        "license_file": "LICENSE",
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "dellemc.powermax.1.0.3.tar.gz",
+        "sha256": "9811421a56469205c8c93c552a4adb606dc1c789acd0e70379b15c39a8e028c6",
+        "size": 31632
+    }
+}

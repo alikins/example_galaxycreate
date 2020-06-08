@@ -1,0 +1,19 @@
+{
+    "meta": {
+        "count": 1
+    },
+    "links": {
+        "first": "content/my_warehouse/v3/collections/nginxinc/nginx_controller/versions/",
+        "last": "content/my_warehouse/v3/collections/nginxinc/nginx_controller/versions/",
+        "next": null,
+        "prev": null
+    },
+    "data": [
+        {
+            "version": "3.3.3",
+            "href": "content/my_warehouse/v3/collections/nginxinc/nginx_controller/versions/3.3.3/",
+            "created_at": "2020-06-08T14:09:17.382501",
+            "modified_at": "2020-06-08T14:09:17.382501"
+        }
+    ]
+}

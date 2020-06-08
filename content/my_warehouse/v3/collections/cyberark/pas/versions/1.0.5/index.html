@@ -1,0 +1,56 @@
+
+
+<p><img alt="cyberark logo|" src="https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/images/full-cyberark-logo.jpg?raw=true"></p>
+<h2>CyberArk Ansible Security Automation Collection</h2>
+<hr>
+<h2>Collection</h2>
+<h4>cyberark.pas</h4>
+<p>This collection is the CyberArk Ansible Security Automation project.  This is aimed to enable the automation of securing privileged access by storing privileged accounts in the Enterprise Password Vault (EPV), controlling user's access to privileged accounts in EPV, and securely retreiving secrets using Application Access Manager (AAM).  The following modules will allow CyberArk administrators to automate the following tasks:</p>
+<h4>Requirements</h4>
+<ul>
+<li>CyberArk Privileged Account Security Web Services SDK</li>
+<li>CyberArk AAM Central Credential Provider (<strong>Only required for cyberark_credential</strong>)</li>
+</ul>
+<h4>Role Variables</h4>
+<p>None.
+<br>
+<br></p>
+<h2>Modules</h2>
+<h4>cyberark_authentication</h4>
+<ul>
+<li>Using the CyberArk Web Services SDK, authenticate and obtain an auth token to be passed as a variable in playbooks</li>
+<li>Logoff of an authenticated REST API session<br>
+<a href="https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_authentication.md">Playbooks and Module Info</a></li>
+</ul>
+<h4>cyberark_user</h4>
+<ul>
+<li>Add a CyberArk User</li>
+<li>Delete a CyberArk User</li>
+<li>Update a CyberArk User's account parameters<ul>
+<li>Enable/Disable, change password, mark for change at next login, etc
+<br><a href="https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_user.md">Playbooks and Module Info</a><br></li>
+</ul>
+</li>
+</ul>
+<h4>cyberark_account</h4>
+<ul>
+<li>Add Privileged Account to the EPV</li>
+<li>Delete account objects</li>
+<li>Modify account properties</li>
+<li>Rotatate privileged credentials<br>
+<a href="https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_account.md">Playbooks and Module Info</a></li>
+</ul>
+<h4>cyberark_credential</h4>
+<ul>
+<li>Using AAM Central Credential Provider (CCP), to securely retreive secrets and account properties from EPV to be registered for use in playbooks<br>
+<a href="https://github.com/cyberark/ansible-security-automation-collection/blob/master/docs/cyberark_credential.md">Playbooks and Module Info</a></li>
+</ul>
+<h4>Author Information</h4>
+<ul>
+<li>CyberArk Business Development Technical Team <ul>
+<li>@enunez-cyberark</li>
+<li>@cyberark-bizdev</li>
+<li>@jimmyjamcabd</li>
+</ul>
+</li>
+</ul>

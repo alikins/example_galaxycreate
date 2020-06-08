@@ -1,0 +1,43 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/tirasa.syncope.1.0.2.tar.gz",
+    "namespace": {
+        "name": "tirasa"
+    },
+    "collection": {
+        "name": "syncope"
+    },
+    "version": "1.0.2",
+    "metadata": {
+        "namespace": "tirasa",
+        "name": "syncope",
+        "version": "1.0.2",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": null,
+        "repository": "https://github.com/Tirasa/SyncopeAnsible",
+        "documentation": "",
+        "homepage": "https://github.com/Tirasa/SyncopeAnsible",
+        "issues": "https://github.com/Tirasa/SyncopeAnsible/issues",
+        "authors": [
+            "Matteo Alessandroni",
+            "Federico Palmitesta",
+            "Marco Di Sabatino Di Diodoro",
+            "Francesco Chicchiricc\u00f2"
+        ],
+        "tags": [
+            "syncope",
+            "security",
+            "tools",
+            "application"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "tirasa.syncope.1.0.2.tar.gz",
+        "sha256": "1270b3949a5ce0cae2e0ce27162cc5a3989a0b4b01050d2f3543c3172e5cc28e",
+        "size": 250419
+    }
+}

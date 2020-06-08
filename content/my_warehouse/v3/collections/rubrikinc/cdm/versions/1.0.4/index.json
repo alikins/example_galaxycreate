@@ -1,0 +1,37 @@
+{
+    "download_url": "http://localhost/static/content/my_warehouse/v3/artifacts/collections/my_warehouse/rubrikinc.cdm-1.0.4.tar.gz",
+    "namespace": {
+        "name": "rubrikinc"
+    },
+    "collection": {
+        "name": "cdm"
+    },
+    "version": "1.0.4",
+    "metadata": {
+        "namespace": "rubrikinc",
+        "name": "cdm",
+        "version": "1.0.4",
+        "license": [
+            "MIT"
+        ],
+        "description": "Ansible Modules that utilize the Rubrik RESTful API to manage the Rubrik Cloud Data Management Platform.",
+        "repository": "https://github.com/rubrikinc/rubrik-modules-for-ansible",
+        "documentation": "https://rubrik.gitbook.io/rubrik-modules-for-ansible/",
+        "homepage": "https://build.rubrik.com/tooling-integrations/ansible/",
+        "issues": "https://github.com/rubrikinc/rubrik-modules-for-ansible/issues",
+        "authors": [
+            "Rubrik Build"
+        ],
+        "tags": [
+            "cloud"
+        ],
+        "license_file": null,
+        "readme": "README.md",
+        "dependencies": {}
+    },
+    "artifact": {
+        "filename": "rubrikinc.cdm-1.0.4.tar.gz",
+        "sha256": "e3421a38a04c951f5de4bfabd49e6698d75c98d0f22619903be3bfab12dafb98",
+        "size": 61577
+    }
+}

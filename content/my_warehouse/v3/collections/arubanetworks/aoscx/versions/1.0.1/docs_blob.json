@@ -1,0 +1,946 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>AOSCX Ansible Collection</h1>\n<p>This Ansible Network collection provides a set of platform dependent configuration\n management modules specifically designed for the AOS-CX network device.</p>\n<h2>Requirements</h2>\n<ul>\n<li>Python 2.7 or 3.5+</li>\n<li>Ansible 2.9.0 or later</li>\n<li>Minimum supported AOS-CX firmware version 10.03</li>\n<li>Enable REST on your AOS-CX device with the following commands:\n    <code>switch(config)# https-server rest access-mode read-write\n    switch(config)# https-server vrf mgmt</code></li>\n</ul>\n<h2>Installation</h2>\n<p>Through Galaxy:</p>\n<pre><code>ansible-galaxy collection install arubanetworks.aoscx\n</code></pre>\n\n<h2>Inventory Variables</h2>\n<p>The variables that should be defined in your inventory for your AOS-CX host are:</p>\n<ul>\n<li><code>ansible_host</code>: IP address of switch in <code>A.B.C.D</code> format. For IPv6 hosts use a string and enclose in square brackets E.G. <code>'[2001::1]'</code> </li>\n<li><code>ansible_user</code>: Username for switch in <code>plaintext</code> format  </li>\n<li><code>ansible_password</code>: Password for switch in <code>plaintext</code> format  </li>\n<li><code>ansible_connection</code>: Must always be set to <code>httpapi</code>  </li>\n<li><code>ansible_network_os</code>: Must always be set to <code>arubanetworks.aoscx.aoscx</code>  </li>\n<li><code>ansible_httpapi_use_ssl</code>: Must always be <code>True</code> as AOS-CX uses port 443 for REST  </li>\n<li><code>ansible_httpapi_validate_certs</code>: Set <code>True</code> or <code>False</code> depending on if Ansible should attempt to validate certificates  </li>\n<li><code>ansible_acx_no_proxy</code>: Set <code>True</code> or <code>False</code> depending if Ansible should bypass environment proxies to connect to AOS-CX  </li>\n</ul>\n<h3>Sample Inventory:</h3>\n<h4>INI</h4>\n<pre><code>aoscx_1 ansible_host=10.0.0.1 ansible_user=admin ansible_password=password ansible_connection=httpapi ansible_network_os=arubanetworks.aoscx.aoscx ansible_httpapi_validate_certs=False ansible_httpapi_use_ssl=True ansible_acx_no_proxy=True\n</code></pre>\n\n<h4>YAML</h4>\n<pre><code>all:\n  hosts:\n    aoscx_1:\n      ansible_host: 10.0.0.1\n      ansible_user: admin\n      ansible_password: password\n      ansible_connection: httpapi  # Do not change\n      ansible_network_os: arubanetworks.aoscx.aoscx\n      ansible_httpapi_validate_certs: False\n      ansible_httpapi_use_ssl: True\n      ansible_acx_no_proxy: True\n</code></pre>\n\n<h2>Example Playbook</h2>\n<p>If collection installed through <a href=\"https://galaxy.ansible.com/arubanetworks/aoscx\">Galaxy</a>\nadd <code>arubanetworks.aoscx</code> to your list of collections:</p>\n<pre><code>    ---\n    -  hosts: all\n       collections:\n         - arubanetworks.aoscx\n       tasks:\n         - name: Create L3 Interface 1/1/3\n           aoscx_l3_interface:\n            interface: 1/1/3\n            description: Uplink_Interface\n            ipv4: ['10.20.1.3/24']\n            ipv6: ['2001:db8::1234/64']\n</code></pre>\n\n<h2>Contribution</h2>\n<p>At Aruba Networks we're dedicated to ensuring the quality of our products, if you find any\nissues at all please open an issue on our <a href=\"https://github.com/aruba/aoscx-ansible-collection\">Github</a> and we'll be sure to respond promptly!</p>\n<h2>License</h2>\n<p>Apache-2.0</p>\n<h2>Author Information</h2>\n<ul>\n<li>Madhusudan Pranav Venugopal (@madhusudan-pranav-venugopal)  </li>\n<li>Yang Liu (@yliu-aruba)  </li>\n<li>Tiffany Chiapuzio-Wong (@tchiapuziowong)  </li>\n</ul>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "aoscx_static_route",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of static routes on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_static_route.py",
+                    "module": "aoscx_static_route",
+                    "options": [
+                        {
+                            "name": "destination_address_prefix",
+                            "description": "The IPv4 or IPv6 destination prefix and mask in the address/mask format i.e 1.1.1.0/24.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "distance",
+                            "default": 1,
+                            "description": "Administrative distance to be used for the next hop in the static route instaed of default value.",
+                            "required": false,
+                            "type": "int"
+                        },
+                        {
+                            "name": "next_hop_interface",
+                            "description": "The interface through which the next hop can be reached.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "next_hop_ip_address",
+                            "description": "The IPv4 address or the IPv6 address of next hop.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or delete the static route.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "type",
+                            "choices": [
+                                "forward",
+                                "blackhole",
+                                "reject"
+                            ],
+                            "default": "forward",
+                            "description": "Specifies whether the static route is a forward, blackhole or reject route. - forward - The packets that match the route for the desination will be forwarded. - reject - The packets that match the route for the destination will be discarded and an ICMP unreachable message is sent to the sender of the packet. - blackhole - The packets that match the route for the destination will be silently discarded without sending any ICMP message to the sender of the packet.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vrf_name",
+                            "default": "default",
+                            "description": "Name of the VRF on which the static route is to be configured. The VRF should have already been configured before using this module to configure the static route on the switch. If nothing is provided, the static route will be on the Default VRF.",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Create or Delete static route configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Create IPv4 Static Route with VRF - Forwarding\n  aoscx_static_route:\n    vrf_name: vrf2\n    destination_address_prefix: '1.1.1.0/24'\n    type: forward\n    distance: 1\n    next_hop_interface: '1/1/2'\n    next_hop_ip_address: '2.2.2.2'\n\n- name: Create IPv6 Static Route with VRF default - Forwarding\n  aoscx_static_route:\n    destination_address_prefix: 3000:300::2/64\n    type: forward\n    next_hop_ip_address: 1000:100::2\n\n- name: Create Static Route with VRF - Blackhole\n  aoscx_static_route:\n    vrf_name: vrf3\n    destination_address_prefix: '2.1.1.0/24'\n    type: blackhole\n\n- name: Create Static Route with VRF - Reject\n  aoscx_static_route:\n    vrf_name: vrf4\n    destination_address_prefix: '3.1.1.0/24'\n    type: reject\n\n- name: Delete Static Route with VRF - Forwarding\n  aoscx_static_route:\n    destination_address_prefix: '1.1.1.0/24'\n    state: 'delete'\n\n- name: Delete Static Route with VRF - Blackhole\n  aoscx_static_route:\n    destination_address_prefix: '2.1.1.0/24'\n    state: 'delete'\n\n- name: Delete Static Route with VRF - Reject\n  aoscx_static_route:\n    destination_address_prefix: '3.1.1.0/24'\n    state: 'delete'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_acl_vlan",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides application management of Access Classifier Lists on VLANs on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_acl_vlan.py",
+                    "module": "aoscx_acl_vlan",
+                    "options": [
+                        {
+                            "name": "acl_direction",
+                            "choices": [
+                                "in",
+                                "out"
+                            ],
+                            "default": "in",
+                            "description": "Direction for which the ACL is to be applied or removed.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "acl_name",
+                            "description": "Name of the ACL being applied or removed from the VLAN.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "acl_type",
+                            "choices": [
+                                "ipv4",
+                                "ipv6",
+                                "mac"
+                            ],
+                            "description": "Type of ACL being applied or removed from the VLAN.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "acl_vlan_list",
+                            "description": "List of VLANs for which the ACL is to be applied or removed.",
+                            "required": true,
+                            "type": "list"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or delete the ACL configuration from the VLANs.",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Apply/Remove ACL configuration on VLANs for AOS-CX.",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Apply ipv4 ACL to VLANs\n  aoscx_acl_vlan:\n    acl_name: ipv4_acl\n    acl_type: ipv4\n    acl_vlan_list: [2, 4]\n\n- name: Remove ipv4 ACL from VLANs\n  aoscx_acl_vlan:\n    acl_name: ipv4_acl\n    acl_type: ipv4\n    acl_vlan_list: [2, 4]\n    state: delete\n\n- name: Apply ipv6 ACL to VLANs\n  aoscx_acl_vlan:\n    acl_name: ipv6_acl\n    acl_type: ipv6\n    acl_vlan_list: [2, 4]\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_l3_interface",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of Layer3 Interfaces on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_l3_interface.py",
+                    "module": "aoscx_l3_interface",
+                    "options": [
+                        {
+                            "name": "admin_state",
+                            "choices": [
+                                "up",
+                                "down"
+                            ],
+                            "default": "up",
+                            "description": "Admin State status of interface.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "description",
+                            "description": "Description of interface.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "interface",
+                            "description": "Interface name, should be in the format chassis/slot/port, i.e. 1/2/3 , 1/1/32.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "interface_qos_rate",
+                            "description": "The rate limit value configured for broadcast/multicast/unknown unicast traffic. Dictionary should have the format ['type_of_traffic'] = speed i.e. {'unknown-unicast': 100pps, 'broadcast': 200pps, 'multicast': 200pps}",
+                            "required": false,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "interface_qos_schedule_profile",
+                            "description": "Attaching existing QoS schedule profile to interface.",
+                            "required": false,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "ip_helper_address",
+                            "description": "Configure a remote DHCP server/relay IP address on the device interface. Here the helper address is same as the DHCP server address or another intermediate DHCP relay.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "ipv4",
+                            "description": "The IPv4 address and subnet mask in the address/mask format. The first entry in the list is the primary IPv4, the remainings are secondary IPv4. i.e. ['10.1.1.1/24', '10.2.1.3/255.255.254.0']  To remove an IP address pass in '' and set 'state: update'.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "ipv6",
+                            "description": "The IPv6 address and subnet mask in the address/mask format. It takes multiple IPv6 with comma separated in the list. i.e. ['2000:cc92::2/64', '3000:820a::43/64']  To remove an IP address pass in '' and set state: update.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete",
+                                "update"
+                            ],
+                            "default": "create",
+                            "description": "Create, Update, or Delete Layer3 Interface",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vrf",
+                            "description": "The VRF the interface will belong to once created. If none provided, the interface will be in the Default VRF. If an L3 interface is created and the user wants to change the interface's VRF, the user must delete the L3 interface then recreate the interface in the desired VRF.",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Create or Update or Delete Layer3 Interface configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Creating new L3 interface 1/1/3 with IPv4 and IPv6 address on VRF red\n  aoscx_l3_interface:\n    interface: 1/1/3\n    description: Uplink Interface\n    ipv4: ['10.20.1.3/24']\n    ipv6: ['2000:db8::1234/64']\n    vrf: red\n\n- name: Creating new L3 interface 1/1/6 with IPv4 address on VRF default\n  aoscx_l3_interface:\n    interface: 1/1/6\n    ipv4: ['10.33.4.15/24']\n\n- name: Deleting L3 Interface - 1/1/3\n  aoscx_l3_interface:\n    interface: 1/1/3\n    state: delete\n\n- name: Create IP Helper Address on Interface 1/1/3\n  aoscx_l3_interface:\n    interface: 1/1/3\n    ip_helper_address: ['172.1.2.32']\n\n- name: Update IP Helper Address on Interface 1/1/3\n  aoscx_l3_interface:\n    interface: 1/1/3\n    ip_helper_address: ['172.1.5.44']\n    state: update\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_dns",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of DNS on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_dns.py",
+                    "module": "aoscx_dns",
+                    "options": [
+                        {
+                            "name": "dns_domain_list",
+                            "description": "Domain list names to be used for address resolution, keyed by the resolution priority order",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "dns_domain_name",
+                            "description": "Domain name used for name resolution by the DNS client, if 'dns_domain_list' is not configured",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "dns_host_v4_address_mapping",
+                            "description": "List of static host address configurations and the IPv4 address associated with them",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "dns_name_servers",
+                            "description": "Name servers to be used for address resolution, keyed by the resolution priority order",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "mgmt_nameservers",
+                            "description": "Primary and secondary nameservers on mgmt interface. The key of the dictionary is primary or secondary and value is the respective IP address",
+                            "required": true,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "update",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or Update or Delete DNS configuration on the switch.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vrf",
+                            "description": "VRF name where DNS configuration is added",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Create or Delete DNS Client configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: DNS configuration creation\n  aoscx_dns:\n    mgmt_nameservers:\n     \"Primary\": \"10.10.2.10\"\n     \"Secondary\": \"10.10.2.10\"\n    dns_domain_name: \"hpe.com\"\n    dns_domain_list:\n      0: \"hp.com\"\n      1: \"aru.com\"\n      2: \"sea.com\"\n    dns_name_servers:\n      0: \"4.4.4.8\"\n      1: \"4.4.4.10\"\n    dns_host_v4_address_mapping:\n      \"host1\": \"5.5.44.5\"\n      \"host2\": \"2.2.44.2\"\n    vrf: \"green\"\n\n\n- name: DNS configuration update\n  aoscx_dns:\n    mgmt_nameservers:\n      \"Primary\": \"10.10.2.15\"\n      \"Secondary\": \"10.10.2.25\"\n    dns_domain_name: \"hpe.com\"\n    dns_domain_list:\n      0: \"hpe.com\"\n      1: \"aruba.com\"\n      2: \"seach.com\"\n    dns_name_servers:\n      0: \"4.4.4.10\"\n      1: \"4.4.4.12\"\n    dns_host_v4_address_mapping:\n      \"host1\": \"5.5.5.5\"\n      \"host2\": \"2.2.45.2\"\n    vrf: \"green\"\n    state: update\n\n- name: DNS configuration deletion\n  aoscx_dns:\n    mgmt_nameservers:\n      \"Primary\": \"10.10.2.15\"\n      \"Secondary\": \"10.10.2.25\"\n    dns_domain_name: \"hp.com\"\n    dns_domain_list:\n      0: \"hpe.com\"\n      1: \"aruba.com\"\n      2: \"seach.com\"\n    dns_name_servers:\n      0: \"4.4.4.10\"\n      1: \"4.4.4.12\"\n    dns_host_v4_address_mapping:\n      \"host1\": \"5.5.5.5\"\n      \"host2\": \"2.2.45.2\"\n    vrf: \"green\"\n    state: delete\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_acl",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management and creation of Access Classifier Lists on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_acl.py",
+                    "module": "aoscx_acl",
+                    "options": [
+                        {
+                            "name": "acl_entries",
+                            "description": "Dictionary of dictionaries of Access Classifier Entries configured in Access Classifier List. Each entry key of the dictionary should be the sequence number of the ACL entry. Each ACL entry dictionary should have the minimum following keys - action , src_ip, dst_ip. See below for examples of options and values.",
+                            "required": false,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "name",
+                            "description": "Name of the Access Classifier List",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete",
+                                "update"
+                            ],
+                            "default": "create",
+                            "description": "Create, Update, or Delete Access Classifier List",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "type",
+                            "choices": [
+                                "ipv4",
+                                "ipv6",
+                                "mac"
+                            ],
+                            "description": "Type of the Access Classifier List",
+                            "required": true,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Manage ACL configuration for AOS-CX.",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Configure IPv4 ACL with entry - 1 deny tcp 10.10.12.12 10.10.12.11 count\n  aoscx_acl:\n    name: ipv4_acl_example\n    type: ipv4\n    acl_entries: {\n      '1': {action: deny, # ACL Entry Action - choices: ['permit', 'deny']\n            count: true, # Enable 'count' on the ACL Entry - choices: ['permit', 'deny']\n            dst_ip: 10.10.12.11/255.255.255.255,  # Matching Destination IPv4 address, format IP/MASK\n            protocol: tcp,  # Matching protocol\n            src_ip: 10.10.12.12/255.255.255.255 # Matching Source IPv4 address, format IP/MASK\n            }\n      }\n\n- name: Configure IPv6 ACL with entry - 809 permit icmpv6 2001:db8::11 2001:db8::12\n  aoscx_acl:\n    name: ipv6_acl_example\n    type: ipv6\n    acl_entries: {\n      '809': {action: permit, # ACL Entry Action - choices: ['permit', 'deny']\n              count: false, # Enable 'count' on the ACL Entry - choices: ['permit', 'deny']\n              dst_ip: 2001:db8::11/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff,  # Matching Destination IPv6 address, format IP/MASK\n              protocol: icmpv6,  # Matching protocol\n              src_ip: 2001:db8::12/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff # Matching Source IPv6 address, format IP/MASK\n              }\n      }\n\n- name: Change existing IPv4 ACL Entry - 1 permit tcp 10.10.12.12 10.10.12.11 count\n  aoscx_acl:\n    name: ipv4_acl_example\n    type: ipv4\n    acl_entries: {\n      '1': {action: permit, # ACL Entry Action - choices: ['permit', 'deny']\n            count: true, # Enable 'count' on the ACL Entry - choices: ['permit', 'deny']\n            dst_ip: 10.10.12.11/255.255.255.255,  # Matching Destination IPv4 address, format IP/MASK\n            protocol: tcp,  # Matching protocol\n            src_ip: 10.10.12.12/255.255.255.255 # Matching Source IPv4 address, format IP/MASK\n            }\n      }\n    state: update\n\n- name: Delete ipv4 ACL from config\n  aoscx_acl:\n    name: ipv4_acl\n    type: ipv4\n    state: delete\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_banner",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of Banner on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_banner.py",
+                    "module": "aoscx_banner",
+                    "options": [
+                        {
+                            "name": "banner",
+                            "description": "String to be configured as the banner.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "banner_type",
+                            "choices": [
+                                "banner",
+                                "banner_exec"
+                            ],
+                            "description": "Type of banner being configured on the switch.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or Delete Banner on the switch.",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Create or Delete Banner configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Adding or Updating Banner\n  aoscx_banner:\n    banner_type: banner\n    banner: \"Aruba Rocks!\"\n\n- name: Delete Banner\n  aoscx_banner:\n    banner_type: banner\n    state: delete\n\n- name: Delete Exec Banner\n  aoscx_banner:\n    banner_type: banner_exec\n    state: delete\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_l2_interface",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of Layer2 Interfaces on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_l2_interface.py",
+                    "module": "aoscx_l2_interface",
+                    "options": [
+                        {
+                            "name": "admin_state",
+                            "choices": [
+                                "up",
+                                "down"
+                            ],
+                            "default": "up",
+                            "description": "Admin State status of interface.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "description",
+                            "description": "Description of interface.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "interface",
+                            "description": "Interface name, should be in the format chassis/slot/port, i.e. 1/2/3 , 1/1/32. Please note, if the interface is a Layer3 interface in the existing configuration and the user wants to change the interface to be Layer2, the user must delete the L3 interface then recreate the interface as a Layer2.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "interface_qos_rate",
+                            "description": "The rate limit value configured for broadcast/multicast/unknown unicast traffic. Dictionary should have the format ['type_of_traffic'] = speed i.e. {'unknown-unicast': 100pps, 'broadcast': 200pps, 'multicast': 200pps}",
+                            "required": false,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "interface_qos_schedule_profile",
+                            "description": "Attaching existing QoS schedule profile to interface.",
+                            "required": false,
+                            "type": "dict"
+                        },
+                        {
+                            "name": "native_vlan_id",
+                            "description": "VLAN trunk native VLAN ID, vlan_mode must be set to trunk.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "native_vlan_tag",
+                            "description": "Flag for accepting only tagged packets on VLAN trunk native, vlan_mode must be set to trunk.",
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete",
+                                "update"
+                            ],
+                            "default": "create",
+                            "description": "Create, Update, or Delete Layer2 Interface",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "trunk_allowed_all",
+                            "description": "Flag for vlan trunk allowed all on L2 interface, vlan_mode must be set to trunk.",
+                            "required": false,
+                            "type": "bool"
+                        },
+                        {
+                            "name": "vlan_access",
+                            "description": "Access VLAN ID, vlan_mode must be set to access.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vlan_mode",
+                            "choices": [
+                                "access",
+                                "trunk"
+                            ],
+                            "description": "VLAN mode on interface, access or trunk.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vlan_trunks",
+                            "description": "List of trunk VLAN IDs, vlan_mode must be set to trunk.",
+                            "required": false,
+                            "type": "list"
+                        }
+                    ],
+                    "short_description": "Create or Update or Delete Layer2 Interface configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Configure Interface 1/1/3 - vlan trunk allowed all\n  aoscx_l2_interface:\n    interface: 1/1/3\n    vlan_mode: trunk\n    trunk_allowed_all: True\n\n- name: Delete Interface 1/1/3\n  aoscx_l2_interface:\n    interface: 1/1/3\n    state: delete\n\n- name: Configure Interface 1/1/1 - vlan trunk allowed 200\n  aoscx_l2_interface:\n    interface: 1/1/1\n    vlan_mode: trunk\n    vlan_trunks: '200'\n\n- name: Configure Interface 1/1/1 - vlan trunk allowed 200,300\n  aoscx_l2_interface:\n    interface: 1/1/1\n    vlan_mode: trunk\n    vlan_trunks: ['200','300']\n\n- name: Configure Interface 1/1/1 - vlan trunk allowed 200,300 , vlan trunk native 200\n  aoscx_l2_interface:\n    interface: 1/1/3\n    vlan_mode: trunk\n    vlan_trunks: ['200','300']\n    native_vlan_id: '200'\n\n- name: Configure Interface 1/1/4 - vlan access 200\n  aoscx_l2_interface:\n    interface: 1/1/4\n    vlan_mode: access\n    vlan_access: '200'\n\n- name: Configure Interface 1/1/5 - vlan trunk allowed all, vlan trunk native 200 tag\n  aoscx_l2_interface:\n    interface: 1/1/5\n    vlan_mode: trunk\n    trunk_allowed_all: True\n    native_vlan_id: '200'\n    native_vlan_tag: True\n\n- name: Configure Interface 1/1/6 - vlan trunk allowed all, vlan trunk native 200\n  aoscx_l2_interface:\n    interface: 1/1/6\n    vlan_mode: trunk\n    trunk_allowed_all: True\n    native_vlan_id: '200'\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_vlan",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of VLANs on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_vlan.py",
+                    "module": "aoscx_vlan",
+                    "options": [
+                        {
+                            "name": "admin_state",
+                            "choices": [
+                                "up",
+                                "down"
+                            ],
+                            "description": "The Admin State of the VLAN, options are 'up' and 'down'.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "description",
+                            "description": "VLAN description",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "name",
+                            "description": "VLAN name",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "update",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or update or delete the VLAN.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vlan_id",
+                            "description": "The ID of this VLAN. Non-internal VLANs must have an 'id' between 1 and 4094 to be effectively instantiated.",
+                            "required": true,
+                            "type": "int"
+                        }
+                    ],
+                    "short_description": "Create or Delete VLAN configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Create VLAN 200 with description\n  aoscx_vlan:\n    vlan_id: 200\n    description: This is VLAN 200\n\n- name: Create VLAN 300 with description and name\n  aoscx_vlan:\n    vlan_id: 300\n    name: UPLINK_VLAN\n    description: This is VLAN 300\n\n- name: Delete VLAN 300\n  aoscx_vlan:\n    vlan_id: 300\n    state: delete\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_acl_interface",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides application management of Access Classifier Lists on Interfaces on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_acl_interface.py",
+                    "module": "aoscx_acl_interface",
+                    "options": [
+                        {
+                            "name": "acl_direction",
+                            "choices": [
+                                "in",
+                                "out"
+                            ],
+                            "default": "in",
+                            "description": "Direction for which the ACL is to be applied or removed.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "acl_interface_list",
+                            "description": "List of interfaces for which the ACL is to be applied or removed.",
+                            "required": true,
+                            "type": "list"
+                        },
+                        {
+                            "name": "acl_name",
+                            "description": "Name of the ACL being applied or removed from the interface.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "acl_type",
+                            "choices": [
+                                "ipv4",
+                                "ipv6",
+                                "mac"
+                            ],
+                            "description": "Type of ACL being applied or removed from the interfaces.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or delete the ACL configuration from the interfaces.",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Apply/Remove ACL configuration on interfaces for AOS-CX.",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Apply ipv4 ACL to interfaces\n  aoscx_acl_interface:\n    acl_name: ipv4_acl\n    acl_type: ipv4\n    acl_interface_list: [\"1/1/2\", \"1/2/23\"]\n\n- name: Remove ipv4 ACL from interfaces\n  aoscx_acl_interface:\n    acl_name: ipv4_acl\n    acl_type: ipv4\n    acl_interface_list: [\"1/1/2\", \"1/2/23\"]\n    state: delete\n\n- name: Apply ipv6 ACL to Interfaces\n  aoscx_acl_interface:\n    acl_name: ipv6_acl\n    acl_type: ipv6\n    acl_interface_list: [\"1/1/2\", \"1/2/23\"]\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_vrf",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of VRFs on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_vrf.py",
+                    "module": "aoscx_vrf",
+                    "options": [
+                        {
+                            "name": "name",
+                            "description": "The name of the VRF",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or delete the VRF.",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Create or Delete VRF configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n- name: Create a VRF\n  aoscx_vrf:\n    name: red\n    state: create\n\n- name: Delete a VRF\n  aoscx_vrf:\n    name: red\n    state: delete\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_vlan_interface",
+            "content_type": "module",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This modules provides configuration management of VLAN Interfacess on AOS-CX devices."
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/modules/aoscx_vlan_interface.py",
+                    "module": "aoscx_vlan_interface",
+                    "options": [
+                        {
+                            "name": "active_gateway_ip",
+                            "description": "Configure IPv4 active-gateway for vlan interface.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "active_gateway_mac_v4",
+                            "description": "Configure virtual MAC address for IPv4 active-gateway for vlan interface. Must be used in conjunction of active_gateway_ip",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "admin_state",
+                            "choices": [
+                                "up",
+                                "down"
+                            ],
+                            "description": "Admin State status of vlan interface.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "description",
+                            "description": "VLAN description",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "ip_helper_address",
+                            "description": "Configure a remote DHCP server/relay IP address on the vlan interface. Here the helper address is same as the DHCP server address or another intermediate DHCP relay.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "ipv4",
+                            "description": "The IPv4 address and subnet mask in the address/mask format. The first entry in the list is the primary IPv4, the remainings are secondary IPv4. i.e. ['10.1.1.1/24', '10.2.1.3/255.255.254.0']. To remove an IP address pass in '' and set state: update.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "ipv6",
+                            "description": "The IPv6 address and subnet mask in the address/mask format. It takes multiple IPv6 with comma separated in the list. i.e. ['2000:cc92::2/64', '3000:820a::43/64']  . To remove an IP address pass in '' and set state: update.",
+                            "required": false,
+                            "type": "list"
+                        },
+                        {
+                            "name": "state",
+                            "choices": [
+                                "create",
+                                "update",
+                                "delete"
+                            ],
+                            "default": "create",
+                            "description": "Create or update or delete the VLAN.",
+                            "required": false,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vlan_id",
+                            "description": "The ID of this VLAN interface. Non-internal VLANs must have an 'id' between 1 and 4094 to be effectively instantiated.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        {
+                            "name": "vrf",
+                            "description": "The VRF the vlan interface will belong to once created. If none provided, the interface will be in the Default VRF. If the VLAN interface is created and the user wants to change the interface vlan's VRF, the user must delete the VLAN interface then recreate the VLAN interface in the desired VRF.",
+                            "required": false,
+                            "type": "str"
+                        }
+                    ],
+                    "short_description": "Create or Delete VLAN Interface configuration on AOS-CX",
+                    "version_added": "2.8"
+                },
+                "examples": "\n  - name: Create VLAN Interface 100\n    aoscx_vlan_interface:\n      vlan_id: 100\n      description: UPLINK_VLAN\n      ipv4: ['10.10.20.1/24']\n      ipv6: ['2000:db8::1234/64']\n\n  - name: Create VLAN Interface 200\n    aoscx_vlan_interface:\n      vlan_id: 200\n      description: UPLINK_VLAN\n      ipv4: ['10.20.20.1/24']\n      ipv6: ['3000:db8::1234/64']\n      vrf: red\n      ip_helper_address: ['10.40.20.1']\n\n  - name: Delete VLAN Interface 100\n    aoscx_vlan_interface:\n      vlan_id: 100\n      state: delete\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "certified"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_port",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_acl",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_vlan",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_vrf",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx_interface",
+            "content_type": "module_utils",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aoscx",
+            "content_type": "httpapi",
+            "doc_strings": {
+                "doc": {
+                    "author": "Aruba Networks (@ArubaNetworks)",
+                    "description": [
+                        "This ArubaOSCX module provides REST interactions with ArubaOS-CX devices"
+                    ],
+                    "filename": "/tmp/tmp3knrbp0e/ansible_collections/arubanetworks/aoscx/plugins/httpapi/aoscx.py",
+                    "httpapi": "aoscx",
+                    "options": [
+                        {
+                            "name": "acx_no_proxy",
+                            "default": true,
+                            "description": [
+                                "Specifies whether to set no_proxy for devices"
+                            ],
+                            "env": [
+                                {
+                                    "name": "ANSIBLE_ACX_NO_PROXY"
+                                }
+                            ],
+                            "type": "bool",
+                            "vars": [
+                                {
+                                    "name": "ansible_acx_no_proxy",
+                                    "version_added": "2.8"
+                                }
+                            ]
+                        }
+                    ],
+                    "short_description": "Use REST to push configs to CX devices",
+                    "version_added": "2.8"
+                },
+                "examples": null,
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}

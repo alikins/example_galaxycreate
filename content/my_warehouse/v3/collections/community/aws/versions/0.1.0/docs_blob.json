@@ -1,0 +1,1582 @@
+{
+    "collection_readme": {
+        "name": "README.md",
+        "html": "<h1>Ansible Collection: community.aws</h1>"
+    },
+    "documentation_files": [],
+    "contents": [
+        {
+            "content_name": "aws_waf_web_acl",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "redshift_subnet_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_lc_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_nacl",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_snapshot",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_waf_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_asg_lifecycle_hook",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudfront_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_ssm_parameter_store",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_eip_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_ecr",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_batch_job_definition",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_classic_lb_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_cert_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_api_gateway",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_elb_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_nat_gateway",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudfront_distribution",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudwatchlogs_log_group_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_waf_rule",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dms_endpoint",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_config_aggregator",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_task",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_application_lb_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_taskdefinition",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_waf_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_elasticbeanstalk_app",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudwatchevent_rule",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_asg",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "redshift_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_tag",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudformation_stack_set",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_taskdefinition_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_lc_find",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_saml_federation",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "execute_lambda",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_policy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_role_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_config_delivery_channel",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "sns_topic",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_direct_connect_virtual_interface",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_route_table_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_target_group_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_secret",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_service_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "efs",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_vgw_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_taskdefinition_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_batch_compute_environment",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_user",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_igw_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dynamodb_ttl",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_vgw_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_acm_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_region_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_role",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_glue_connection",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_region_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_inspector_target",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_codepipeline",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudwatchlogs_log_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_direct_connect_link_aggregation_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_placement_group_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudfront_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_peering_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_endpoint_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_mfa_device_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_s3_cors",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_password_policy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_acm_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_config_recorder",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_ses_identity",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_peering_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elasticache_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_step_functions_state_machine",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_managed_policy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_sgw_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "efs_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_egress_igw",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "lambda_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_user_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "data_pipeline",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_nacl_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_param_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_nat_gateway_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_endpoint",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_s3_bucket_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_direct_connect_gateway",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "kinesis_stream",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "sqs_queue",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "route53_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_nat_gateway_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_role_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_ami_copy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_config_aggregation_authorization",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_eks_cluster",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_scaling_policy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_placement_group_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_lc",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_customer_gateway",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_attribute",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "lightsail",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_glue_job",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_config_rule",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_service",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elasticache_subnet_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "redshift",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_ses_rule_set",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_placement_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_step_functions_state_machine_execution",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_codecommit",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_instance_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_eip",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudtrail",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_service_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "efs_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_nacl_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dynamodb_table",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_metric_alarm",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_elb",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_kms_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_peer",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_route_table",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "route53_zone",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudformation_exports_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "sts_session_token",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_batch_job_queue",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elasticache_snapshot",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_endpoint_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_kms_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_vgw",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_eip_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudfront_invalidation",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_snapshot_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "s3_sync",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "lambda_event",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "sts_assume_role",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_instance",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_target_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "lambda",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_network_lb",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_igw_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ecs_cluster",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_server_certificate_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_direct_connect_connection",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_lc_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_kms",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_vpn_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "route53",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_ses_identity_policy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_application_scaling_policy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_classic_lb_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elasticache_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_launch_template",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_transit_gateway",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_customer_gateway_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_instance_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "lambda_alias",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_cert",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_route_table_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_application_lb_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "redshift_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elasticache",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_instance",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "s3_lifecycle",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_s3_bucket_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "route53_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_target_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_server_certificate_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_target_group_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_subnet_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_vpn_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_mfa_device_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_acm",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "sns",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_instance",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_codebuild",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "s3_logging",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_transit_gateway_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_classic_lb",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_waf_condition",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_elb_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudfront_origin_access_identity",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_customer_gateway_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_igw",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_win_password",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_sgw_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "redshift_cross_region_snapshots",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam_policy_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_application_lb",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_target_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "route53_health_check",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_snapshot_copy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "rds_snapshot_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "dms_replication_subnet_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elasticache_parameter_group",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "iam",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_vpc_vpn",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudwatchlogs_log_group_metric_filter",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "lambda_policy",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "elb_target",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_instance_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_instance_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_asg_info",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "lambda_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "cloudwatchlogs_log_group_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "ec2_asg_facts",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "s3_website",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "s3_bucket_notification",
+            "content_type": "module",
+            "doc_strings": null,
+            "readme_file": null,
+            "readme_html": null
+        },
+        {
+            "content_name": "aws_ssm",
+            "content_type": "connection",
+            "doc_strings": {
+                "doc": {
+                    "author": [
+                        "Pat Sharkey (@psharkey) <psharkey@cleo.com>",
+                        "HanumanthaRao MVL (@hanumantharaomvl) <hanumanth@flux7.com>",
+                        "Gaurav Ashtikar (@gau1991 )<gaurav.ashtikar@flux7.com>"
+                    ],
+                    "connection": "aws_ssm",
+                    "description": [
+                        "This connection plugin allows ansible to execute tasks on an EC2 instance via the aws ssm CLI."
+                    ],
+                    "filename": "/tmp/tmpmkkyrtbz/ansible_collections/community/aws/plugins/connection/aws_ssm.py",
+                    "options": [
+                        {
+                            "name": "bucket_name",
+                            "description": "The name of the S3 bucket used for file transfers.",
+                            "vars": [
+                                {
+                                    "name": "ansible_aws_ssm_bucket_name"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "instance_id",
+                            "description": "The EC2 instance ID.",
+                            "vars": [
+                                {
+                                    "name": "ansible_aws_ssm_instance_id"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "plugin",
+                            "default": "/usr/local/bin/session-manager-plugin",
+                            "description": "This defines the location of the session-manager-plugin binary.",
+                            "vars": [
+                                {
+                                    "name": "ansible_aws_ssm_plugin"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "region",
+                            "default": "us-east-1",
+                            "description": "The region the EC2 instance is located.",
+                            "vars": [
+                                {
+                                    "name": "ansible_aws_ssm_region"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "retries",
+                            "default": 3,
+                            "description": "Number of attempts to connect.",
+                            "type": "integer",
+                            "vars": [
+                                {
+                                    "name": "ansible_aws_ssm_retries"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "timeout",
+                            "default": 60,
+                            "description": "Connection timeout seconds.",
+                            "type": "integer",
+                            "vars": [
+                                {
+                                    "name": "ansible_aws_ssm_timeout"
+                                }
+                            ]
+                        }
+                    ],
+                    "requirements": [
+                        "The remote EC2 instance must be running the AWS Systems Manager Agent (SSM Agent).",
+                        "The control machine must have the aws session manager plugin installed.",
+                        "The remote EC2 linux instance must have the curl installed."
+                    ],
+                    "short_description": "execute via AWS Systems Manager"
+                },
+                "examples": "\n\n# Stop Spooler Process on Windows Instances\n- name: Stop Spooler Service on Windows Instances\n  vars:\n    ansible_connection: aws_ssm\n    ansible_shell_type: powershell\n    ansible_aws_ssm_bucket_name: nameofthebucket\n    ansible_aws_ssm_region: us-east-1\n  tasks:\n    - name: Stop spooler service\n      win_service:\n        name: spooler\n        state: stopped\n\n# Install a Nginx Package on Linux Instance\n- name: Install a Nginx Package\n  vars:\n    ansible_connection: aws_ssm\n    ansible_aws_ssm_bucket_name: nameofthebucket\n    ansible_aws_ssm_region: us-west-2\n  tasks:\n    - name: Install a Nginx Package\n      yum:\n        name: nginx\n        state: present\n\n# Create a directory in Windows Instances\n- name: Create a directory in Windows Instance\n  vars:\n    ansible_connection: aws_ssm\n    ansible_shell_type: powershell\n    ansible_aws_ssm_bucket_name: nameofthebucket\n    ansible_aws_ssm_region: us-east-1\n  tasks:\n    - name: Create a Directory\n      win_file:\n        path: C:\\Windows\\temp\n        state: directory\n\n# Making use of Dynamic Inventory Plugin\n# =======================================\n# aws_ec2.yml (Dynamic Inventory - Linux)\n# This will return the Instance IDs matching the filter\n#plugin: aws_ec2\n#regions:\n#    - us-east-1\n#hostnames:\n#    - instance-id\n#filters:\n#    tag:SSMTag: ssmlinux\n# -----------------------\n- name: install aws-cli\n  hosts: all\n  gather_facts: false\n  vars:\n    ansible_connection: aws_ssm\n    ansible_aws_ssm_bucket_name: nameofthebucket\n    ansible_aws_ssm_region: us-east-1\n  tasks:\n  - name: aws-cli\n    raw: yum install -y awscli\n    tags: aws-cli\n# Execution: ansible-playbook linux.yaml -i aws_ec2.yml\n# The playbook tasks will get executed on the instance ids returned from the dynamic inventory plugin using ssm connection.\n# =====================================================\n# aws_ec2.yml (Dynamic Inventory - Windows)\n#plugin: aws_ec2\n#regions:\n#    - us-east-1\n#hostnames:\n#    - instance-id\n#filters:\n#    tag:SSMTag: ssmwindows\n# -----------------------\n- name: Create a dir.\n  hosts: all\n  gather_facts: false\n  vars:\n    ansible_connection: aws_ssm\n    ansible_shell_type: powershell\n    ansible_aws_ssm_bucket_name: nameofthebucket\n    ansible_aws_ssm_region: us-east-1\n  tasks:\n    - name: Create the directory\n      win_file:\n        path: C:\\Temp\\SSM_Testing5\n        state: directory\n# Execution:  ansible-playbook win_file.yaml -i aws_ec2.yml\n# The playbook tasks will get executed on the instance ids returned from the dynamic inventory plugin using ssm connection.\n",
+                "metadata": {
+                    "status": [
+                        "preview"
+                    ],
+                    "supported_by": "community"
+                },
+                "return": null
+            },
+            "readme_file": null,
+            "readme_html": null
+        }
+    ]
+}
